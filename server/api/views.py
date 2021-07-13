@@ -771,5 +771,5 @@ def getEveryAnnotations(request):
                 annotations.sort(key=lambda s: int(s['box_id']))
                 workerannot.append({'document_pk': document.pk, 'annotations': getLastAnnotations(annotations)})
             userannots["annotations"]=workerannot
-        response.append(userannots)
+            response.append(userannots)
     return JsonResponse(response, safe=False)
