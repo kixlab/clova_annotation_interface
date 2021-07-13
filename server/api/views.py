@@ -646,11 +646,11 @@ def getWorkers(request):
     if request.method=='GET':
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
-        users=User.objects.filter()
         profiles=Profile.objects.filter(doctype=doctype, done=True)
         users=[]
         for prof in profiles:
             users.append({'username': prof.user.username, 'userpk': prof.user.pk})
+        print*users
         return JsonResponse(users)            
 
 
