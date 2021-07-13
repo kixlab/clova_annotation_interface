@@ -772,4 +772,4 @@ def getEveryAnnotations(request):
                 workerannot.append({'document_pk': document.pk, 'annotations': getLastAnnotations(annotations)})
             userannots["annotations"]=workerannot
         response.append(userannots)
-    return JsonResponse(response)
+    return JsonResponse(response, safe=False)
