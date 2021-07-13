@@ -657,7 +657,7 @@ def getWorkers(request):
 @csrf_exempt
 def getAnnotationsByWorker(request):
     if request.method=='GET':
-        username = query_json['mturk_id']
+        username =request.GET['mturk_id']
         user = User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
         statuses=Status.objects.filter(user=user, status=True)
