@@ -589,3 +589,98 @@ def uploadJson(request):
         json = Json(image_id=file.name.replace(".json", ""), image=file)
         json.save()
         return HttpResponse("Uploaded!")
+
+# view for api call from resolution interface 
+@csrf_exempt
+def getAnnotationsByImage(request):
+    if request.method=='GET':
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =request.GET['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        statuses=Status.objects.filter(document=document, status=True)
+        workerannots=[]
+        print(statuses)
+        for status in statuses: 
+            user=status.user
+            annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+            annotations=[]
+            print(annots)
+            for annot in annots: 
+                boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
+                for box in boxes:
+                    if(annot.subcat==None):
+                        annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
+                    else:
+                        if(annot.subcat.subcat_text=="N/A"):
+                            annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
+                        else:
+                            annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
+            annotations.sort(key=lambda s: int(s['box_id']))
+
+            # remove duplicate 
+
+            workerannots.append({'user': user.username, 'annotations': getLastAnnotations(annotations)})
+        for i in range(4-len(workerannots)):
+            workerannots.append({'user': 'null', 'annotations': []})
+        response={
+            'workerannots':workerannots
+        }
+        return JsonResponse(response)
+
+
+def getLastAnnotations(jsonlist):
+    result=[]
+    result.append(jsonlist[0])
+    for idx in range(len(jsonlist)-1):
+        row=jsonlist[idx+1]
+        if(row["box_id"]==result[-1]["box_id"]):
+            result[-1]=row
+        else: 
+            result.append(row)
+    return result
+        
+      
+@csrf_exempt
+def getWorkers(request):
+    if request.method=='GET':
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        users=User.objects.filter()
+        profiles=Profile.objects.filter(doctype=doctype, done=True)
+        users=[]
+        for prof in profiles:
+            users.append({'username': prof.user.username, 'userpk': prof.user.pk})
+        return JsonResponse(users)            
+
+
+@csrf_exempt
+def getAnnotationsByWorker(request):
+    if request.method=='GET':
+        username = query_json['mturk_id']
+        user = User.objects.get(username=username)
+        profile=Profile.objects.get(user=user)
+        statuses=Status.objects.filter(user=user, status=True)
+        response={}
+        response["username"]=username
+        workerannot=[]
+        for stat in statuses:
+            document=stat.document            
+            annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+            annotations=[]
+            for annot in annots: 
+                boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
+                for box in boxes:
+                    if(annot.subcat==None):
+                        annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
+                    else:
+                        if(annot.subcat.subcat_text=="N/A"):
+                            annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
+                        else:
+                            annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
+            annotations.sort(key=lambda s: int(s['box_id']))
+            workerannot.append({'document_pk': document.pk, 'annotations': getLastAnnotations(annotations)})
+        response["annotations"]=workerannot
+        response["start_time"]=profile.starttime 
+        response['end_time']=profile.endtime
+        return JsonResponse(response)
