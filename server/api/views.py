@@ -66,8 +66,8 @@ def startTask(request):
         ## get smallest available user_order 
         # check if there is a user order taken but not completed
         remaining_dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
-        #datetime.now())
-        #print(profile.signuptime)
+        print(datetime.now())
+        print(profile.signuptime)
 
         if(len(remaining_dropouts)==0):
             print('No drop out')
@@ -231,8 +231,8 @@ def getImageID(request):
 
         #get least unannotated document
         undonedocs=Status.objects.filter(user=user, document__doctype=profile.doctype, status=False)
-        #print('undonedocs', undonedocs)
-        #print('donedocs',Status.objects.filter(user=user, document__doctype=profile.doctype, status=True))
+        print('undonedocs', undonedocs)
+        print('donedocs',Status.objects.filter(user=user, document__doctype=profile.doctype, status=True))
         if(len(undonedocs)==0):
             startdoc=Status.objects.filter(user=user, document__doctype=profile.doctype, status=True)[0]
         else:
@@ -273,7 +273,7 @@ def getAnnotations(request):
         image_id =request.GET['image_id']
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         annots=Annotation.objects.filter(user=user, document=document,is_alive=True)
-        #print(annots)
+        print(annots)
 
         annotations=[]
         for annot in annots: 
@@ -310,6 +310,60 @@ def getDefAnnotations(request):
             'annotations':annotations
         }
         return JsonResponse(response)
+
+
+
+@csrf_exempt
+def getWorkerAnnotations(request):
+    if request.method=='GET':
+        doctypetext=request.GET['doctype']
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =request.GET['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+        statuses=Status.objects.filter(document=document, status=True)
+        workerannots=[]
+        print(statuses)
+        for status in statuses: 
+            user=status.user
+            annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+            annotations=[]
+            print(annots)
+            for annot in annots: 
+                boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
+                for box in boxes:
+                    if(annot.subcat==None):
+                        annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
+                    else:
+                        if(annot.subcat.subcat_text=="N/A"):
+                            annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
+                        else:
+                            annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
+            annotations.sort(key=lambda s: int(s['box_id']))
+
+            # remove duplicate 
+
+            workerannots.append({'user': user.username, 'annotations': getLastAnnotations(annotations)})
+        for i in range(4-len(workerannots)):
+            workerannots.append({'user': 'null', 'annotations': []})
+        response={
+            'workerannots':workerannots
+        }
+        return JsonResponse(response)
+
+
+def getLastAnnotations(jsonlist):
+    result=[]
+    result.append(jsonlist[0])
+    for idx in range(len(jsonlist)-1):
+        row=jsonlist[idx+1]
+        if(row["box_id"]==result[-1]["box_id"]):
+            result[-1]=row
+        else: 
+            result.append(row)
+    return result
+        
+        
 
 @csrf_exempt
 def saveAnnotation(request):
@@ -646,13 +700,12 @@ def getWorkers(request):
     if request.method=='GET':
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
+        users=User.objects.filter()
         profiles=Profile.objects.filter(doctype=doctype, done=True)
-        print(profiles)
-        users=[]
+        users=[{"username": "phuser"}]
         for prof in profiles:
-            users.append({"username": prof.user.username})
-        print(users)
-        return JsonResponse({"workers": "emptyworker"})            
+            users.append({'username': prof.user.username})
+        return JsonResponse(users)            
 
 
 @csrf_exempt
