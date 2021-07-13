@@ -701,12 +701,12 @@ def getWorkers(request):
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         print(doctype)
-        profiles=Profile.objects.filter(doctype=doctype, done=True)
+        profiles=Profile.objects.filter(doctype=doctype)
         print('profiles', profiles)
-        users=[{"username": "phuser"}]
+        users=[]
         for prof in profiles:
             users.append({'username': prof.user.username})
-        return JsonResponse(doctype.doctype, safe=False)            
+        return JsonResponse(users, safe=False)            
 
 
 @csrf_exempt
