@@ -652,7 +652,7 @@ def getWorkers(request):
         for prof in profiles:
             users.append({"username": prof.user.username})
         print(users)
-        return JsonResponse({"workers": users})            
+        return JsonResponse({"workers": "emptyworker"})            
 
 
 @csrf_exempt
