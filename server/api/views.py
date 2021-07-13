@@ -743,4 +743,33 @@ def getAnnotationsByWorker(request):
 
 @csrf_exempt
 def getEveryAnnotations(request):
-    return JsonResponse([])
+    if request.method=='GET':
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        profiles=Profile.objects.filter(doctype=doctype)
+        response=[]
+        for prof in profiles:
+            user=prof.user
+            statuses=Status.objects.filter(user=user, status=True)
+            userannots={}
+            userannots["username"]=user.username
+            workerannot=[]
+            for stat in statuses:
+                document=stat.document            
+                annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+                annotations=[]
+                for annot in annots: 
+                    boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
+                    for box in boxes:
+                        if(annot.subcat==None):
+                            annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
+                        else:
+                            if(annot.subcat.subcat_text=="N/A"):
+                                annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
+                            else:
+                                annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
+                annotations.sort(key=lambda s: int(s['box_id']))
+                workerannot.append({'document_pk': document.pk, 'annotations': getLastAnnotations(annotations)})
+            userannots["annotations"]=workerannot
+        response.append({userannots})
+    return JsonResponse(response)
