@@ -649,7 +649,7 @@ def getWorkers(request):
         profiles=Profile.objects.filter(doctype=doctype, done=True)
         users=[]
         for prof in profiles:
-            users.append({'username': prof.user.username, 'userpk': prof.user.pk})
+            users.append(prof.user.username)
         print(users)
         return JsonResponse(users, safe=False)            
 
