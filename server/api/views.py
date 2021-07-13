@@ -706,7 +706,7 @@ def getWorkers(request):
         users=[{"username": "phuser"}]
         for prof in profiles:
             users.append({'username': prof.user.username})
-        return JsonResponse(doctype, safe=False)            
+        return JsonResponse(doctype.doctype, safe=False)            
 
 
 @csrf_exempt
