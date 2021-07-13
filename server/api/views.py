@@ -700,7 +700,9 @@ def getWorkers(request):
     if request.method=='GET':
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
+        print(doctype)
         profiles=Profile.objects.filter(doctype=doctype, done=True)
+        print('profiles', profiles)
         users=[{"username": "phuser"}]
         for prof in profiles:
             users.append({'username': prof.user.username})
