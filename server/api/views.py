@@ -684,3 +684,8 @@ def getAnnotationsByWorker(request):
         response["start_time"]=profile.starttime 
         response['end_time']=profile.endtime
         return JsonResponse(response)
+
+
+@csrf_exempt
+def getEveryAnnotations(request):
+    return JsonResponse([])
