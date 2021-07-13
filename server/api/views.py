@@ -66,8 +66,8 @@ def startTask(request):
         ## get smallest available user_order 
         # check if there is a user order taken but not completed
         remaining_dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
-        print(datetime.now())
-        print(profile.signuptime)
+        #datetime.now())
+        #print(profile.signuptime)
 
         if(len(remaining_dropouts)==0):
             print('No drop out')
@@ -231,8 +231,8 @@ def getImageID(request):
 
         #get least unannotated document
         undonedocs=Status.objects.filter(user=user, document__doctype=profile.doctype, status=False)
-        print('undonedocs', undonedocs)
-        print('donedocs',Status.objects.filter(user=user, document__doctype=profile.doctype, status=True))
+        #print('undonedocs', undonedocs)
+        #print('donedocs',Status.objects.filter(user=user, document__doctype=profile.doctype, status=True))
         if(len(undonedocs)==0):
             startdoc=Status.objects.filter(user=user, document__doctype=profile.doctype, status=True)[0]
         else:
@@ -273,7 +273,7 @@ def getAnnotations(request):
         image_id =request.GET['image_id']
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         annots=Annotation.objects.filter(user=user, document=document,is_alive=True)
-        print(annots)
+        #print(annots)
 
         annotations=[]
         for annot in annots: 
@@ -647,6 +647,7 @@ def getWorkers(request):
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         profiles=Profile.objects.filter(doctype=doctype, done=True)
+        print(profiles)
         users=[]
         for prof in profiles:
             users.append(prof.user.username)
