@@ -42,7 +42,7 @@ export default {
 
   computed: {
     disabled() {
-      return false//!this.$store.getters.getIfAllImagesAnnotated
+      return !this.$store.getters.getIfAllImagesAnnotated
     }
   }
 }

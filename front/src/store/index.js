@@ -59,6 +59,25 @@ export default new Vuex.Store({
       console.log("json_url **", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json')
       return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
     },
+
+    prac_image_url: state => {
+      var docType= 'receipt'
+      var image_order= 300;
+      
+      var three_digit_id = ("00" + image_order).slice(-3);
+//      console.log(state.start_image_no);
+      console.log("server_url ** ", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png')
+      return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
+      
+    },
+    prac_json_url: state => {
+      var docType= 'receipt'
+      var image_order= 300;
+
+      var three_digit_id = ("00" + image_order).slice(-3);
+      console.log("json_url **", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json')
+      return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
+    },
     image_no: state =>{
       return state.image_order
     },

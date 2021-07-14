@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Landing from '../views/Landing.vue'
 import InformedConsent from '../views/InformedConsent.vue'
 import Instruction from '../views/Instruction.vue'
+import Practice from '../views/Practice.vue'
 import DeferredAnnotation from '../views/Annotation.vue'
 import AfterDone from '../views/AfterDone.vue'
 import PageNotFound from '../views/404.vue'
@@ -33,6 +34,11 @@ Vue.use(VueRouter)
     path: '/instruction',
     name: 'Instruction',
     component: Instruction
+  },
+  {
+    path: '/practice',
+    name: 'Practice',
+    component: Practice
   },
   {
     path: '/doctypelist',
