@@ -706,8 +706,7 @@ def getWorkers(request):
 
         users=[]
         for prof in profiles:
-            if (prof.instr_read):
-                
+            if (prof.content_agreed and prof.instr_read):
                 users.append({'username': prof.user.username})
         return JsonResponse(users, safe=False)            
 
