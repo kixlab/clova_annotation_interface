@@ -481,6 +481,7 @@ def submit(request):
         profile=Profile.objects.get(user=user)
         profile.endtime=datetime.now()
         profile.done=True
+        print("dd", profile.endtime, profile.done)
         return HttpResponse('')
 
 

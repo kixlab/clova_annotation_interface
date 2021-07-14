@@ -32,8 +32,8 @@ export default {
       axios.post(self.$store.state.server_url + '/api/submit/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( function(){
-        var doctype=self.$router.currentRoute.fullPath.split('/')[2];
-        self.$router.push('../../annot-done/'+doctype);
+        //var doctype=self.$router.currentRoute.fullPath.split('/')[2];
+        //self.$router.push('../../annot-done/'+doctype);
       });
 
       
@@ -42,7 +42,7 @@ export default {
 
   computed: {
     disabled() {
-      return !this.$store.getters.getIfAllImagesAnnotated
+      return false//!this.$store.getters.getIfAllImagesAnnotated
     }
   }
 }
