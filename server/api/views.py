@@ -479,6 +479,7 @@ def submit(request):
         user = User.objects.get(username=username)
 
         profile=Profile.objects.get(user=user)
+        print("Get profile", profile)
         profile.endtime=datetime.now()
         profile.done=True
         print("dd", profile.endtime, profile.done)
