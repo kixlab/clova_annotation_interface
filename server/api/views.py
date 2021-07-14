@@ -705,9 +705,8 @@ def getWorkers(request):
         print('profiles', profiles)
         users=[]
         for prof in profiles:
-            if (prof.endtime):
-            #print("prof.user", prof.endtime, prof.starttime)
-                users.append({'username': prof.user.username})
+            prof_user=Profile.objects.get(user=prof.user.username)
+            users.append({'username': prof.user.username, 'end_time': prof_user.endtime, 'start_time': prof_user.starttime})
         return JsonResponse(users, safe=False)            
 
 
