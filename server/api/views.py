@@ -765,6 +765,7 @@ def getAnnotationsByWorker(request):
         response["annotations"]=workerannot
         response["start_time"]=profile.starttime 
         response['end_time']=profile.endtime
+        response['user_order']=profile.user_order
         return JsonResponse(response)
 
 
