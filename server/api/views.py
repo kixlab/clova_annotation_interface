@@ -9,11 +9,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from .models import *
 
+import string
+import random
 import json
 from datetime import datetime, timedelta
 from django.db.models import 
-import string
-import random
+
 
 
 @csrf_exempt
@@ -501,7 +502,7 @@ def submitSurvey(request):
         profile.token=token
 
         profile.save()
-        
+
         response={
             'token': token
         }
