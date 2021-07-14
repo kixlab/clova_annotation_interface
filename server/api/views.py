@@ -703,10 +703,13 @@ def getWorkers(request):
         print(doctype)
         profiles=Profile.objects.filter(doctype=doctype)
         print('profiles', profiles)
+
         users=[]
         for prof in profiles:
             prof_user=Profile.objects.get(user=prof.user.username)
-            users.append({'username': prof.user.username, 'end_time': prof_user.endtime, 'start_time': prof_user.starttime})
+            print("endtime", prof_user.endtime, prof.endtime)
+            print("starttime", prof_user.starttime, prof.starttime)
+            users.append({'username': prof.user.username})
         return JsonResponse(users, safe=False)            
 
 
