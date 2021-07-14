@@ -11,7 +11,7 @@
       <v-row>
         <v-col>
           <div ref="img_container">
-          <v-img :src=image_url contain style="width: 100%; marginTop: 0; paddingTop: 0;;">
+          <v-img :src="require('http://13.125.191.49:8000/media/receipt/receipt_00300.png')" contain style="width: 100%; marginTop: 0; paddingTop: 0;;">
             <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
               <template slot-scope="{ startPoint }">
                 {{startPoint}}
@@ -84,7 +84,7 @@ export default {
   mounted() {
 
     this.loadNewImage(function(self) {
-      self.image = self.$store.getters.getImage;
+      //self.image = self.$store.getters.getImage;
       self.image_box = self.$store.getters.getImageBoxes;
       self.getInitialPosition();
       
@@ -93,6 +93,7 @@ export default {
         if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
           self.image_box = self.$store.getters.getImageBoxes;
         }
+        //if (action.type)
       }})
     })
     
@@ -267,7 +268,7 @@ export default {
   computed: {
     ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'image_no']),
     image_url() {
-      return this.$store.getters.prac_image_url;
+      return require('http://13.125.191.49:8000/media/receipt/receipt_00300.png')//this.$store.getters.prac_image_url;
     }
   }
 };
