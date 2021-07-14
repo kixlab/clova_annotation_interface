@@ -11,7 +11,9 @@ from .models import *
 
 import json
 from datetime import datetime, timedelta
-from django.db.models import Max
+from django.db.models import 
+import string
+import random
 
 
 @csrf_exempt
@@ -479,12 +481,31 @@ def submit(request):
         user = User.objects.get(username=username)
 
         profile=Profile.objects.get(user=user)
-        print("Get profile", profile)
         profile.endtime=datetime.now()
         profile.done=True
-        print("dd", profile.endtime, profile.done)
         profile.save()
         return HttpResponse('')
+
+
+@csrf_exempt
+def submitSurvey(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        user = User.objects.get(username=username)
+
+        profile=Profile.objects.get(user=user)
+        profile.endsurveytime=datetime.now()
+
+        token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        profile.token=token
+
+        profile.save()
+        
+        response={
+            'token': token
+        }
+        return JsonResponse(response)
 
 
 @csrf_exempt

@@ -25,7 +25,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            @click="showCode = true"
+            @click="onSubmit"
             color="deep-purple accent-2"
             class="mr-4"
             style="margin-left: auto;"
@@ -36,7 +36,7 @@
           
         </v-card-actions>
         <span v-if="showCode">
-          <div>Code to enter in MTurk: <b style="color: blue">edjkslfj</b></div>
+          <div>Code to enter in MTurk: <b style="color: blue">{{this.token}}</b></div>
           <div style="padding-bottom: 1%">Thanks again for the participation! If you haven't, make sure you submit the form above as well 🙏</div>
         </span>
       </v-card>
@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       showCode: false,
+      token: '',
     }
   },
   methods: {
@@ -70,6 +71,15 @@ export default {
           });
 
     },
+    onSubmit: function() {
+      const self=this;
+      axios.post(self.$store.state.server_url + '/api/submit-survey/', {
+        mturk_id: self.$store.state.mturk_id,
+      }).then(function(res){
+        self.token = res.data.token
+        self.showCode = true
+      });
+    }
   }
 }
 </script>

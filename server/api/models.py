@@ -25,6 +25,7 @@ class Profile(models.Model):
     user_order=models.IntegerField(default=0)
 
     endtime=models.DateTimeField(blank=True, null=True)
+    endsurveytime=models.DateTimeField(blank=True, null=True)
 
     dropout=models.BooleanField(default=False)
 
