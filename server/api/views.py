@@ -731,8 +731,9 @@ def getWorkers(request):
 
         users=[]
         for prof in profiles:
+            # should be modified later to if (prof.endtime and prof.done)
             if (prof.consent_agreed and prof.instr_read):
-                users.append({'username': prof.user.username})
+                users.append({'username': prof.user.username, 'user_order': prof.user_order})
         return JsonResponse(users, safe=False)            
 
 
