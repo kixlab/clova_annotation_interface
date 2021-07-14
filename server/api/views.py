@@ -13,7 +13,7 @@ import string
 import random
 import json
 from datetime import datetime, timedelta
-from django.db.models import 
+from django.db.models import Max
 
 
 
