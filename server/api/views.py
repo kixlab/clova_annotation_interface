@@ -483,6 +483,7 @@ def submit(request):
         profile.endtime=datetime.now()
         profile.done=True
         print("dd", profile.endtime, profile.done)
+        profile.save()
         return HttpResponse('')
 
 
