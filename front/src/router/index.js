@@ -36,7 +36,7 @@ Vue.use(VueRouter)
     component: Instruction
   },
   {
-    path: '/practice',
+    path: '/practice/:docType/',
     name: 'Practice',
     component: Practice
   },

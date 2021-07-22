@@ -5,13 +5,10 @@
     @mousedown="clickDown" @mouseup="clickUp"
     
     >
-    <!--
-    <b style="color: red; fontSize: 85%">Sometimes, the box position might be a bit off from the texts on the image. If that problem occurs, please move to another image and come back.</b>
-    -->
       <v-row>
         <v-col>
           <div ref="img_container">
-          <v-img :src="require('http://13.125.191.49:8000/media/receipt/receipt_00300.png')" contain style="width: 100%; marginTop: 0; paddingTop: 0;;">
+          <v-img :src="prac_img" contain style="width: 100%; marginTop: 0; paddingTop: 0;;">
             <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
               <template slot-scope="{ startPoint }">
                 {{startPoint}}
@@ -39,7 +36,6 @@
         </v-col>
 
       </v-row>
-
   </v-card>
   <v-card >
     <br>
@@ -49,6 +45,7 @@
     Bayar - Pay <br>
     Tunai - Cash <br>
     Kembalian - Change <br>
+    ddd
     </b>
     </span>
   </v-card>
@@ -78,11 +75,15 @@ export default {
       original_box: [],
       width: 0,
       height: 0,
+
+      prac_img: 'http://13.125.191.49:8000/media/receipt/receipt_00300.png',
     };
   },
 
   mounted() {
-
+    const self = this;
+    self.loadNewImage()
+    self.image_box = self.$store.getters.getImageBoxes;
     this.loadNewImage(function(self) {
       //self.image = self.$store.getters.getImage;
       self.image_box = self.$store.getters.getImageBoxes;
@@ -114,6 +115,21 @@ export default {
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
     loadNewImage: function() {
+      const self = this;
+      axios.get(self.$store.getters.prac_json_url).then(function(res) {
+          var json = res.data;
+          var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
+          var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height);
+          //console.log(img_width, img_height)
+          //console.log(self.width, self.height, self.width*img_height/img_width)
+          self.setImageBoxes([json, self.width, self.width*img_height/img_width, true]);
+          self.original_box = json;
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+    },
+    loadNewJson: function() {
       const self = this;
       axios.get(self.$store.getters.prac_json_url).then(function(res) {
           var json = res.data;
@@ -267,9 +283,11 @@ export default {
 
   computed: {
     ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'image_no']),
-    image_url() {
+    
+    /*image_url() {
       return require('http://13.125.191.49:8000/media/receipt/receipt_00300.png')//this.$store.getters.prac_image_url;
-    }
+    }*/
+    
   }
 };
 </script>

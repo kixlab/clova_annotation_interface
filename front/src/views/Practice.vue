@@ -9,8 +9,8 @@
     >
       <v-toolbar-title>Practice Annotation (ID: {{this.$store.state.mturk_id}})</v-toolbar-title>
       <v-spacer/>
-      <instruction-button/>
-      <submit-button/>
+      <!--<instruction-button disabled/>-->
+      <practice-submit-button/>
     </v-app-bar>
 
     <v-main>
@@ -25,10 +25,10 @@
 
         <!-- COL2 - ANNOTATION UI -->
         <v-col cols="7">
-          <v-row dense>
+          <v-row dense><!--
             <box-selection-status/>
             <deferred-annotation/>
-            <deferred-annotation-status/>
+            <deferred-annotation-status/>-->
           </v-row>
         </v-col>
       </v-row>
@@ -40,13 +40,17 @@
 
 <script>
 // @ is an alias to /src
-import PracticeImagePanel from '@/components/ImagePanel.vue'
-import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
-import SubmitButton from '@/components/SubmitButton.vue'
-import InstructionButton from '@/components/InstructionButton.vue'
+import PracticeImagePanel from '@/components/PracticeImagePanel.vue'
+import PracticeSubmitButton from '@/components/PracticeSubmitButton.vue'
+
+//import InstructionButton from '@/components/InstructionButton.vue'
 //import OverviewButton from '@/components/OverviewButton.vue'
-import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
+/*
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
+import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
+import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
+*/
+
 import axios from 'axios'
 //import SubmitButton from '../components/SubmitButton.vue'
 
@@ -54,12 +58,14 @@ export default {
   name: 'Home',
   components: {
     PracticeImagePanel,
-    DeferredAnnotationStatus,
-    SubmitButton,
-    InstructionButton,
+    PracticeSubmitButton,
+    //InstructionButton,
   //  OverviewButton,
-    DeferredAnnotation,
+    /*
     BoxSelectionStatus,
+    DeferredAnnotation,
+    DeferredAnnotationStatus,
+    */
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)
@@ -71,7 +77,7 @@ export default {
       axios.get(self.$store.state.server_url+'/api/get-status/', {
         params: {
             mturk_id: self.$store.state.mturk_id,
-            doctype: self.$route.params.docType
+            doctype: 'receipt'
           }
         }).then(function (res) {
           self.$store.commit('update_status',res.data.status);
