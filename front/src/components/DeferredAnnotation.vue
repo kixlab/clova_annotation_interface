@@ -293,7 +293,6 @@ export default {
           }          
         },
       clicked(label) {
-        console.log("Clicked", label)
       }
   },
   computed: {

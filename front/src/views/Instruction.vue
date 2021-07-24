@@ -94,7 +94,6 @@ export default {
 
       self.$helpers.server_post(self, "/api/instr-done/", 
         function(self, res){ // eslint-disable-line no-unused-vars
-          console.log(res.data)
           self.$store.commit('set_assigned_images', res.data.assigned_images);
           self.$store.commit('set_start_image_no', res.data.assigned_images[0]);
           self.$store.commit('set_curr_image', 0);

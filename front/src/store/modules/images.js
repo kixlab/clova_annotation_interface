@@ -41,7 +41,6 @@ const actions = {
     },
 
     setImageBoxes({ commit }, json) {
-        console.log("NEW JSON --------\n" , json)
         const img_w = json[0].meta === undefined ? json[0].image_size.width : (json[0].meta.image_size === undefined? json[0].meta.imageSize.width:json[0].meta.image_size.width)
         const img_h = json[0].meta === undefined ? json[0].image_size.height : (json[0].meta.image_size === undefined? json[0].meta.imageSize.height:json[0].meta.image_size.height)
         var ratio = 1

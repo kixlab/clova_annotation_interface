@@ -41,7 +41,6 @@ export default {
         }
         }).then(function(res){
             self.worker_list = res.data;
-            console.log(res.data);
         })},500);
 
         setTimeout( function(){
