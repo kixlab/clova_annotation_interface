@@ -287,7 +287,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'image_no']),
+    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio']),
     image_url() {
       return this.$store.getters.image_url;
     }
