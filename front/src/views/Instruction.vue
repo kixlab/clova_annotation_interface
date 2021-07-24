@@ -96,12 +96,8 @@ export default {
         function(self, res){ // eslint-disable-line no-unused-vars
           console.log(res);
           self.$store.commit('set_start_image_no', res.data.user_order*7);
-<<<<<<< HEAD
           self.$store.commit('set_assigned_images', res.data.assigned_images);
  //         self.$router.push('annotation/'+res.data.doctype);
-=======
-          self.$router.push('/annotation/'+res.data.doctype);
->>>>>>> 4320b57c7c7e7a77b82aaae317a86feda2cb77fb
         })
     }
   },
