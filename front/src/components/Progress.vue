@@ -2,7 +2,7 @@
 <div class='center'>
   <div style="width: 100%; overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap;">
       <template v-for="(status, index) in stats"> 
-        <template v-if="index===img_temp">
+        <template v-if="index===curr_index">
           <template v-if="status===true">
             <button class="curr done status" v-on:click="goTo(index);" :key='index' >
             #{{index+1}}
@@ -50,7 +50,7 @@ export default {
   mounted() {
     this.$store.subscribeAction({after: (action) => {
         if (action.type ==='setCurrImage') {
-            this.img_temp = this.$store.getters.get_curr_image
+            this.curr_index = this.$store.getters.get_curr_image
             
         }
     }})
