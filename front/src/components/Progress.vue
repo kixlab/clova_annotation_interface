@@ -67,13 +67,13 @@ export default {
         }
   }, 
   methods:{
-      ...mapActions(['setCurrImage']),
+      ...mapActions(['setCurrImage', 'setCurrOrder']),
       ...mapGetters(['getStatus']),
       goTo: function(index){
-        this.$store.commit('set_image_count', index);
-        this.image_box = this.$store.getters.getImageBoxes;
+//        this.$store.commit('set_image_order', index);
         this.setCurrOrder(index)
         this.setCurrImage(index)
+        this.image_box = this.$store.getters.getImageBoxes;
       },
   }
 };
