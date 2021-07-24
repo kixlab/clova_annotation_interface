@@ -114,7 +114,6 @@ def startTask(request):
             Status(user=user, document=document, status=False).save()
 
         response={
-            'mod_order': mod_order,
             'assigned_images': [doc.doc_no for doc in documents],
             'doctype': profile.doctype.doctype
         }
