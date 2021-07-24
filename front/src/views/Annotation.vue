@@ -68,6 +68,7 @@ export default {
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)
+    console.log(this.$store.state)
 
   },
   methods:{
