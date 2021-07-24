@@ -292,8 +292,6 @@ export default {
             self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id}, "add"])
           }          
         },
-      clicked(label) {
-      }
   },
   computed: {
     isDisabled() {
