@@ -94,10 +94,10 @@ def startTask(request):
             order=dropout.user_order
 
         profile.starttime=datetime.now()
-        profile.user_order=order        
-        profile.save()
-
+        profile.user_order=order
         mod_order = (order % n_annotators)
+        profile.mod_order=mod_order        
+        profile.save()
 
         if(mod_order<=(n_annotators-workers_per_group)): # now: 50 -5 = 45 --> 45*4 ~ 45*4 + 20
             # assign documents 

@@ -77,7 +77,7 @@ export default {
   name: 'Introduction',
   data: () => ({
     time_now: 0,
-    passOneMinute: false,
+    passOneMinute: true,
     items: [
       {src: require('@/assets/tutorial_clova1.png')},
       {src: require('@/assets/tutorial_clova2.png')},
