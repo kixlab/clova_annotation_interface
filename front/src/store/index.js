@@ -41,8 +41,8 @@ export default new Vuex.Store({
       state.step = step
     },
     set_curr_image(state, newidx) {
-      var new_image=state.
-      state.curr_image_no = curr_image_no
+      var new_image=state.assigned_images[newidx-1]
+      state.curr_image_no = new_image
     },
     
   },
