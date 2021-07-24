@@ -105,7 +105,7 @@ export default {
   },
 
   watch:{
-    image_no: {
+    curr_image_no: {
       deep: true,
       handler(){
         this.loadNewImage();

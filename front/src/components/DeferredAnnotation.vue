@@ -314,7 +314,7 @@ export default {
     }
   },
   watch:{
-    image_no:{
+    curr_image_no:{
       deep: true,
       handler(){
         const self=this;
@@ -322,7 +322,7 @@ export default {
           params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order + self.$store.state.start_image_no
+            image_id: self.$store.state.curr_image_no
           }
         }).then(function(res){
           var annotations=res.data.annotations;
