@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="dialog"
-    width="70%"
+    width="80%"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
@@ -19,8 +19,11 @@
        <b># Instruction</b>
       </v-card-title>
       <v-card-subtitle> 
-       <b>Please read the instruction below carefully before moving on to the task.</b>
+       <b>Please refer to the below instructions along the way.</b>
       </v-card-subtitle>
+      <div v-for="num in [1, 2, 3, 4, 5, 6]" :key="num">
+        <v-img :src="require('@/assets/tutorial_clova'+num+'.png')" style="width: 75%; margin: 8px auto; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"/>
+      </div>
       <!--
       <v-card-text style="line-height: 1.8; color:black;">
         You are given <b style="color:red;">20 images</b> to annotate in this task.
@@ -56,6 +59,7 @@
       </v-card-text>
       -->
 
+      <!-- ## New instruction but replaced with the images
       <v-card-text style="line-height: 1.8; color:black;">
         You are given <b style="color:blue;">21 images</b> to annotate in this task.
         Please click on the numbers on the top to move to each image. <br>
@@ -82,14 +86,12 @@
           <svg width="13" height="12"><rect style="fill:grey; fill-opacity:0.4; stroke:grey;" width="13" height="12"/></svg>
           <span class="gray-text"> gray</span>.<br>
           
-
-          
         3. You can find the labeled boxes on the right bottom panel. <b>Hover to see corresponding boxes</b> and undo labeling if necessary. <br/>
         4. Once all boxes in all images are labeled, <v-btn color="error" x-small>Submit</v-btn> button at the top right corner will be activated. <br/>
         <span style="marginLeft: 15px;"></span> Click to end the task and <b>receive the code to submit</b> on the MTurk page. <br><br>
 
-        
       </v-card-text>
+      -->
 
       <v-divider></v-divider>
 

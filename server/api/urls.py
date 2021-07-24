@@ -27,6 +27,7 @@ urlpatterns = [
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
     path('submit/', views.submit),
+    path('submit-survey/', views.submitSurvey),
     path('get-annotations-by-image', views.getAnnotationsByImage),
     path('get-workers', views.getWorkers),
     path('get-every-annotations', views.getEveryAnnotations),

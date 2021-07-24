@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from .models import *
 
+import string
+import random
 import json
 from datetime import datetime, timedelta
 from django.db.models import Max
@@ -20,6 +22,7 @@ window = 4
 n_annotators=n_documents/window # now = 50 
 images_per_worker=n_documents*workers_per_image / n_annotators # 200*5 / 50 = 20
 workers_per_group=images_per_worker/window # 20 / 4 = 5
+
 
 @csrf_exempt
 @api_view(['POST','GET'])
@@ -492,7 +495,29 @@ def submit(request):
         profile=Profile.objects.get(user=user)
         profile.endtime=datetime.now()
         profile.done=True
+        profile.save()
         return HttpResponse('')
+
+
+@csrf_exempt
+def submitSurvey(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        user = User.objects.get(username=username)
+
+        profile=Profile.objects.get(user=user)
+        profile.endsurveytime=datetime.now()
+
+        token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        profile.token=token
+
+        profile.save()
+
+        response={
+            'token': token
+        }
+        return JsonResponse(response)
 
 
 @csrf_exempt
@@ -714,9 +739,12 @@ def getWorkers(request):
         print(doctype)
         profiles=Profile.objects.filter(doctype=doctype)
         print('profiles', profiles)
+
         users=[]
         for prof in profiles:
-            users.append({'username': prof.user.username})
+            # should be modified later to if (prof.endtime and prof.done)
+            if (prof.consent_agreed and prof.instr_read):
+                users.append({'username': prof.user.username, 'user_order': prof.user_order})
         return JsonResponse(users, safe=False)            
 
 
@@ -749,6 +777,9 @@ def getAnnotationsByWorker(request):
         response["annotations"]=workerannot
         response["start_time"]=profile.starttime 
         response['end_time']=profile.endtime
+        response['user_order']=profile.user_order
+        response['start_image_no']=profile.user_order*7
+        response['end_image_no']=profile.user_order*7+20
         return JsonResponse(response)
 
 
