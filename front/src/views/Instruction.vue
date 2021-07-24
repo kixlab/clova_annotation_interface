@@ -97,7 +97,7 @@ export default {
           console.log(res.data)
           self.$store.commit('set_assigned_images', res.data.assigned_images);
           self.$store.commit('set_start_image_no', res.data.assigned_images[0]);
-          self.$store.commit('set_curr_image', 1);
+          self.$store.commit('set_curr_image', 0);
           self.$router.push('annotation/'+res.data.doctype);
         })
     }

@@ -51,7 +51,6 @@ export default {
     this.$store.subscribeAction({after: (action) => {
         if (action.type ==='setCurrImage') {
             this.curr_index = this.$store.getters.get_curr_image
-            
         }
     }})
 

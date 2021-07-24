@@ -42,7 +42,9 @@ export default new Vuex.Store({
     },
     set_curr_image(state, newidx) {
       var new_image=state.assigned_images[newidx]
+      console.log('set_curr_image, before', state.curr_image_no)
       state.curr_image_no = new_image
+      console.log('set_curr_image, after', state.curr_image_no)
     },
     
   },
