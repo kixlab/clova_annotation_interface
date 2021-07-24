@@ -13,6 +13,13 @@ import json
 from datetime import datetime, timedelta
 from django.db.models import Max
 
+n_documents=200
+workers_per_image=5
+window = 4
+
+n_annotators=n_documents/window # now = 50 
+images_per_worker=n_documents*workers_per_image / n_annotators # 200*5 / 50 = 20
+workers_per_group=images_per_worker/window # 20 / 4 = 5
 
 @csrf_exempt
 @api_view(['POST','GET'])
@@ -65,43 +72,47 @@ def startTask(request):
         # assign task by assigning start image number 
         ## get smallest available user_order 
         # check if there is a user order taken but not completed
-        remaining_dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
-        print(datetime.now())
-        print(profile.signuptime)
 
+        remaining_dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
+        
         if(len(remaining_dropouts)==0):
-            print('No drop out')
-            # assign new order
             active_profiles=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False)
-            print('active_profiles', active_profiles)
             if(len(active_profiles)==0):
                 order=0
-                print("no active profiles")
             else:
                 last_order= active_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
-                print('last order of active profiles', last_order)
                 order=last_order+1 
         else:
-            print("dropouts",remaining_dropouts)
-            # reassign the first dropout order to this user 
+            # drop out exist, take those in dropout list
             dropout=remaining_dropouts[0]
             dropout.dropout = True
+            # remove this profile from dropout list 
             dropout.save()
             order=dropout.user_order
+
         profile.starttime=datetime.now()
-        print('neworder', order)
         profile.user_order=order        
         profile.save()
 
-        # assign documents 
-        documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[order*7:(order*7+21)]
+        mod_order = (order % n_annotators)
 
+        if(mod_order<=(n_annotators-workers_per_group)): # now: 50 -5 = 45 --> 45*4 ~ 45*4 + 20
+            # assign documents 
+            documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[mod_order*window:(mod_order*window+images_per_worker)]
+        else: 
+            # assign documents 
+            end_docs=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[mod_order*window:] # now: 184: 188: 192: 196:  
+            start_docs=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[:(workers_per_group - (n_annotators-mod_order))*window] # 46 --> 4*(5-(50-46)), 49 --> 4*(5-(50-49)) 
+            documents=start_docs 
+            documents.append(end_docs)
+ 
         # initialize status 
         for document in documents:
             Status(user=user, document=document, status=False).save()
 
         response={
-            'user_order': order,
+            'mod_order': mod_order,
+            'assigned_images': [doc.doc_no for doc in documents],
             'doctype': profile.doctype.doctype
         }
         return JsonResponse(response)

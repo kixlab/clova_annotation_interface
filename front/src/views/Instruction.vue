@@ -94,8 +94,10 @@ export default {
 
       self.$helpers.server_post(self, "/api/instr-done/", 
         function(self, res){ // eslint-disable-line no-unused-vars
+          console.log(res);
           self.$store.commit('set_start_image_no', res.data.user_order*7);
-          self.$router.push('annotation/'+res.data.doctype);
+          self.$store.commit('set_assigned_images', res.data.assigned_images);
+ //         self.$router.push('annotation/'+res.data.doctype);
         })
     }
   },

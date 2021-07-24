@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       image_box: this.$store.getters.getImageBoxes,
-      img_temp: this.$store.getters.get_curr_image
+      curr_index: this.$store.getters.get_image_order
     };
   },
   mounted() {
@@ -58,23 +58,22 @@ export default {
   },
   computed: {
     stats() {
-      console.log("Hi", this.$store.getters.getStatus);
           return this.$store.getters.getStatus;
         }
   },
   watch: {
     stats() {
-      console.log("Hi", this.$store.getters.getStatus);
           return this.$store.getters.getStatus;
         }
   }, 
   methods:{
       ...mapActions(['setCurrImage']),
       ...mapGetters(['getStatus']),
-      goTo: function(imgNo){
-        this.$store.commit('set_image_count', imgNo);
+      goTo: function(index){
+        this.$store.commit('set_image_count', index);
         this.image_box = this.$store.getters.getImageBoxes;
-        this.setCurrImage(imgNo)
+        this.setCurrOrder(index)
+        this.setCurrImage(index)
       },
   }
 };

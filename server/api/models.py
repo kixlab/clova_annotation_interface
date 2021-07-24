@@ -23,6 +23,7 @@ class Profile(models.Model):
 
     starttime=models.DateTimeField(blank=True, null=True)
     user_order=models.IntegerField(default=0)
+    mod_order=models.IntegerField(default=0, blank=True, null=True)
 
     endtime=models.DateTimeField(blank=True, null=True)
 
