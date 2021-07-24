@@ -43,7 +43,6 @@ export default {
   name: "Progress",
   data() {
     return {
-      image_box: this.$store.getters.getImageBoxes,
       curr_index: this.$store.getters.get_image_order
     };
   },
@@ -72,7 +71,6 @@ export default {
 //        this.$store.commit('set_image_order', index);
         this.setCurrOrder(index)
         this.setCurrImage(index)
-        this.image_box = this.$store.getters.getImageBoxes;
       },
   }
 };
