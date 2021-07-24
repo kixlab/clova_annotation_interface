@@ -69,7 +69,7 @@ export default new Vuex.Store({
       return state.image_order
     },
     get_curr_image: (state) => {
-      return state.image_order
+      return state.curr_image_no
     },
     get_assigned_images: (state) => {
       return state.assigned_images

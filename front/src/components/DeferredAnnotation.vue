@@ -297,8 +297,6 @@ export default {
       }
   },
   computed: {
-    ...mapGetters(['image_no']),
-
     isDisabled() {
         return this.$store.getters.getSelectedBoxes.length === 0
     },
