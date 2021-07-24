@@ -138,6 +138,7 @@ export default {
     loadNewImage: function() {
       const self = this;
       console.log('load new image')
+      console.log(self.$store.getters.json_url);
       axios.get(self.$store.getters.json_url).then(function(res) {
           var json = res.data;
           var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
