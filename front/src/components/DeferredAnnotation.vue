@@ -196,7 +196,7 @@ export default {
   },
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setAStatus', 'setStatus']),
-      ...mapGetters(['getImageBoxes']),
+      ...mapGetters(['getImageBoxes', 'get_curr_image']),
 
       selectCategory(selectedCategory){
         this.category=selectedCategory;
@@ -311,7 +311,7 @@ export default {
     }
   },
   watch:{
-    curr_image_no:{
+    get_curr_image:{
       deep: true,
       handler(){
         const self=this;
