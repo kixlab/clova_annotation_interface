@@ -2,7 +2,7 @@
 <div class='center'>
   <div style="width: 100%; overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap;">
       <template v-for="(status, index) in stats"> 
-        <template v-if="index===img_temp">
+        <template v-if="index===curr_index">
           <template v-if="status===true">
             <button class="curr done status" v-on:click="goTo(index);" :key='index' >
             #{{index+1}}
@@ -43,38 +43,34 @@ export default {
   name: "Progress",
   data() {
     return {
-      image_box: this.$store.getters.getImageBoxes,
-      img_temp: this.$store.getters.get_curr_image
+      curr_index: this.$store.getters.get_image_order
     };
   },
   mounted() {
     this.$store.subscribeAction({after: (action) => {
         if (action.type ==='setCurrImage') {
-            this.img_temp = this.$store.getters.get_curr_image
-            
+            this.curr_index = this.$store.getters.get_curr_image
         }
     }})
 
   },
   computed: {
     stats() {
-      console.log("Hi", this.$store.getters.getStatus);
           return this.$store.getters.getStatus;
         }
   },
   watch: {
     stats() {
-      console.log("Hi", this.$store.getters.getStatus);
           return this.$store.getters.getStatus;
         }
   }, 
   methods:{
-      ...mapActions(['setCurrImage']),
+      ...mapActions(['setCurrImage', 'setCurrOrder']),
       ...mapGetters(['getStatus']),
-      goTo: function(imgNo){
-        this.$store.commit('set_image_count', imgNo);
-        this.image_box = this.$store.getters.getImageBoxes;
-        this.setCurrImage(imgNo)
+      goTo: function(index){
+//        this.$store.commit('set_image_order', index);
+        this.setCurrOrder(index)
+        this.setCurrImage(index)
       },
   }
 };

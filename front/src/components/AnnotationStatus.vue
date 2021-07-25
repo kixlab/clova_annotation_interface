@@ -126,7 +126,7 @@ export default {
       axios.post(self.$store.state.server_url + "/api/delete-annotation/", {
 //        mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
-        image_id: self.$store.state.image_order + self.$store.state.start_image_no,
+        image_id: self.$store.state.curr_image_no,
         annot_pk: group.annotpk
       }).then(function () {
 //        console.log("Annotation deleted", res.data.annot_pk)
@@ -148,7 +148,7 @@ export default {
       axios.post(self.$store.state.server_url + "/api/update-status/", {
        // mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
-        image_id: self.$store.state.image_order + self.$store.state.start_image_no,
+        image_id: self.$store.state.curr_image_no,
         status: false
       }).then(function () {
         //console.log('set status false')

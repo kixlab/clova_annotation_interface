@@ -188,7 +188,7 @@ export default {
       params:{
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
-        image_id: self.$store.state.image_order + self.$store.state.start_image_no
+        image_id: self.$store.state.curr_image_no
       }
     }).then(function(res){
       var annotations=res.data.annotations;
@@ -239,7 +239,7 @@ export default {
           axios.post(self.$store.state.server_url + "/api/save-def-annotation/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order + self.$store.state.start_image_no,
+            image_id: self.$store.state.curr_image_no,
             boxes_id: group.map((i) => {return i.box_id}),
             subcatpk:subcatpk,
             catpk: catpk,
@@ -258,7 +258,7 @@ export default {
           axios.post(self.$store.state.server_url + "/api/update-status/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order + self.$store.state.start_image_no,
+            image_id: self.$store.state.curr_image_no,
             status: true
           }).then(function () {
             self.setAStatus({
@@ -292,13 +292,8 @@ export default {
             self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id}, "add"])
           }          
         },
-      clicked(label) {
-        console.log("Clicked", label)
-      }
   },
   computed: {
-    ...mapGetters(['image_no']),
-
     isDisabled() {
         return this.$store.getters.getSelectedBoxes.length === 0
     },
@@ -316,7 +311,7 @@ export default {
     }
   },
   watch:{
-    image_no:{
+    curr_image_no:{
       deep: true,
       handler(){
         const self=this;
@@ -324,7 +319,7 @@ export default {
           params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
-            image_id: self.$store.state.image_order + self.$store.state.start_image_no
+            image_id: self.$store.state.curr_image_no
           }
         }).then(function(res){
           var annotations=res.data.annotations;
