@@ -197,8 +197,6 @@ export default {
   },
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setAStatus', 'setStatus']),
-      ...mapGetters(['getImageBoxes', 'get_curr_image']),
-
       selectCategory(selectedCategory){
         this.category=selectedCategory;
         this.addsubcat=false;
