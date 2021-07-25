@@ -60,6 +60,13 @@ export default {
         }
   },
   watch: {
+
+    curr_image_no:{
+      deep: true, 
+      handler(){
+        this.curr_index = this.$store.getters.get_curr_image
+      }
+      },
     stats() {
           return this.$store.getters.getStatus;
         }
