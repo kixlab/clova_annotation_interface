@@ -26,7 +26,7 @@
             </v-list>
           </v-col>
 
-          <v-col :cols="8" style="text-align:left;">
+          <v-col :cols="7" style="text-align:left;">
             Sub-category
              <v-list>
               <v-list-item-group
@@ -39,7 +39,7 @@
                     <v-menu> 
                       <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip right> 
-                        <template v-slot:activator="{ on:tooltip }">
+                        <template v-slot:activator="{ click:tooltip }">
                           <v-btn x-small outlined color="warning" v-on="{ ...tooltip, ...menu }" v-bind="attrs">
                             Can be
                           </v-btn>
@@ -61,7 +61,7 @@
               </v-list-item-group>
             </v-list>
           </v-col>
-          <v-col :cols="1" style="text-align:left;">
+          <v-col :cols="2" style="text-align:left;">
             </v-col>
         </v-row>
          <!-- <v-row>
