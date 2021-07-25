@@ -310,7 +310,8 @@ export default {
     },
     isAddingSub(){
       return (this.addsubcat)
-    }
+    },
+    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'get_image_order', 'get_curr_image']),
   },
   watch:{
     get_curr_image:{
