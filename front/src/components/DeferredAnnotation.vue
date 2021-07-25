@@ -36,7 +36,22 @@
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
-                    <v-btn x-small outlined color="warning" v-on:click.stop="annotate(subcat, 0)">Can be</v-btn>
+                    <v-menu> 
+                      <template v-slot:activator="{ on: menu, attrs }">
+                        <v-tooltip bottom> 
+                        <template v-slot:activator="{ on:tooltip }">
+                          <v-btn x-small outlined color="warning" v-on:"{ ...tooltip }">
+                            Can be
+                          </v-btn>
+                        </template>
+                        <span>tooltip</span>
+                      </v-tooltip>
+                      </template>
+                      <v-list>
+                        suggestions
+                        <v-list-item> hi </v-list-item>
+                      </v-list>
+                      </v-menu>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
                         <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="annotate(subcat, null)">N/A</v-btn>
