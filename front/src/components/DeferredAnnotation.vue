@@ -35,13 +35,8 @@
                   <span class='subcat-div'>
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
-                    <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
-                    <v-tooltip v-model="subcat.show" top>
-                      <template>
-                        <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="console.log('opentooltip')">Can Be</v-btn>
-                      </template> 
-                      <span> hhi </span>
-                    </v-tooltip>
+                      <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
+                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="console.log('opentooltip')">Can Be</v-btn>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
                         <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="annotate(subcat, null)">N/A</v-btn>
@@ -148,6 +143,7 @@
       </v-card-text>
 
     </v-card>
+    <v-card>suggestions</v-card>
   </v-col>
 </template>
 
