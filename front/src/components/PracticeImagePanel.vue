@@ -107,7 +107,6 @@ export default {
       deep: true,
       handler(){
         this.loadNewImage();
-        console.log('********** watching!!!')
       }
     }
     
@@ -115,7 +114,6 @@ export default {
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
     loadNewImage: function() {
-      console.log('load new image')
       const self = this;
       axios.get(self.$store.getters.prac_json_url).then(function(res) {
           var json = res.data;
@@ -131,7 +129,6 @@ export default {
       });
     },
     loadNewJson: function() {
-        console.log('load new json')
       const self = this;
       axios.get(self.$store.getters.prac_json_url).then(function(res) {
           var json = res.data;

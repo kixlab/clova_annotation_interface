@@ -93,7 +93,6 @@ export default {
         }
       }
 
-      //console.log(this.image_box)
       this.updateImageBoxes(this.image_box)
       this.selection = null
 
