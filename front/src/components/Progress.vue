@@ -60,14 +60,6 @@ export default {
         }
   },
   watch: {
-
-    curr_image_no:{
-      deep: true, 
-      handler(){
-        console.log('curr image no watching')
-        this.curr_index = this.$store.getters.get_curr_image
-      }
-      },
     stats() {
           return this.$store.getters.getStatus;
         }
@@ -79,6 +71,7 @@ export default {
         this.$store.commit('set_image_order', index);
         this.setCurrOrder(index)
         this.setCurrImage(index)
+        this.curr_index=index;
       },
   }
 };
