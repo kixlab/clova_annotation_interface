@@ -218,6 +218,7 @@ export default {
       openSuggestion(event, item, confidence){
         console.log(event);
         console.log(event.target);
+        console.log(item, confidence)
       },
       annotate(item, confidence) {
 
