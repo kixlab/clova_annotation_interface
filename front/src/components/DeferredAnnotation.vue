@@ -37,8 +37,8 @@
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
                         <v-tooltip right> 
-                        <template v-slot:activator="{ click:tooltip }">
-                          <v-btn x-small outlined color="warning" v-on="{ ...tooltip, ...menu }" v-bind="attrs">
+                        <template v-slot:activator="{ on }">
+                          <v-btn x-small outlined color="warning" v-on="{on}">
                             Can be
                           </v-btn>
                         </template>
