@@ -81,7 +81,7 @@ export default new Vuex.Store({
       commit('set_image_order', neworder)
     },
     setCurrImage({commit}, newidx) {
-      console.llg('setCurrImage called')
+      console.log('setCurrImage called')
       commit('set_curr_image', newidx)
     },
     setAssignedImages({ commit }, images) {
