@@ -271,6 +271,7 @@ export default {
       },
 
       loadAnnotatedBoxes(annotations){
+        console.log('loadAnnotatedBoxes called')
         const self = this;
           self.updateAnnotatedBoxes([[], "reset"])
           var currImageBox = self.$store.getters.getImageBoxes
