@@ -183,6 +183,7 @@ export default {
       self.category=self.cats[0];
       })
     
+    console.log('set timeout called')
     setTimeout( function(){
     axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
       params:{
