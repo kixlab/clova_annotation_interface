@@ -90,7 +90,7 @@ export default {
     self.loadNewImage();
 
     self.$store.subscribeAction({after: (action) => {
-      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
+      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes'|| action.type === 'setCurrImage') {
         self.image_box = self.$store.getters.getImageBoxes;
       }
     }})
