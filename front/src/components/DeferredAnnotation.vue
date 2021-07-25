@@ -37,7 +37,7 @@
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
                         <v-tooltip v-model="subcat.show" right> 
-                        <template v-slot:activator="{ on }">
+                        <template>
                           <v-btn x-small outlined color="warning" @click="subcat.show = true">
                             Can be
                           </v-btn>
