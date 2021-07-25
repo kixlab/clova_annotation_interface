@@ -197,6 +197,8 @@ export default {
   },
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setAStatus', 'setStatus']),
+      ...mapGetters(['getImageBoxes']),
+
       selectCategory(selectedCategory){
         this.category=selectedCategory;
         this.addsubcat=false;
@@ -294,7 +296,7 @@ export default {
         },
   },
   computed: {
-    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'get_image_order', 'get_curr_image']),
+    ...mapGetters(['getImage','getImageRatio', 'get_image_order', 'get_curr_image']),
     isDisabled() {
         return this.$store.getters.getSelectedBoxes.length === 0
     },
