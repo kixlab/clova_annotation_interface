@@ -290,6 +290,10 @@ export default {
     ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio']),
     image_url() {
       return this.$store.getters.image_url;
+    },
+    json_url(){
+      return this.$store.getters.json_url;
+
     }
   }
 };
