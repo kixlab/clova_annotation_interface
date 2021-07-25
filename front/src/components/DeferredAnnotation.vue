@@ -38,7 +38,7 @@
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
                     <v-menu> 
                       <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom> 
+                        <v-tooltip right> 
                         <template v-slot:activator="{ on:tooltip }">
                           <v-btn x-small outlined color="warning" v-on="{ ...tooltip, ...menu }" v-bind="attrs">
                             Can be
