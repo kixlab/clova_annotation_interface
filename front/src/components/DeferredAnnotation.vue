@@ -40,7 +40,7 @@
                       <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom> 
                         <template v-slot:activator="{ on:tooltip }">
-                          <v-btn x-small outlined color="warning" v-on:"{ ...tooltip }">
+                          <v-btn x-small outlined color="warning" v-on="{ ...tooltip, ...menu }" v-bind="attrs">
                             Can be
                           </v-btn>
                         </template>
