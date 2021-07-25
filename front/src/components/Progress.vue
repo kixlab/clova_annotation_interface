@@ -50,7 +50,7 @@ export default {
   mounted() {
     this.$store.subscribeAction({after: (action) => {
         if (action.type ==='setCurrImage') {
-            this.curr_index = this.$store.getters.get_curr_image
+            this.curr_index = this.$store.getters.get_image_order;
         }
     }})
 
