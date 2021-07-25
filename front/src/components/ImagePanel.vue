@@ -294,7 +294,6 @@ export default {
     },
     json_url(){
       return this.$store.getters.json_url;
-
     }
   }
 };

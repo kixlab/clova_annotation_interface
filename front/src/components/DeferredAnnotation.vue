@@ -314,6 +314,7 @@ export default {
     get_curr_image:{
       deep: true,
       handler(){
+        console.log('watched get_curr_image at deferred annoattion vue')
         const self=this;
         axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
           params:{
