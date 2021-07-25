@@ -11,7 +11,7 @@
       
       <v-card-text> 
         <v-row>
-          <v-col :cols="4" style="text-align:left;">
+          <v-col :cols="3" style="text-align:left;">
             Category
             <v-list >
               <v-list-item-group
@@ -26,7 +26,7 @@
             </v-list>
           </v-col>
 
-          <v-col :cols="8" style="text-align:left;">
+          <v-col :cols="9" style="text-align:left;">
             Sub-category
              <v-list>
               <v-list-item-group
@@ -183,7 +183,6 @@ export default {
       self.category=self.cats[0];
       })
     
-    console.log('set timeout called')
     setTimeout( function(){
     axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
       params:{
@@ -266,13 +265,11 @@ export default {
               'idx':self.$store.state.image_order,
               'val':true
             });
-            //console.log('### setAStatus called - annotate')
           });
         }
       },
 
       loadAnnotatedBoxes(annotations){
-        console.log('loadAnnotatedBoxes called')
         const self = this;
           self.updateAnnotatedBoxes([[], "reset"])
           var currImageBox = self.$store.getters.getImageBoxes
@@ -289,7 +286,6 @@ export default {
               currBox.annotated=true
               group.push(currBox)
             }
-            //console.log(currImageBox)
             self.updateImageBoxes(currImageBox)
             self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id}, "add"])
           }          
@@ -317,7 +313,6 @@ export default {
     get_curr_image:{
       deep: true,
       handler(){
-        console.log('watched get_curr_image at deferred annoattion vue')
         const self=this;
         axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
           params:{
