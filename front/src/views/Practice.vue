@@ -25,10 +25,10 @@
 
         <!-- COL2 - ANNOTATION UI -->
         <v-col cols="7">
-          <v-row dense><!--
+          <v-row dense>
             <box-selection-status/>
             <deferred-annotation/>
-            <deferred-annotation-status/>-->
+            <deferred-annotation-status/>
           </v-row>
         </v-col>
       </v-row>
@@ -45,11 +45,11 @@ import PracticeSubmitButton from '@/components/PracticeSubmitButton.vue'
 
 //import InstructionButton from '@/components/InstructionButton.vue'
 //import OverviewButton from '@/components/OverviewButton.vue'
-/*
+
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
 import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
-*/
+
 
 import axios from 'axios'
 //import SubmitButton from '../components/SubmitButton.vue'
@@ -61,11 +61,11 @@ export default {
     PracticeSubmitButton,
     //InstructionButton,
   //  OverviewButton,
-    /*
+    
     BoxSelectionStatus,
     DeferredAnnotation,
     DeferredAnnotationStatus,
-    */
+    
   },
   beforeCreate() {
     this.$helpers.isWrongAccess(this)

@@ -82,10 +82,11 @@ export default {
 
   mounted() {
     const self = this;
-    self.loadNewImage()
-    self.image_box = self.$store.getters.getImageBoxes;
-    this.loadNewImage(function(self) {
+    //self.loadNewImage()
+    //self.image_box = self.$store.getters.getImageBoxes;
+    self.loadNewImage(function(self) {
       //self.image = self.$store.getters.getImage;
+      self.newSize()
       self.image_box = self.$store.getters.getImageBoxes;
       self.getInitialPosition();
       
@@ -122,22 +123,13 @@ export default {
           var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height);
           //console.log(img_width, img_height)
           //console.log(self.width, self.height, self.width*img_height/img_width)
+          const cont_pos = self.$refs.img_container.getBoundingClientRect()
+          const width = cont_pos.right-cont_pos.left
+          const height = cont_pos.bottom-cont_pos.top
+          self.width = width
+          self.height = height
           self.setImageBoxes([json, self.width, self.width*img_height/img_width, true]);
-          self.original_box = json;
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
-    },
-    loadNewJson: function() {
-      const self = this;
-      axios.get(self.$store.getters.prac_json_url).then(function(res) {
-          var json = res.data;
-          var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
-          var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height);
-          //console.log(img_width, img_height)
-          //console.log(self.width, self.height, self.width*img_height/img_width)
-          self.setImageBoxes([json, self.width, self.width*img_height/img_width, true]);
+          
           self.original_box = json;
       })
       .catch(function(err) {
