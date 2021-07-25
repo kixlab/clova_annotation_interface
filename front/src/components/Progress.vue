@@ -64,6 +64,7 @@ export default {
     curr_image_no:{
       deep: true, 
       handler(){
+        console.log('curr image no watching')
         this.curr_index = this.$store.getters.get_curr_image
       }
       },
