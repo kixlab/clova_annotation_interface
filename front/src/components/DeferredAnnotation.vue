@@ -26,7 +26,7 @@
             </v-list>
           </v-col>
 
-          <v-col :cols="9" style="text-align:left;">
+          <v-col :cols="8" style="text-align:left;">
             Sub-category
              <v-list>
               <v-list-item-group
@@ -61,6 +61,8 @@
               </v-list-item-group>
             </v-list>
           </v-col>
+          <v-col :cols="1" style="text-align:left;">
+            </v-col>
         </v-row>
          <!-- <v-row>
           <v-col class="text-left">
