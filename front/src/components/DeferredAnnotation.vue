@@ -36,13 +36,11 @@
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
                     <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
-                      <v-tooltip v-model="subcat.show" right> 
+                    <v-tooltip v-model="subcat.show" top>
                       <template>
-                        <v-btn x-small outlined color="warning" @click="subcat.show = true">
-                          Can be
-                        </v-btn>        
-                      </template>
-                      <span>tooltip</span>
+                        <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="console.log('opentooltip')">Can Be</v-btn>
+                      </template> 
+                      <span> hhi </span>
                     </v-tooltip>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
