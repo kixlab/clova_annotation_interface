@@ -296,6 +296,7 @@ export default {
         },
   },
   computed: {
+    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'get_image_order', 'get_curr_image']),
     isDisabled() {
         return this.$store.getters.getSelectedBoxes.length === 0
     },
@@ -311,7 +312,6 @@ export default {
     isAddingSub(){
       return (this.addsubcat)
     },
-    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'get_image_order', 'get_curr_image']),
   },
   watch:{
     get_curr_image:{
