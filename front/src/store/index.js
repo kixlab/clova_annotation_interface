@@ -23,7 +23,7 @@ export default new Vuex.Store({
   },
   mutations: {
     set_image_order (state, cnt) {
-      console.log('image order set to ' cnt)
+      console.log('image order set to ', cnt)
       state.image_order = cnt;
     },
     update_image_count (state) {
