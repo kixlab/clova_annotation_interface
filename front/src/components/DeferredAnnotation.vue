@@ -36,10 +36,10 @@
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
                       <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
-                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="console.log('opentooltip')">Can Be</v-btn>
+                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion(event, subcat, 0)">Can Be</v-btn>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
-                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="annotate(subcat, null)">N/A</v-btn>
+                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion(event,subcat,  null)">N/A</v-btn>
                     </span>
                   </span>
                 </v-list-item>
@@ -143,7 +143,7 @@
       </v-card-text>
 
     </v-card>
-    <v-card>suggestions</v-card>
+    <v-card class='suggestion-div'>suggestions</v-card>
   </v-col>
 </template>
 
@@ -215,7 +215,10 @@ export default {
         this.addsubcat=true;
       },
 
-      
+      openSuggestion(event, item, confidence){
+        console.log(event);
+        console.log(event.target);
+      },
       annotate(item, confidence) {
 
         const imageBox = this.getImageBoxes()//this.image_box
@@ -364,5 +367,9 @@ export default {
 th {
   text-align: center; 
   background-color: lightGrey;
+}
+
+.suggestion-div{
+  position: absolute;
 }
 </style>
