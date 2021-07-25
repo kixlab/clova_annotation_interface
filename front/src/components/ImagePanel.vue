@@ -90,7 +90,7 @@ export default {
     self.loadNewImage();
 
     self.$store.subscribeAction({after: (action) => {
-      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes'|| action.type === 'setCurrImage') {
+      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
         self.image_box = self.$store.getters.getImageBoxes;
       }
     }})
@@ -105,7 +105,7 @@ export default {
   },
 
   watch:{
-    image: {
+    get_curr_image: {
       deep: true,
       handler(){
         this.loadNewImage();
