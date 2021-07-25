@@ -105,7 +105,7 @@ export default {
   },
 
   watch:{
-    curr_image_no: {
+    image: {
       deep: true,
       handler(){
         this.loadNewImage();
@@ -118,6 +118,7 @@ export default {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
     loadImageID: function (callback) {
       const self = this;
+      console.log('load new image id!')
       axios.get(self.$store.state.server_url + "/api/get-image-id", {
         params: {
           mturk_id: self.$store.state.mturk_id,
