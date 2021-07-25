@@ -23,6 +23,7 @@ export default new Vuex.Store({
   },
   mutations: {
     set_image_order (state, cnt) {
+      console.log('image order set to ' cnt)
       state.image_order = cnt;
     },
     update_image_count (state) {
@@ -80,6 +81,7 @@ export default new Vuex.Store({
       commit('set_image_order', neworder)
     },
     setCurrImage({commit}, newidx) {
+      console.llg('setCurrImage called')
       commit('set_curr_image', newidx)
     },
     setAssignedImages({ commit }, images) {

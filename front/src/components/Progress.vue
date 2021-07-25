@@ -68,7 +68,7 @@ export default {
       ...mapActions(['setCurrImage', 'setCurrOrder']),
       ...mapGetters(['getStatus']),
       goTo: function(index){
-//        this.$store.commit('set_image_order', index);
+        this.$store.commit('set_image_order', index);
         this.setCurrOrder(index)
         this.setCurrImage(index)
       },
