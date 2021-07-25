@@ -72,6 +72,7 @@ export default {
         this.setCurrOrder(index)
         this.setCurrImage(index)
         this.curr_index=index;
+        console.log('curr index', this.curr_index, index)
       },
   }
 };
