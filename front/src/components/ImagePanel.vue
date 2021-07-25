@@ -109,7 +109,6 @@ export default {
       deep: true,
       handler(){
         this.loadNewImage();
-        console.log('********** watching!!!')
       }
     }
     
@@ -118,7 +117,6 @@ export default {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
     loadImageID: function (callback) {
       const self = this;
-      console.log('load new image id!')
       axios.get(self.$store.state.server_url + "/api/get-image-id", {
         params: {
           mturk_id: self.$store.state.mturk_id,
@@ -138,8 +136,6 @@ export default {
     },
     loadNewImage: function() {
       const self = this;
-      console.log('load new image')
-      console.log(self.$store.getters.json_url);
       axios.get(self.$store.getters.json_url).then(function(res) {
           var json = res.data;
           var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
