@@ -2,7 +2,7 @@
  <v-col cols="12">
   <v-card
     tile
-    @mousedown="clickDown" @mouseup="clickUp"
+    @mousedown="clickDown" @mouseup="clickUp" 
     
     >
       <v-row>
@@ -17,11 +17,9 @@
                   <div v-if="box.selected === true">
                     <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
                   </div>
-                  <div v-else-if="box.annotated === true && box.hover === false">
+                  <div v-else-if="box.annotated === true">
+                    
                     <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
-                  </div>
-                  <div v-else-if="box.annotated === true && box.hover === true">
-                    <bounding-box circle="no" color="stroke:yellow; fill: rgb(220, 223, 131); fill-opacity: 0.4;" :box_info="box"/>
                   </div>
                   <div v-else>
                     <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
@@ -57,7 +55,7 @@
 import axios from "axios";
 import {mapActions, mapGetters} from 'vuex';
 import DragSelect from 'vue-drag-select/src/DragSelect.vue'
-import BoundingBox from '@/components/BoundingBox.vue'
+import BoundingBox from '@/components/PracticeBoundingBox.vue'
 
 export default {
   name: "PracticeImagePanel",
@@ -77,13 +75,15 @@ export default {
       height: 0,
 
       prac_img: 'http://13.125.191.49:8000/media/receipt/receipt_00300.png',
+      showAnswer: this.$store.getters.getShowAnswer,
+
     };
   },
 
   mounted() {
     const self = this;
-    //self.loadNewImage()
-    //self.image_box = self.$store.getters.getImageBoxes;
+    self.loadNewImage()
+    self.image_box = self.$store.getters.getImageBoxes;
     self.loadNewImage(function(self) {
       //self.image = self.$store.getters.getImage;
       self.newSize()
@@ -131,6 +131,8 @@ export default {
           self.setImageBoxes([json, self.width, self.width*img_height/img_width, true]);
           
           self.original_box = json;
+
+          console.log(self.$store.getters.getImageBoxes)
       })
       .catch(function(err) {
         console.log(err);
@@ -184,6 +186,28 @@ export default {
       this.endPoint = [event.clientX, event.clientY];
       this.getInitialPosition();
       this.updateSelectedBoxes();
+    },
+
+    checkPosition: function(event) {
+      //if (this.$modelPrediction) {
+        this.getInitialPosition()
+        var x = event.clientX - this.initialPosition[0]
+        var y = event.clientY - this.initialPosition[1]
+        var boxes = this.image_box
+        for (var box in boxes) {
+          var x1 = boxes[box].x_pos
+          var x2 = boxes[box].x_pos + boxes[box].x_len
+          var y1 = boxes[box].y_pos
+          var y2 = boxes[box].y_pos + boxes[box].y_len
+          if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
+            boxes[box].showdata = true
+          }
+          else {
+            boxes[box].showdata = false
+          }
+        }
+        this.updateImageBoxes(boxes)
+      //}
     },
 
     updateSelectedBoxes: function() {

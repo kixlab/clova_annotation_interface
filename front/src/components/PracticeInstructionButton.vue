@@ -127,7 +127,7 @@ export default {
     },
     mounted() {
       // this.dialog = true;
-      this.openInstruction();
+      //this.openInstruction();
     },
 }
 </script>

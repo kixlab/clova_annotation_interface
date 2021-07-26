@@ -2,7 +2,7 @@
   <v-col cols="12">
     <v-card tile>
       <v-card-title style="font-size: 110%">
-        <b> 2. Choose a label that best describes the <span class="red-text">selected box(es)</span>.</b> 
+        <b> 2. Choose a label that best describes the <span >selected box(es)</span>.</b> 
       </v-card-title>
       
       <v-card-subtitle class='text-left'>
@@ -217,7 +217,7 @@ export default {
 
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
-        var label = item.cat + "." + item.subcat
+        var label = item.cat + "-" + item.subcat
         var subcatpk=item.pk
         var catpk=item.catpk
         const self = this;

@@ -20,14 +20,14 @@
         1. Drag or click to select <span class="red-text">red box(es)</span> on the image.</b> 
       </v-card-title>
       <v-card-subtitle class='text-left'>
-        <b><span style="color:red;">You should select one group of box(es) at a time</span> that indicate a single entity.<br></b>
+        You should <b style="color:blue;">select one group of box(es) at a time</b> that indicates a single entity.<br>
       </v-card-subtitle>
-      <v-card-text style="min-height:200px; max-height: 200px; text-align:left; overflow-y: scroll;" scrollable>
+      <v-card-text style="min-height:130px; max-height: 200px; text-align:left; overflow-y: scroll;" scrollable>
         <div class="text-left" style="font-size: 100%; padding: 5px;"> 
-          <b>Selected boxes: </b>
+          <b style="color:gray">Selected boxes: </b>
           <div style="display:flex;" class="flex-wrap"> 
           <div v-for="box in selected_box" :key="box.id" >
-              <span style="border: 1.5px solid red; margin: 0 2px; font-size: 95%"> <b>{{ box.text }}</b> </span>
+              <span style="border: 2px solid red; margin: 0 2px; font-size: 95%; padding: 0 3px;"> <b>{{ box.text }}</b> </span>
           </div>
           </div>
           <br/>

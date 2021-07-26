@@ -9,29 +9,32 @@
     >
       <v-toolbar-title>Practice Annotation (ID: {{this.$store.state.mturk_id}})</v-toolbar-title>
       <v-spacer/>
-      <!--<instruction-button disabled/>-->
+      <practice-instruction-button />
       <practice-submit-button/>
     </v-app-bar>
 
     <v-main>
       <v-container fluid fill-height>
-      <v-row align-content="start">
-        <!-- COL1 - IMAGE LOADER -->
-        <v-col cols="5">
-          <v-row dense>
-            <practice-image-panel/>
-          </v-row>
-        </v-col>
+        <v-row dense>
+          <b style="color:red; margin-right: 8px;">* Important * </b>  This is a part of the tutorial where you can check your understanding with the requester's provided answer. Please practice with the provided image.
+        </v-row>
+        <v-row align-content="start">
+          <!-- COL1 - IMAGE LOADER -->
+          <v-col cols="5">
+            <v-row dense>
+              <practice-image-panel/>
+            </v-row>
+          </v-col>
 
-        <!-- COL2 - ANNOTATION UI -->
-        <v-col cols="7">
-          <v-row dense>
-            <box-selection-status/>
-            <deferred-annotation/>
-            <deferred-annotation-status/>
-          </v-row>
-        </v-col>
-      </v-row>
+          <!-- COL2 - ANNOTATION UI -->
+          <v-col cols="7">
+            <v-row dense>
+              <box-selection-status/>
+              <deferred-annotation/>
+              <deferred-annotation-status/>
+            </v-row>
+          </v-col>
+        </v-row>
       </v-container>
     </v-main>
   </v-app>
@@ -43,7 +46,7 @@
 import PracticeImagePanel from '@/components/PracticeImagePanel.vue'
 import PracticeSubmitButton from '@/components/PracticeSubmitButton.vue'
 
-//import InstructionButton from '@/components/InstructionButton.vue'
+import PracticeInstructionButton from '@/components/PracticeInstructionButton.vue'
 //import OverviewButton from '@/components/OverviewButton.vue'
 
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
@@ -59,7 +62,7 @@ export default {
   components: {
     PracticeImagePanel,
     PracticeSubmitButton,
-    //InstructionButton,
+    PracticeInstructionButton,
   //  OverviewButton,
     
     BoxSelectionStatus,

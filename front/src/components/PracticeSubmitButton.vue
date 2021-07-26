@@ -19,25 +19,43 @@
 </template>
 
 <script>
-import axios from "axios";
-import {mapGetters} from 'vuex';
+//import axios from "axios";
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
   name: "SubmitButton",
   methods: {
     ...mapGetters(['getIfAllImagesAnnotated']),
+    ...mapActions(['updateImageBoxes', 'setShowAnswer']),
 
     onSubmit: function() {
       const self=this;
+      //console.log(self.$store.getters.getImageBoxes)
+      var boxes = self.$store.getters.getImageBoxes
+      for (var box in boxes) {
+        var tempbox = boxes[box]
+        var gt = tempbox.gtlabel.cat + '-' + tempbox.gtlabel.subcat
+        if (tempbox.label !== gt) {
+          
+          tempbox.correct = false
+        } else {
+          tempbox.correct = true
+        }
+        //tempbox.showdata = true
+      }
+      self.updateImageBoxes(boxes)
+      self.setShowAnswer(!self.$store.getters.getShowAnswer)
+      /*
       axios.post(self.$store.state.server_url + '/api/submit/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( function(){
         var doctype=self.$router.currentRoute.fullPath.split('/')[2];
         self.$router.push('../../annot-done/'+doctype);
       });
+      */
 
       
- }
+    }
   },
 
   computed: {

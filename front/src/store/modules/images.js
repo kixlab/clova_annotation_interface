@@ -6,6 +6,7 @@ const state = {
     imageRatio: '',
     selectedBoxes: [],
     annotatedBoxes: [],
+    showAnswer: false,
 }
 
 const getters = {
@@ -20,7 +21,8 @@ const getters = {
             return false
         }
         return state.imageBoxes.every(box => box.annotated === true)
-    }
+    },
+    getShowAnswer: (state) => state.showAnswer,
 }
 
 const actions = {
@@ -35,12 +37,17 @@ const actions = {
         commit('setCurrImage', name.toString())
     },
  */
+    setShowAnswer({ commit }, bool) {
+        console.log("action -- ", bool)
+        commit('resetShowAnswer', bool)
+    },
     setImage({ commit },docType, id) {
         const imageFile = docType+'/'+docType+"_"+ id.toString() + ".png"
         commit('setCurrImage', imageFile)
     },
 
     setImageBoxes({ commit }, json) {
+        console.log("HERE????")
         const img_w = json[0].meta === undefined ? json[0].image_size.width : (json[0].meta.image_size === undefined? json[0].meta.imageSize.width:json[0].meta.image_size.width)
         const img_h = json[0].meta === undefined ? json[0].image_size.height : (json[0].meta.image_size === undefined? json[0].meta.imageSize.height:json[0].meta.image_size.height)
         var ratio = 1
@@ -94,7 +101,18 @@ const actions = {
         commit('setCurrBox', processedData)
         }
         else{
+            console.log("hereeee")
             const validData=json[0].valid_line.map(v => v.words).flat(1)
+
+            for (var d in json[0].valid_line) {
+                var word = json[0].valid_line[d].words
+                var cat = json[0].valid_line[d].category
+                for (var w in word) {
+                    word[w]["GTlabel"] = cat
+                    //newValidData.push(word[w])
+                }
+            }
+
             const processedData = validData.map(function(i, idx) {
                 return {box_id: idx,
                         text: i.text,
@@ -106,9 +124,13 @@ const actions = {
                         annotated: false, 
                         hover: false,
                         quad: {x1: i.quad.x1, y1: i.quad.y1, x2: i.quad.x2, y2: i.quad.y2, y3: i.quad.y3},
-                        label: ""}
+                        label: "",
+                        gtlabel: gt_to_cat(i.GTlabel),
+                        showdata: true,
+                        correct: false,}
             })
             //console.log("***", padding_x, padding_y)
+            console.log(processedData.map(v => v.gtlabel))
             commit('setCurrBox', processedData)
             }
 
@@ -169,6 +191,9 @@ const mutations = {
         state.annotatedBoxes = annotatedBoxes
         // console.log(state.annotatedBoxes)
     },
+    resetShowAnswer: (state, showAnswer) => {
+        state.showAnswer = showAnswer
+    }
 }
 
 export default {
@@ -176,4 +201,29 @@ export default {
     getters,
     actions,
     mutations
+}
+
+const gt_to_cat = (label) => {
+    var newlabel = label
+    //newlabel = label.split(".")
+    newlabel = newlabel === 'menu.num' ? 'menu.id' : newlabel
+    newlabel = newlabel === 'menu.nm' ? 'menu.name' : newlabel
+    newlabel = newlabel === 'menu.cnt' ? 'menu.count' : newlabel
+    newlabel = (['menu.discountprice', 'menu.itemsubtotal', 'menu.vatyn', 'menu.etc', 
+    'menu.sub_nm', 'menu.sub_unitprice', 'menu.sub_cnt', 'menu.sub_price', 'menu.sub_etc'].indexOf(newlabel) > -1) ? 'menu.n/a' : newlabel
+    newlabel = newlabel === 'sub_total.subtotal_price' ? 'subtotal.price' : newlabel
+    newlabel = newlabel === 'total.menutype_cnt' ? 'subtotal.menu count' : newlabel
+    newlabel = newlabel === 'total.menuqty_cnt' ? 'subtotal.item count' : newlabel
+    newlabel = newlabel === 'sub_total.service_price' ? 'subtotal.service charge' : newlabel
+    newlabel = newlabel === 'sub_total.tax_price' ? 'subtotal.tax price' : newlabel
+    newlabel = (['sub_total.discount_price', 'sub_total.othersvc_price', 'sub_total.etc'].indexOf(newlabel) > -1) ? 'sub_total.n/a': newlabel
+    newlabel = newlabel === 'total.total_price' ? 'total.price' : newlabel
+    newlabel = newlabel === 'total.total_etc' ? 'total.n/a' : newlabel
+    newlabel = newlabel === 'total.cashprice' ? 'payment.cash' : newlabel
+    newlabel = newlabel === 'total.changeprice' ? 'payment.change' : newlabel
+    newlabel = newlabel === 'total.creditcardprice' ? 'payment.credit card' : newlabel
+    newlabel = newlabel === 'total.emoneyprice' ? 'payment.n/a' : newlabel
+    newlabel = newlabel.split(".")
+    newlabel[0] = newlabel[0] === 'sub_total' ? 'subtotal' : newlabel[0]
+    return {cat: newlabel[0], subcat: newlabel[1]}
 }
