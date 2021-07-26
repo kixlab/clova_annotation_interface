@@ -14,7 +14,6 @@ const getters = {
 
 const actions = {
     setStatus({commit}, status){
-        //console.log('setStatus called with', status)
         commit('update_status', status)
       },
     setAStatus({commit}, payload){

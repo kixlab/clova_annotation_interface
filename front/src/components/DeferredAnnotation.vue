@@ -11,7 +11,7 @@
       
       <v-card-text> 
         <v-row>
-          <v-col :cols="4" style="text-align:left;">
+          <v-col :cols="3" style="text-align:left;">
             Category
             <v-list >
               <v-list-item-group
@@ -26,7 +26,7 @@
             </v-list>
           </v-col>
 
-          <v-col :cols="8" style="text-align:left;">
+          <v-col :cols="7" style="text-align:left;">
             Sub-category
              <v-list>
               <v-list-item-group
@@ -35,17 +35,19 @@
                   <span class='subcat-div'>
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
-                    <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
-                    <v-btn x-small outlined color="warning" v-on:click.stop="annotate(subcat, 0)">Can be</v-btn>
+                      <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
+                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion($event, subcat, 0)">Can Be</v-btn>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
-                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="annotate(subcat, null)">N/A</v-btn>
+                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion($event,subcat,  null)">N/A</v-btn>
                     </span>
                   </span>
                 </v-list-item>
               </v-list-item-group>
             </v-list>
           </v-col>
+          <v-col :cols="2" style="text-align:left;">
+            </v-col>
         </v-row>
          <!-- <v-row>
           <v-col class="text-left">
@@ -141,6 +143,7 @@
       </v-card-text>
 
     </v-card>
+    <v-card class='suggestion-div'>suggestions</v-card>
   </v-col>
 </template>
 
@@ -212,7 +215,11 @@ export default {
         this.addsubcat=true;
       },
 
-      
+      openSuggestion(event, item, confidence){
+        console.log(event);
+        console.log(event.target);
+        console.log(item, confidence)
+      },
       annotate(item, confidence) {
 
         const imageBox = this.getImageBoxes()//this.image_box
@@ -265,7 +272,6 @@ export default {
               'idx':self.$store.state.image_order,
               'val':true
             });
-            //console.log('### setAStatus called - annotate')
           });
         }
       },
@@ -287,13 +293,13 @@ export default {
               currBox.annotated=true
               group.push(currBox)
             }
-            //console.log(currImageBox)
             self.updateImageBoxes(currImageBox)
             self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id}, "add"])
           }          
         },
   },
   computed: {
+    ...mapGetters(['getImage','getImageRatio', 'get_image_order', 'get_curr_image']),
     isDisabled() {
         return this.$store.getters.getSelectedBoxes.length === 0
     },
@@ -308,10 +314,10 @@ export default {
     },
     isAddingSub(){
       return (this.addsubcat)
-    }
+    },
   },
   watch:{
-    curr_image_no:{
+    get_curr_image:{
       deep: true,
       handler(){
         const self=this;
@@ -362,5 +368,9 @@ export default {
 th {
   text-align: center; 
   background-color: lightGrey;
+}
+
+.suggestion-div{
+  position: absolute;
 }
 </style>

@@ -108,7 +108,6 @@ export default {
       deep: true,
       handler(){
         this.loadNewImage();
-        console.log('********** watching!!!')
       }
     }
     
@@ -296,7 +295,7 @@ export default {
   
 
   computed: {
-    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'image_no']),
+    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'curr_image_no']),
     
     /*image_url() {
       return require('http://13.125.191.49:8000/media/receipt/receipt_00300.png')//this.$store.getters.prac_image_url;

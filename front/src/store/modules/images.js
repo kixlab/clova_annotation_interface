@@ -65,7 +65,6 @@ const actions = {
         
         if(json[0].valid_line==undefined){
             const validData = (json[0]['boxes']===undefined? json[0]['words']:json[0]['boxes']);
-            //console.log(validData)
             const processedData = validData.map(function(i) {
                 if(i.box_id==undefined){
                     return {
@@ -130,7 +129,7 @@ const actions = {
                         correct: false,}
             })
             //console.log("***", padding_x, padding_y)
-            console.log(processedData.map(v => v.gtlabel))
+            //console.log(processedData.map(v => v.gtlabel))
             commit('setCurrBox', processedData)
             }
 
@@ -164,32 +163,24 @@ const mutations = {
     },
     setCurrBox: (state, imageBoxes) => {
         state.imageBoxes = imageBoxes
-        //console.log("New JSON:", state.imageBoxes)
     },
     setImageRatio: (state, imageRatio) => {
         state.imageRatio = imageRatio
-        //console.log("New RATIO:", state.imageRatio)
     },
     setImageURL: (state, commit, rootState) => {
-        console.log(rootState.image_url)
         state.imageURL = rootState.image_url
-        //console.log("New RATIO:", state.imageRatio)
     },
     setSelectedBox: (state, selectedBoxes) => {
         state.selectedBoxes = selectedBoxes
-        //console.log("NEW SELBOXES:", state.selectedBoxes)
     },
     addAnnotatedBox: (state, annotatedBoxes) => {
         state.annotatedBoxes.push(annotatedBoxes)
-        //console.log("ANNOTATED:", state.annotatedBoxes)
     },
     removeAnnotationBox: (state, annotatedBoxes) => {
         state.annotatedBoxes.splice(state.annotatedBoxes.indexOf(annotatedBoxes), 1)
-        //console.log("REMOVED:", state.annotatedBoxes)
     },
     resetAnnotationBox: (state, annotatedBoxes) => {
         state.annotatedBoxes = annotatedBoxes
-        // console.log(state.annotatedBoxes)
     },
     resetShowAnswer: (state, showAnswer) => {
         state.showAnswer = showAnswer

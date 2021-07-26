@@ -52,7 +52,6 @@ export default new Vuex.Store({
      // var image_order=state.image_order+state.start_image_no;
       
       var three_digit_id = ("00" + state.curr_image_no).slice(-3);
-//      console.log(state.start_image_no);
       console.log("server_url ** ", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png')
       return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
       

@@ -43,13 +43,14 @@ export default {
   name: "Progress",
   data() {
     return {
-      curr_index: this.$store.getters.get_image_order
+      curr_index: this.$store.getters.get_image_order,
+      image_box: this.$store.getters.getImageBoxes, 
     };
   },
   mounted() {
     this.$store.subscribeAction({after: (action) => {
         if (action.type ==='setCurrImage') {
-            this.curr_index = this.$store.getters.get_curr_image
+            this.curr_index = this.$store.getters.get_image_order;
         }
     }})
 
@@ -68,7 +69,8 @@ export default {
       ...mapActions(['setCurrImage', 'setCurrOrder']),
       ...mapGetters(['getStatus']),
       goTo: function(index){
-//        this.$store.commit('set_image_order', index);
+        this.$store.commit('set_image_order', index);
+        this.image_box=this.$store.getters.getImageBoxes;
         this.setCurrOrder(index)
         this.setCurrImage(index)
       },

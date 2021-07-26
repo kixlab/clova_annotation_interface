@@ -105,11 +105,10 @@ export default {
   },
 
   watch:{
-    curr_image_no: {
+    get_curr_image: {
       deep: true,
       handler(){
         this.loadNewImage();
-        console.log('********** watching!!!')
       }
     }
     
@@ -137,14 +136,10 @@ export default {
     },
     loadNewImage: function() {
       const self = this;
-      console.log('load new image')
-      console.log(self.$store.getters.json_url);
       axios.get(self.$store.getters.json_url).then(function(res) {
           var json = res.data;
           var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
           var img_height = json.meta === undefined ? json.image_size.height:(json.meta.image_size === undefined? json.meta.imageSize.height:json.meta.image_size.height);
-          //console.log(img_width, img_height)
-          //console.log(self.width, self.height, self.width*img_height/img_width)
           self.setImageBoxes([json, self.width, self.width*img_height/img_width, true]);
           self.original_box = json;
       })
@@ -287,9 +282,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio']),
+    ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'get_image_order', 'get_curr_image']),
     image_url() {
       return this.$store.getters.image_url;
+    },
+    json_url(){
+      return this.$store.getters.json_url;
     }
   }
 };
