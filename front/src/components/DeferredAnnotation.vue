@@ -132,7 +132,7 @@ export default {
             return idx
           }
         })
-        this.subcats[cursubcatidx]["suggestion"]=true
+        this.subcats[currsubcatidx]["suggestion"]=true
         console.log(this.subcats, subcatpk)
 
     },
