@@ -83,6 +83,6 @@ export default {
   padding:5 !important;
   min-width: 0px !important;
   position: absolute;
-  right: 10;
+  right: 10px;
 }
 </style>
