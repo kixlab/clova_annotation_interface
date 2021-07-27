@@ -413,13 +413,27 @@ def saveAnnotation(request):
         subcatpk = query_json['subcatpk']
         catpk = query_json['catpk']
         confidence=query_json['confidence']
+        suggestion=query_json['suggestion']
+
         thisSubcat=InitSubCat.objects.get(pk=subcatpk)
         thisCat=InitCat.objects.get(pk=catpk)
+
         if(thisSubcat.subcat_text=='n/a'):
             newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=False, is_alive=True)
         else:
             newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=confidence, is_alive=True)
         newAnnot.save()
+
+        thisSuggestions=UserSuggestion.objects.filter(subcat=thisSubcat, suggested_subcat=suggestion)
+        if(len(thisSuggestions)==0): # new suggestion
+            newSuggestion = UserSuggestion(user=user, subcat=thisSubcat, suggested_subcat=suggestion)
+            newSuggestion.save()
+            # add selection count 
+            newSelection = SelectedSuggestion(suggestion=newSuggestion, user=user, annotation=newAnnot)
+            newSelection.save()
+        else: #existing suggestion 
+            thisSuggestion=thisSuggestions[0]
+            newSelection = SelectedSuggestion(suggestion=thisSuggestion, user=user, annotation=newAnnot)
         response={
             'annot_pk': newAnnot.pk
         }

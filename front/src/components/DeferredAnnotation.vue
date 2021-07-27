@@ -150,7 +150,6 @@ export default {
         console.log(confidence)
         var idx = 0;
           for(let i =0;i<this.subcats.length;i++){
-            console.log(this.subcats[i])
             if(this.subcats[i].pk===subcatpk){
               idx=i;
             }
@@ -164,6 +163,9 @@ export default {
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
         var label = item.cat + "-" + item.subcat
+        if(confidence!=1){
+          label=label+' (suggested: '+ suggestion+')'
+        }
         var subcatpk=item.pk
         var catpk=item.catpk
         const self = this;
