@@ -37,7 +37,7 @@
           <v-btn
             x-small outlined
             color="primary" 
-            class="close-btn">
+            class="close-btn" v-on:click.stop="submitSuggestion">
             Suggest
           </v-btn>
       </v-col>
@@ -52,10 +52,16 @@
 
 export default {
   name: "Suggestion",
+  props: [subcatpk],
   data: () => ({
       items: [{'id': 1, 'suggestion': 'sug-menu'},{'id': 2, 'suggestion': 'sug-menu2'}],
       value: null,
     }),
+  methods:{
+    submitSuggestion: function(){
+      console.log(this.value, this.props.subcatpk)
+    }
+  }
 };
 </script>
 
