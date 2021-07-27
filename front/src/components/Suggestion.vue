@@ -74,7 +74,6 @@ export default {
       self.othersuggestions=res.data.othersuggestions;
       var suggestions = res.data.mysuggestions.concat(res.data.othersuggestions)
       self.suggestions=suggestions;
-      console.log(suggestions)
     })
 
   },

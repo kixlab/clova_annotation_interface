@@ -36,15 +36,15 @@
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
                       <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1, '')">Exactly</v-btn>
-                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion($event, subcat.pk, 0)">Close to</v-btn>
+                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion(subcat.pk)">Close to</v-btn>
                       <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
-                        <suggestion  v-bind:subcat="subcat"  v-bind:confidence=0 @annotate="annotate" @done="closeSuggestion(subcat.pk, 0)"/>
+                        <suggestion  v-bind:subcat="subcat"  v-bind:confidence=0 @annotate="annotate" @done="closeSuggestion(subcat.pk)"/>
                       </div>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
-                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion($event,subcat.pk,  null)">N/A</v-btn>
+                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion(subcat.pk)">N/A</v-btn>
                         <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
-                        <suggestion  v-bind:subcat="subcat" v-bind:confidence='null' @annotate="annotate" @done="closeSuggestion(subcat.pk, null)"/>
+                        <suggestion  v-bind:subcat="subcat" v-bind:confidence='null' @annotate="annotate" @done="closeSuggestion(subcat.pk)"/>
                       </div>
                     </span>
                   </span>
@@ -113,7 +113,6 @@ export default {
         }
       }).then(function(res){
         var annotations=res.data.annotations;
-        console.log(annotations)
         self.loadAnnotatedBoxes(annotations);})}
     ,1000);
   },
@@ -135,8 +134,7 @@ export default {
         this.addsubcat=true;
       },
 
-      openSuggestion(event, subcatpk, confidence){
-        console.log(event, confidence)
+      openSuggestion(subcatpk){
         //find idx 
         var idx = 0;
         for(let i =0;i<this.subcats.length;i++){
@@ -146,8 +144,7 @@ export default {
         }
         this.subcats[idx]["suggestion"]=true
       },
-      closeSuggestion(subcatpk, confidence){
-        console.log(confidence)
+      closeSuggestion(subcatpk){
         var idx = 0;
           for(let i =0;i<this.subcats.length;i++){
             if(this.subcats[i].pk===subcatpk){
