@@ -21,6 +21,7 @@
             v-model="value"
             :items="suggestions"
             :item-text="item => `${item.suggested_subcat} `"
+            :search-input.sync="value"
             dense
           >
             <template v-slot>
