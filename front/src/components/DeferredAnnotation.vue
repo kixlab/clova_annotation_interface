@@ -38,13 +38,13 @@
                       <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1, '')">Exactly</v-btn>
                       <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion($event, subcat.pk, 0)">Close to</v-btn>
                       <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
-                        <suggestion  v-bind:subcat="subcat"  v-bind:confidence=0 @annotate="annotate"/>
+                        <suggestion  v-bind:subcat="subcat"  v-bind:confidence=0 @annotate="annotate" @done="closeSuggestion(subcat.pk, 0)"/>
                       </div>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
                         <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion($event,subcat.pk,  null)">N/A</v-btn>
                         <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
-                        <suggestion  v-bind:subcat="subcat" v-bind:confidence='null' @annotate="annotate"/>
+                        <suggestion  v-bind:subcat="subcat" v-bind:confidence='null' @annotate="annotate" @done="closeSuggestion(subcat.pk, null)"/>
                       </div>
                     </span>
                   </span>

@@ -80,7 +80,8 @@ export default {
   },
   methods:{
     markSuggestion: function(){
-      this.$emit('annotate', this.subcat, this.confidence, this.value);}
+      this.$emit('annotate', this.subcat, this.confidence, this.value);
+      this.$emit('done')}
   }
 };
 </script>
