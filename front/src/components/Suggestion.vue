@@ -20,10 +20,11 @@
           <v-combobox
             v-model="value"
             :items="items"
+            :item-text="item => `${item.suggestion} `"
             dense
           >
-            <template v-slot:selection="data">
-            {{data.suggestion}}
+            <template v-slot>
+            {{ data.suggestion }}
           </template>
           </v-combobox>
         </v-col>
