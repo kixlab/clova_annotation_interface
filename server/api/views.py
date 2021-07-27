@@ -320,7 +320,7 @@ def getSuggestions(request):
         othersuggestions = UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(user=user, subcat=subcat, nselection__gte=1).order_by('-nselection')
 
         response={
-            'mysuggestions': UserSuggestionSerializer(mysuggestions, many=True).data
+            'mysuggestions': UserSuggestionSerializer(mysuggestions, many=True).data,
             'othersuggestions': UserSuggestionSerializer(othersuggestions, many=True).data
         }
 
