@@ -15,8 +15,6 @@
             v-model="value"
             :items="items"
             dense
-            filled
-            label="Filled"
           ></v-autocomplete>
         </v-col>
       </v-row>
