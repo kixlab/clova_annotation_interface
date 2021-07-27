@@ -126,6 +126,7 @@ export default {
       },
 
       openSuggestion(event, subcatpk, confidence){
+        console.log(event, confidence)
         console.log(this.subcats)
         var currsubcat = this.subcats.filter(e=>e.pk == subcatpk);
         currsubcat["suggestion"]=true
