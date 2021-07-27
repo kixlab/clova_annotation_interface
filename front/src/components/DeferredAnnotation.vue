@@ -304,6 +304,7 @@ th {
 }
 
 .suggestion-holder{
+  padding: 5px;
   position: absolute;
   display: inline;
   width: 175px;
