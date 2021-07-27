@@ -13,7 +13,7 @@ import string
 import random
 import json
 from datetime import datetime, timedelta
-from django.db.models import Max, Count
+from django.db.models import Max, Count, Q
 from .serializers import *
 
 
@@ -317,7 +317,7 @@ def getSuggestions(request):
         subcat=InitSubCat.objects.get(pk=subcatpk)
 
         mysuggestions=UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(user=user, subcat=subcat, nselection__gte=1).order_by('-nselection')
-        othersuggestions = UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(user=user, subcat=subcat, nselection__gte=1).order_by('-nselection')
+        othersuggestions = UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(~Q(user=user), subcat=subcat, nselection__gte=1).order_by('-nselection')
 
         response={
             'mysuggestions': UserSuggestionSerializer(mysuggestions, many=True).data,
