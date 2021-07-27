@@ -306,5 +306,6 @@ th {
 .suggestion-holder{
   position: absolute;
   display: inline;
+  width: 175px;
 }
 </style>
