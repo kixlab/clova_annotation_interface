@@ -36,10 +36,13 @@
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
                       <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
-                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion($event, subcat, 0)">Can Be</v-btn>
+                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion($event, subcat.pk, 0)">Close to</v-btn>
+                      <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
+                        <suggestion />
+                      </div>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
-                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion($event,subcat,  null)">N/A</v-btn>
+                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion($event,subcat.pk,  null)">N/A</v-btn>
                     </span>
                   </span>
                 </v-list-item>
@@ -49,110 +52,22 @@
           <v-col :cols="2" style="text-align:left;">
             </v-col>
         </v-row>
-         <!-- <v-row>
-          <v-col class="text-left">
-            <div v-for="category in table" :key="category" style="padding: 4px;">
-              <v-menu open-on-hover right offset-x>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    class="text-none"
-                    color="normal"
-                    small
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    {{ category }}
-                  </v-btn>
-                </template>
-                <v-list dense>
-                  <v-list-item
-                    v-for="(item, index) in labelTable.filter(e => e.label == category)"
-                    :key="index"
-                  >
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        <v-btn class="text-none" color="normal" small text @click="clicked(item.sublabel); annotate(item)" :disabled=isDisabled>
-                        {{ item.sublabel }}
-                        </v-btn>
-                      </v-list-item-title>
-                      <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-              <br/>
-            </div>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col class="text-left">
-            <v-autocomplete
-              clearable
-              dense
-              filled
-              :items="labelTable"
-              label="Search for the label.."
-            >
-              <template v-slot:selection="data">
-                {{ data.item.label.concat(' - ', data.item.sublabel) }}
-              </template>
-              <template v-slot:item="data">
-                
-              </template>
-            </v-autocomplete>
-          </v-col>
-        </v-row> -->
-
-        <!-- <v-row>
-          <v-col>
-            <v-simple-table fixed-header height="250px">
-                <template v-slot:default>
-                <thead>
-                    <tr>
-                      <th style="textAlign: center; background-color: lightGrey;"></th>
-                      <th style="textAlign: center; background-color: lightGrey;">#</th>
-                      <th style="textAlign: center; background-color: lightGrey;">Category</th>
-                      <th style="textAlign: center; background-color: lightGrey;">Label</th>
-                      <th style="textAlign: center; background-color: lightGrey;">Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="item in labelTable" :key="item.id">
-                      <td style="padding:0; width: 35px;">
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn small icon color="darkgrey" @click="annotate(item)" :disabled=isDisabled v-bind="attrs" v-on="on">
-                              <v-icon>check_circle</v-icon>
-                            </v-btn>
-                          </template>
-                          <span>annotate</span>
-                        </v-tooltip>
-                      </td>
-                      <td style="background-color: #eee">{{ item.id }}</td>
-                      <td>{{ item.label }}</td>
-                      <td style="background-color: #eee">{{ item.sublabel }}</td>
-                      <td>{{ item.description }}</td>
-                        
-                    </tr>
-                </tbody>
-                </template>
-            </v-simple-table>
-          </v-col>
-        </v-row> -->
       </v-card-text>
 
     </v-card>
-    <v-card class='suggestion-div'>suggestions</v-card>
   </v-col>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import axios from "axios";
+import Suggestion from '@/components/Suggestion.vue'
 
 export default {
   name: 'DeferredAnnotation',
+  components: {
+    Suggestion
+  },
   data() {
     return{
       selection: [],
@@ -187,7 +102,7 @@ export default {
       })
     
     setTimeout( function(){
-    axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
+    axios.get(self.$store.state.server_url+'/api/get-annotations/',{
       params:{
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
@@ -215,11 +130,29 @@ export default {
         this.addsubcat=true;
       },
 
-      openSuggestion(event, item, confidence){
-        console.log(event);
-        console.log(event.target);
-        console.log(item, confidence)
+      openSuggestion(event, subcatpk, confidence){
+        console.log(event, confidence)
+        //find idx 
+        var idx = 0;
+        for(let i =0;i<this.subcats.length;i++){
+          if(this.subcats[i].pk===subcatpk){
+            idx=i;
+          }
+        }
+        this.subcats[idx]["suggestion"]=true
       },
+      closeSuggestion(subcatpk, confidence){
+        console.log(confidence)
+        var idx = 0;
+          for(let i =0;i<this.subcats.length;i++){
+            console.log(this.subcats[i])
+            if(this.subcats[i].pk===subcatpk){
+              idx=i;
+            }
+          }
+          this.subcats[idx]["suggestion"]=false
+      },
+
       annotate(item, confidence) {
 
         const imageBox = this.getImageBoxes()//this.image_box
@@ -239,11 +172,11 @@ export default {
             }
         }
 
-        this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
+        //this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
         this.updateImageBoxes(this.image_box)
 
         if(group.length>0){
-          axios.post(self.$store.state.server_url + "/api/save-def-annotation/", {
+          axios.post(self.$store.state.server_url + "/api/save-annotation/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
             image_id: self.$store.state.curr_image_no,
@@ -321,7 +254,7 @@ export default {
       deep: true,
       handler(){
         const self=this;
-        axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
+        axios.get(self.$store.state.server_url+'/api/get-annotations/',{
           params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
@@ -370,7 +303,8 @@ th {
   background-color: lightGrey;
 }
 
-.suggestion-div{
+.suggestion-holder{
   position: absolute;
+  display: inline;
 }
 </style>

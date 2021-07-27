@@ -123,7 +123,7 @@ export default {
 
     remove(group) {
       const self = this;
-      axios.post(self.$store.state.server_url + "/api/delete-def-annotation/", {
+      axios.post(self.$store.state.server_url + "/api/delete-annotation/", {
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
         image_id: self.$store.state.curr_image_no,
@@ -139,7 +139,7 @@ export default {
             }
           }
         }
-        self.$helpers.server_log(self, 'RA', group.boxes.map((i) => {return i.box_id}))
+        //self.$helpers.server_log(self, 'RA', group.boxes.map((i) => {return i.box_id}))
         self.updateImageBoxes(self.image_box)
         self.updateAnnotatedBoxes([group, "remove"])
       });
@@ -166,7 +166,7 @@ export default {
         temp.label = '';
       }
 
-      this.$helpers.server_log(this, 'RL', [])
+      //this.$helpers.server_log(this, 'RL', [])
       this.updateImageBoxes(this.image_box)
       this.updateAnnotatedBoxes([[], "reset"])
       this.undo_warning = false;

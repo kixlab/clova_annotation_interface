@@ -415,7 +415,7 @@ export default {
             }
         }
 
-        this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
+        //this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
         this.updateImageBoxes(this.image_box)
 
         if(group.length>0){
