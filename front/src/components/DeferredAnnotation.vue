@@ -132,6 +132,7 @@ export default {
             return idx
           }
         })
+        console.log(currsubcatidx)
         this.subcats[currsubcatidx]["suggestion"]=true
         console.log(this.subcats, subcatpk)
 
