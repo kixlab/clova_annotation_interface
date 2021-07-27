@@ -15,23 +15,29 @@
   </v-container>
   <v-container>
       <v-row>
-        <v-col cols="9">
+        <v-col cols="12">
           <v-autocomplete
             v-model="value"
             :items="items"
             dense
           ></v-autocomplete>
         </v-col>
-        <v-col cols="3">
+      </v-row>
+  </v-container>
+  <v-container fluid style='padding:0'>
+      <v-row
+      >
+      <v-col cols='12' style='padding:0'>
           <v-btn
             x-small outlined
             color="primary" 
-            class="suggestion-btn">
+            class="close-btn">
             Suggest
           </v-btn>
-        </v-col>
+      </v-col>
       </v-row>
-      </v-container>
+  </v-container>
+  
     </v-card>
 </template>
 
