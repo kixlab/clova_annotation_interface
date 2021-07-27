@@ -168,6 +168,7 @@ export default {
 
     reset() {
       for (var group in this.annotated_box){
+        console.log(group);
         this.remove(group);
       }
 /*       for (var i in this.image_box) {
