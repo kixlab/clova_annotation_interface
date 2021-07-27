@@ -123,7 +123,7 @@ export default {
 
     remove(group) {
       const self = this;
-      axios.post(self.$store.state.server_url + "/api/delete-def-annotation/", {
+      axios.post(self.$store.state.server_url + "/api/delete-annotation/", {
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
         image_id: self.$store.state.curr_image_no,

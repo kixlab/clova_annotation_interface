@@ -298,7 +298,7 @@ def getAnnotations(request):
         return JsonResponse(response)
 
 @csrf_exempt
-def getDefAnnotations(request):
+def getAnnotations(request):
     if request.method=='GET':
         username = request.GET['mturk_id']
         user = User.objects.get(username=username)
@@ -307,7 +307,7 @@ def getDefAnnotations(request):
         doctype=DocType.objects.get(doctype=doctypetext)
         image_id =request.GET['image_id']
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
-        annots=DefAnnotation.objects.filter(user=user, document=document,is_alive=True)
+        annots=Annotation.objects.filter(user=user, document=document,is_alive=True)
         print(annots)
 
         annotations=[]
@@ -339,7 +339,7 @@ def getWorkerAnnotations(request):
         print(statuses)
         for status in statuses: 
             user=status.user
-            annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+            annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
             annotations=[]
             print(annots)
             for annot in annots: 
@@ -377,7 +377,7 @@ def getLastAnnotations(jsonlist):
     return result
         
         
-
+""" 
 @csrf_exempt
 def saveAnnotation(request):
     if request.method == 'POST':
@@ -396,10 +396,10 @@ def saveAnnotation(request):
         response={
             'annot_pk': newAnnot.pk
         }
-        return JsonResponse(response)
+        return JsonResponse(response) """
 
 @csrf_exempt
-def saveDefAnnotation(request):
+def saveAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
         username=query_json['mturk_id']
@@ -415,16 +415,16 @@ def saveDefAnnotation(request):
         thisSubcat=InitSubCat.objects.get(pk=subcatpk)
         thisCat=InitCat.objects.get(pk=catpk)
         if(thisSubcat.subcat_text=='n/a'):
-            newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=False, is_alive=True)
+            newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=False, is_alive=True)
         else:
-            newDefAnnot=DefAnnotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=confidence, is_alive=True)
-        newDefAnnot.save()
+            newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=confidence, is_alive=True)
+        newAnnot.save()
         response={
-            'annot_pk': newDefAnnot.pk
+            'annot_pk': newAnnot.pk
         }
         return JsonResponse(response)
 
-
+""" 
 @csrf_exempt
 def saveAsRegular(request):
     if request.method == 'POST':
@@ -443,9 +443,9 @@ def saveAsRegular(request):
             'annot_pk': newAnnot.pk
         }
         return JsonResponse(response)
+ """
 
-
-@csrf_exempt
+""" @csrf_exempt
 def deleteAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
@@ -463,9 +463,9 @@ def deleteAnnotation(request):
         response={
             'annot_pk': annot_pk
         }
-        return JsonResponse(response)
+        return JsonResponse(response) """
 @csrf_exempt
-def deleteDefAnnotation(request):
+def deleteAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
         username=query_json['mturk_id']
@@ -476,7 +476,7 @@ def deleteDefAnnotation(request):
         image_id =query_json['image_id']
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         annot_pk = query_json['annot_pk']
-        thisAnnot=DefAnnotation.objects.get(user=user, pk=annot_pk)
+        thisAnnot=Annotation.objects.get(user=user, pk=annot_pk)
         thisAnnot.is_alive=False
         thisAnnot.save()
         response={
@@ -594,7 +594,7 @@ def addSubcat(request):
             'newsubcat_pk': newSubcat.pk,
         }
         return JsonResponse(response)
-
+""" 
 @csrf_exempt
 def reviseCat(request):
     if request.method=='POST':
@@ -610,8 +610,8 @@ def reviseCat(request):
 
         UserCat.objects.filter(user=user, doctype=doctype, pk=int(cat_pk)).update(cat_text=revcat)
         return HttpResponse('')
-
-
+ """
+""" 
 @csrf_exempt
 def reviseSubcat(request):
     if request.method=='POST':
@@ -628,7 +628,7 @@ def reviseSubcat(request):
 
         UserSubcat.objects.filter(pk=int(subcat_pk)).update(subcat_text=revsubcat, subcat_description=revdesc)
         return HttpResponse('')
-
+ """
 
 @csrf_exempt
 def getImage(request, image_id):
@@ -636,14 +636,6 @@ def getImage(request, image_id):
         item = Image.objects.get(image_id=image_id)
         # item = Image.objects.filter(is_done=True)[int(num)]
         return HttpResponse(item.image.url)
-
-'''
-@csrf_exempt
-def getImageBoxInfo(request, image_id):
-    if request.method == 'GET':
-        item = Image.objects.get(image_id=image_id)
-        return HttpResponse(item.box_info)
-'''
 
 @csrf_exempt
 def uploadImage(request):
@@ -692,7 +684,7 @@ def getAnnotationsByImage(request):
         print(statuses)
         for status in statuses: 
             user=status.user
-            annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+            annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
             annotations=[]
             print(annots)
             for annot in annots: 
@@ -759,7 +751,7 @@ def getAnnotationsByWorker(request):
         workerannot=[]
         for stat in statuses:
             document=stat.document            
-            annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+            annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
             annotations=[]
             for annot in annots: 
                 boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
@@ -797,7 +789,7 @@ def getEveryAnnotations(request):
             workerannot=[]
             for stat in statuses:
                 document=stat.document            
-                annots=DefAnnotation.objects.filter(user=user, document=document, is_alive=True)
+                annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
                 annotations=[]
                 for annot in annots: 
                     boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()

@@ -96,7 +96,7 @@ export default {
       })
     
     setTimeout( function(){
-    axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
+    axios.get(self.$store.state.server_url+'/api/get-annotations/',{
       params:{
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
@@ -135,9 +135,19 @@ export default {
           }
         }
         this.subcats[idx]["suggestion"]=true
-        console.log(this.subcats, subcatpk)
+      },
+      closeSuggestion(subcatpk, confidence){
+        console.log(confidence)
+        var idx = 0;
+          for(let i =0;i<this.subcats.length;i++){
+            console.log(this.subcats[i])
+            if(this.subcats[i].pk===subcatpk){
+              idx=i;
+            }
+          }
+          this.subcats[idx]["suggestion"]=false
+      },
 
-    },
       annotate(item, confidence) {
 
         const imageBox = this.getImageBoxes()//this.image_box
@@ -239,7 +249,7 @@ export default {
       deep: true,
       handler(){
         const self=this;
-        axios.get(self.$store.state.server_url+'/api/get-def-annotations/',{
+        axios.get(self.$store.state.server_url+'/api/get-annotations/',{
           params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
