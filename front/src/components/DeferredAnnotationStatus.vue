@@ -167,9 +167,9 @@ export default {
     },
 
     reset() {
-      for (var group in this.annotated_box){
+      for (var idx in this.annotated_box){
         console.log(group);
-        this.remove(group);
+        this.remove(this.annotated_box[idx]);
       }
 /*       for (var i in this.image_box) {
         var temp = this.image_box[i];
