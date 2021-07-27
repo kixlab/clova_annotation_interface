@@ -127,10 +127,8 @@ export default {
       openSuggestion(event, subcatpk, confidence){
         console.log(event, confidence)
         console.log(this.subcats)
-        var currsubcatidx = this.subcats.find(function(item, idx){
-          if(item.pk===subcatpk){
-            return idx
-          }
+        var currsubcatidx = this.subcats.findIndex(function(item, i){
+          return item.pk===subcatpk
         })
         console.log(currsubcatidx)
         this.subcats[currsubcatidx]["suggestion"]=true
