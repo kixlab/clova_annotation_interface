@@ -426,16 +426,17 @@ def saveAnnotation(request):
             newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=confidence, is_alive=True)
         newAnnot.save()
 
-        thisSuggestions=UserSuggestion.objects.filter(subcat=thisSubcat, suggested_subcat=suggestion)
-        if(len(thisSuggestions)==0): # new suggestion
-            newSuggestion = UserSuggestion(user=user, subcat=thisSubcat, suggested_subcat=suggestion)
-            newSuggestion.save()
-            # add selection count 
-            newSelection = SelectedSuggestion(suggestion=newSuggestion, user=user, annotation=newAnnot)
-            newSelection.save()
-        else: #existing suggestion 
-            thisSuggestion=thisSuggestions[0]
-            newSelection = SelectedSuggestion(suggestion=thisSuggestion, user=user, annotation=newAnnot)
+        if(confidence!=1):
+            thisSuggestions=UserSuggestion.objects.filter(subcat=thisSubcat, suggested_subcat=suggestion)
+            if(len(thisSuggestions)==0): # new suggestion
+                newSuggestion = UserSuggestion(user=user, subcat=thisSubcat, suggested_subcat=suggestion)
+                newSuggestion.save()
+                # add selection count 
+                newSelection = SelectedSuggestion(suggestion=newSuggestion, user=user, annotation=newAnnot)
+                newSelection.save()
+            else: #existing suggestion 
+                thisSuggestion=thisSuggestions[0]
+                newSelection = SelectedSuggestion(suggestion=thisSuggestion, user=user, annotation=newAnnot)
         response={
             'annot_pk': newAnnot.pk
         }
