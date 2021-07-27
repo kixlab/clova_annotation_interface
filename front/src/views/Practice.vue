@@ -28,6 +28,10 @@
         <v-row dense>
           <b style="color:red; margin-right: 8px;">* Important * </b>  This is a part of the tutorial where you can check your understanding with the requester's provided answer. Please practice with the provided image.
         </v-row>
+        <v-row dense style="margin-top: 10px;"> 
+          Also, the receipts are from Indonesia, here are translations for commonly occuring words: <br>
+          <b>Bayar - Pay | Tunai - Cash | Kembali(an) - Change | Pajak - Tax | PB1 - tax code </b>
+        </v-row>
         <v-row align-content="start">
           <!-- COL1 - IMAGE LOADER -->
           <v-col cols="5">
