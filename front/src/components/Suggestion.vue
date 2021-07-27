@@ -21,11 +21,10 @@
             v-model="value"
             :items="suggestions"
             :item-text="suggested_subcat"
-            :search-input.sync="value.suggested_subcat"
             dense
           >
-            <template v-slot:item="data">
-            {{ data.item.suggested_subcat }}
+            <template v-slot>
+            {{ suggestions }}
           </template>
           </v-combobox>
         </v-col>
