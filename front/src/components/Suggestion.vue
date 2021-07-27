@@ -49,6 +49,8 @@
 
 <script>
 //import { mapActions, mapGetters} from 'vuex'
+import axios from "axios";
+
 
 export default {
   name: "Suggestion",
@@ -72,7 +74,7 @@ export default {
   },
   methods:{
     submitSuggestion: function(){
-      const self=this;
+      //const self=this;
 
       console.log(this.value, this.subcatpk)
     }
