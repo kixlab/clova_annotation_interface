@@ -20,12 +20,8 @@
           <v-combobox
             v-model="value"
             :items="suggestions"
-            :item-text="item => `${item.suggested_subcat} `"
             dense
           >
-            <template v-slot>
-            {{ suggestion }}
-          </template>
           </v-combobox>
         </v-col>
       </v-row>

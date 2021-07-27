@@ -319,9 +319,11 @@ def getSuggestions(request):
         mysuggestions=UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(user=user, subcat=subcat, nselection__gte=1).order_by('-nselection')
         othersuggestions = UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(~Q(user=user), subcat=subcat, nselection__gte=1).order_by('-nselection')
 
+    
+
         response={
-            'mysuggestions': UserSuggestionSerializer(mysuggestions, many=True).data,
-            'othersuggestions': UserSuggestionSerializer(othersuggestions, many=True).data
+            'mysuggestions': [i.suggested_subcat for i in mysuggestions],
+            'othersuggestions': [i.suggested_subcat for i in othersuggestions]
         }
 
         return JsonResponse(response)
