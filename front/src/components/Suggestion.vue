@@ -1,5 +1,5 @@
 <template>
-<div>
+<v-card>
       <v-row
       >
       <v-btn
@@ -20,7 +20,7 @@
           ></v-autocomplete>
         </v-col>
       </v-row>
-      </div>
+      </v-card>
 </template>
 
 <script>
@@ -40,5 +40,7 @@ export default {
 .close-btn{
   padding:0 !important;
   width: 20px;
+  position: absolute;
+  right: 0;
 }
 </style>
