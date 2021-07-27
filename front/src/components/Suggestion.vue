@@ -20,12 +20,12 @@
           <v-combobox
             v-model="value"
             :items="suggestions"
-            :item-text="item => `${item.suggested_subcat} `"
+            :item-text="suggested_subcat"
             :search-input.sync="value.suggested_subcat"
             dense
           >
-            <template v-slot>
-            {{ data.suggestion }}
+            <template v-slot:item="data">
+            {{ data.item.suggested_subcat }}
           </template>
           </v-combobox>
         </v-col>
