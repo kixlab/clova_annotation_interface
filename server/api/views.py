@@ -268,7 +268,7 @@ def getCats(request):
         for cat in initcats:
             cats.append({'cat': cat.cat_text, 'pk': cat.pk})
             for subcat in InitSubCat.objects.filter(initcat=cat):
-                subcats.append({'cat': subcat.initcat.cat_text, 'subcat':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'catpk':subcat.initcat.pk})
+                subcats.append({'cat': subcat.initcat.cat_text, 'subcat':subcat.subcat_text, 'description':subcat.subcat_description, 'pk':subcat.pk, 'catpk':subcat.initcat.pk, 'suggestion': False})
         response = {
             'cats': cats,
             'subcats': subcats

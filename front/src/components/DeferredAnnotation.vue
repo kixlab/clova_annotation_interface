@@ -129,6 +129,7 @@ export default {
         console.log(event);
         console.log(event.target);
         console.log(item, confidence)
+        console.log(this.subcats)
       },
       annotate(item, confidence) {
 
