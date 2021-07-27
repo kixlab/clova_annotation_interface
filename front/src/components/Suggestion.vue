@@ -10,12 +10,20 @@
       </v-btn>
       </v-row>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="9">
           <v-autocomplete
             v-model="value"
             :items="items"
             dense
           ></v-autocomplete>
+        </v-col>
+        <v-col cols="3">
+          <v-btn
+            x-small outlined
+            color="primary" 
+            class="suggestion-btn">
+            Suggest
+          </v-btn>
         </v-col>
       </v-row>
       </v-card>
