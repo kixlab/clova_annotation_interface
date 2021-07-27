@@ -20,6 +20,7 @@
           <v-combobox
             v-model="value"
             :items="suggestions"
+            :search-input.sync="value"
             dense
           >
           </v-combobox>
