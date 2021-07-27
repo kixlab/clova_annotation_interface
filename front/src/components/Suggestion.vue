@@ -27,7 +27,7 @@
         </v-col>
       </v-row>
   </v-container>
-  <v-container style='padding:0'>
+  <v-container style='padding-bottom:20px;'>
           <v-btn
             x-small outlined
             color="primary" 
@@ -83,6 +83,6 @@ export default {
   padding:5 !important;
   min-width: 0px !important;
   position: absolute;
-  right: 0;
+  right: 10;
 }
 </style>
