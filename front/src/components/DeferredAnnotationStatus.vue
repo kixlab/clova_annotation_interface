@@ -167,7 +167,10 @@ export default {
     },
 
     reset() {
-      for (var i in this.image_box) {
+      for (var group in this.annotated_box){
+        remove(group);
+      }
+/*       for (var i in this.image_box) {
         var temp = this.image_box[i];
         temp.annotated = false;
         temp.label = '';
@@ -176,7 +179,7 @@ export default {
 
       //this.$helpers.server_log(this, 'RL', [])
       this.updateImageBoxes(this.image_box)
-      this.updateAnnotatedBoxes([[], "reset"])
+      this.updateAnnotatedBoxes([[], "reset"]) */
       this.undo_warning = false;
     }
 
