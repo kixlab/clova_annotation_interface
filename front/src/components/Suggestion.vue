@@ -52,7 +52,7 @@
 
 export default {
   name: "Suggestion",
-  props: [subcatpk],
+  props: ['subcatpk'],
   data: () => ({
       items: [{'id': 1, 'suggestion': 'sug-menu'},{'id': 2, 'suggestion': 'sug-menu2'}],
       value: null,
