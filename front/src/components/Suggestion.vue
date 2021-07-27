@@ -85,4 +85,8 @@ export default {
   position: absolute;
   right: 10px;
 }
+
+.suggestion-holder{
+  border: 1px solid grey;
+}
 </style>
