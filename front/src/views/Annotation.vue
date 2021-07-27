@@ -15,8 +15,12 @@
 
     <v-main>
       <v-container fluid fill-height>
-        <v-row>
+        <v-row> 
           <Progress/>
+        </v-row>
+        <v-row dense style="margin-top: 15px;"> 
+          As the receipts are from Indonesia, here are translations for commonly occuring words: <br>
+          <b>Bayar - Pay | Tunai - Cash | Kembali(an) - Change | Pajak - Tax | PB1 - tax code </b>
         </v-row>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->

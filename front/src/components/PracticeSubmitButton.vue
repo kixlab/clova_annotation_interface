@@ -14,7 +14,7 @@
       </v-btn>
       </div>
     </template>
-    Annotate all the images to submit!
+    Annotate all boxes to check answer!
   </v-tooltip>
 </template>
 
@@ -35,16 +35,26 @@ export default {
       for (var box in boxes) {
         var tempbox = boxes[box]
         var gt = tempbox.gtlabel.cat + '-' + tempbox.gtlabel.subcat
+        //console.log(tempbox.label, "vs.", gt)
         if (tempbox.label !== gt) {
-          
           tempbox.correct = false
         } else {
           tempbox.correct = true
         }
-        //tempbox.showdata = true
+        tempbox.anschecked = true
       }
+      var accuracy = (boxes.filter(v => v.correct).length / 22.0 * 100).toFixed(2)
+      var wrong = 22 - boxes.filter(v => v.correct).length
+      if (wrong > 0) {
+        alert("You are " + accuracy + "% correct. Please check the answers to the " + wrong + " boxes that you incorrectly labeled on the image.")
+      }
+      else {
+        alert("You got everything correct! Please move on to the actual task. Good job!! 😊")
+      }
+      
       self.updateImageBoxes(boxes)
-      self.setShowAnswer(!self.$store.getters.getShowAnswer)
+      //console.log(boxes.map(v => v.label))
+      self.setShowAnswer(true/*!this.$store.getters.getShowAnswer*/)
       /*
       axios.post(self.$store.state.server_url + '/api/submit/', {
         mturk_id: self.$store.state.mturk_id,
@@ -61,7 +71,8 @@ export default {
   computed: {
     
     disabled() {
-      return false;//!this.$store.getters.getIfAllImagesAnnotated
+      //console.log(this.$store.getters.getAnnotatedBoxes.map(v => v.boxes).flat(1).map(v => v.box_id).length >= 22)
+      return this.$store.getters.getAnnotatedBoxes.map(v => v.boxes).flat(1).length < 22
     }
     
   }

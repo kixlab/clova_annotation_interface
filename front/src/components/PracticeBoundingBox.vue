@@ -1,6 +1,20 @@
 <template>
   <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
-    <!--<template v-if="showAnswer === true">-->
+    <!--
+    <text fill="red" :x="x+3" :y="y-15-7" font-size="11" font-weight="bold" font-family="Avenir, Helvetica, Arial, sans-serif">{{ this.$store.getters.getShowAnswer }}</text>
+    -->
+    <template v-if="box_info.correct === false && box_info.label !== '' && showAnswer === true && showans === true && box_info.anschecked === true">
+        <rect fill="white" :x="x" :y="y-36" :width="100" height=35 />
+        <text fill="red" :x="x+3" :y="y-15-7" font-size="11" font-weight="bold" font-family="Avenir, Helvetica, Arial, sans-serif">{{ this.box_info.label }} (x)</text>
+        <text fill="green" :x="x+3" :y="y-7" font-size="11" font-weight="bold" font-family="Avenir, Helvetica, Arial, sans-serif">{{this.box_info.gtlabel.cat}}-{{this.box_info.gtlabel.subcat}} (o)</text>
+    </template>
+    
+    <rect id="box" class="bnd" :style="color" style="fill:transparent; stroke-width:1;" :x="x" :y="y" :width="w" :height="h"/>
+  </svg>
+  
+</template>
+
+    <!--<template v-if="showAnswer === true">
       <template v-if="box_info.correct">
         <rect fill="white" :x="x" :y="y-18" :width="w" height=17 />
         <text fill="green" font-size="11" font-weight="bold" font-family="Avenir, Helvetica, Arial, sans-serif" :x="x+3" :y="y-7">{{ this.box_info.label }}</text>
@@ -11,27 +25,27 @@
         <text fill="black" font-size="11" font-weight="bold" font-family="Avenir, Helvetica, Arial, sans-serif" :x="x+3" :y="y-7">{{this.box_info.gtlabel.cat}}-{{this.box_info.gtlabel.subcat}}</text>
       </template>
       
-    <!--</template>-->
-    <!--<text :x="x" :y="y" fill="red" style="font-weight: bold; font-size:1.2vw;">{{box_info.gtlabel.cat}}-{{box_info.gtlabel.subcat}}</text>-->
-    <rect id="box" class="bnd" :style="color" style="fill:transparent; stroke-width:1;" :x="x" :y="y" :width="w" :height="h"/>
-  </svg>
-</template>
-
+    </template>-->
 <script>
+//import { mapGetters } from 'vuex'
 export default {
   name: 'BoundingBox',
-  props: ['color', 'box_info', 'border', 'circle', 'hover'],
+  props: ['color', 'box_info', 'border', 'circle', 'hover', 'showans'],
   data() {
     return {
       clicked: true,
       selected: false,
       annotated: false,
-      showAnswer: this.$store.getters.getShowAnswer
+      showAnswer: this.$store.getters.getShowAnswer,
     }
   },
   mounted() {
-    //this.showAnswer = this.$store.getters.getShowAnswer
-    //console.log(this.showAnswer)
+    const self = this;
+    self.$store.subscribeAction({after: (action) => {
+      if (action.type === 'setShowAnswer') {
+        self.showAnswer = self.$store.getters.getShowAnswer;
+      }
+    }})
   },
   computed: {
     x: function () {

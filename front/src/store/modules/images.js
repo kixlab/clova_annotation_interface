@@ -6,7 +6,7 @@ const state = {
     imageRatio: '',
     selectedBoxes: [],
     annotatedBoxes: [],
-    showAnswer: false,
+    showAnswer: true,
 }
 
 const getters = {
@@ -47,7 +47,7 @@ const actions = {
     },
 
     setImageBoxes({ commit }, json) {
-        console.log("HERE????")
+        //console.log("HERE????")
         const img_w = json[0].meta === undefined ? json[0].image_size.width : (json[0].meta.image_size === undefined? json[0].meta.imageSize.width:json[0].meta.image_size.width)
         const img_h = json[0].meta === undefined ? json[0].image_size.height : (json[0].meta.image_size === undefined? json[0].meta.imageSize.height:json[0].meta.image_size.height)
         var ratio = 1
@@ -100,7 +100,7 @@ const actions = {
         commit('setCurrBox', processedData)
         }
         else{
-            console.log("hereeee")
+            //console.log("hereeee")
             const validData=json[0].valid_line.map(v => v.words).flat(1)
 
             for (var d in json[0].valid_line) {
@@ -126,7 +126,8 @@ const actions = {
                         label: "",
                         gtlabel: gt_to_cat(i.GTlabel),
                         showdata: true,
-                        correct: false,}
+                        correct: false,
+                        anschecked: false,}
             })
             //console.log("***", padding_x, padding_y)
             //console.log(processedData.map(v => v.gtlabel))

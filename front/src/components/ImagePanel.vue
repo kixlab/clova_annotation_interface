@@ -41,6 +41,7 @@
       </v-row>
 
   </v-card>
+  <!--
   <v-card >
     <br>
     As the receipts are from Indonesia, here are some translations for commonly occuring words: <br>
@@ -52,6 +53,7 @@
     </b>
     </span>
   </v-card>
+  -->
  </v-col>
 </template>
 

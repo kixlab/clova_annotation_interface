@@ -11,12 +11,26 @@
       <v-spacer/>
       <practice-instruction-button />
       <practice-submit-button/>
+      <v-btn
+        :disabled="disabled"
+        color="normal"
+        @click="onSubmit"
+      >
+        Proceed
+        <v-icon right>
+          mdi-arrow-right
+        </v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-main>
       <v-container fluid fill-height>
         <v-row dense>
           <b style="color:red; margin-right: 8px;">* Important * </b>  This is a part of the tutorial where you can check your understanding with the requester's provided answer. Please practice with the provided image.
+        </v-row>
+        <v-row dense style="margin-top: 10px;"> 
+          Also, the receipts are from Indonesia, here are translations for commonly occuring words: <br>
+          <b>Bayar - Pay | Tunai - Cash | Kembali(an) - Change | Pajak - Tax | PB1 - tax code </b>
         </v-row>
         <v-row align-content="start">
           <!-- COL1 - IMAGE LOADER -->
@@ -30,7 +44,7 @@
           <v-col cols="7">
             <v-row dense>
               <box-selection-status/>
-              <deferred-annotation/>
+              <practice-deferred-annotation/>
               <deferred-annotation-status/>
             </v-row>
           </v-col>
@@ -50,7 +64,7 @@ import PracticeInstructionButton from '@/components/PracticeInstructionButton.vu
 //import OverviewButton from '@/components/OverviewButton.vue'
 
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
-import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
+import PracticeDeferredAnnotation from '@/components/PracticeDeferredAnnotation.vue'
 import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
 
 
@@ -66,7 +80,7 @@ export default {
   //  OverviewButton,
     
     BoxSelectionStatus,
-    DeferredAnnotation,
+    PracticeDeferredAnnotation,
     DeferredAnnotationStatus,
     
   },
@@ -85,10 +99,21 @@ export default {
         }).then(function (res) {
           self.$store.commit('update_status',res.data.status);
       })
+    },
+    onSubmit() {
+      const self = this;
+      var doctype=self.$router.currentRoute.fullPath.split('/')[2];
+      self.$router.push('../annotation/'+doctype);
+      //alert("Please proceed to the actual annotation from now on.");
     }
   },
   mounted(){
     this.updateStatus();
+  },
+  computed: {
+    disabled() {
+      return !this.$store.getters.getShowAnswer;
+    }
   }
 }
 </script>
