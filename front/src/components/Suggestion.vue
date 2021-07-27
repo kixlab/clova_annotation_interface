@@ -1,7 +1,6 @@
 <template>
     <v-container fluid>
       <v-row
-        align="right"
       >
       <v-btn
         small 
@@ -9,7 +8,7 @@
         depressed 
         v-bind = "attrs"
         v-on = "on"
-        style="margin-bottom: 10px">
+        class="close-btn">
         X
       </v-btn>
       </v-row>
@@ -41,4 +40,7 @@ export default {
 </script>
 
 <style scoped>
+.close-btn{
+  padding:0,
+}
 </style>
