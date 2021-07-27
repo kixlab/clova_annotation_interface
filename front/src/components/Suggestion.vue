@@ -54,7 +54,7 @@ export default {
   name: "Suggestion",
   props: ['subcat', 'confidence'],
   data: () => ({
-      select: 'defalut',
+      select: '',
       suggestions:[],
       search: null,
     }),
