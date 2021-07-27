@@ -21,7 +21,6 @@
             v-model="select"
             :items="suggestions"
             :search-input.sync="search"
-            :menu-props="{ ...(!search && {value:false})}"
             dense
           >
           </v-combobox>
