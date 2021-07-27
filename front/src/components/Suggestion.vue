@@ -28,17 +28,12 @@
       </v-row>
   </v-container>
   <v-container style='padding:0'>
-      <v-row
-      >
-      <v-col cols='12' style='padding:0'>
           <v-btn
             x-small outlined
             color="primary" 
             class="close-btn" v-on:click.stop="markSuggestion">
             Suggest
           </v-btn>
-      </v-col>
-      </v-row>
   </v-container>
   
     </v-card>
