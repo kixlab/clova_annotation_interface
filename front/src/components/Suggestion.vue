@@ -59,7 +59,7 @@ export default {
     }),
   methods:{
     submitSuggestion: function(){
-      console.log(this.value, this.props.subcatpk)
+      console.log(this.value, this.subcatpk)
     }
   }
 };
