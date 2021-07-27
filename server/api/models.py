@@ -92,7 +92,7 @@ class UserSuggestion(models.Model):
 class SelectedSuggestion(models.Model):
     suggestion=models.ForeignKey('UserSuggestion', on_delete=models.CASCADE)
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-    annotation=models.ForeignKey(Annotation, on_delete=models.CASCADE)
+    annotation=models.ForeignKey('Annotation', on_delete=models.CASCADE)
     def __str__(self):
         return self.user.username+'-'+str(self.suggestion)
 
