@@ -155,7 +155,6 @@ export default {
       },
 
       annotate(item, confidence, suggestion) {
-        console.log('annotate called with suggestion', suggestion)
 
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
@@ -191,7 +190,7 @@ export default {
             confidence: confidence,
             suggestion: suggestion
           }).then(function (res) {
-            self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, subcatpk: item.pk, catpk:catpk, boxes: group, confidence: confidence, annotpk: res.data.annot_pk}, "add"])            
+            self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, subcatpk: item.pk, catpk:catpk, boxes: group, confidence: confidence, annotpk: res.data.annot_pk, suggestion: suggestion}, "add"])            
           });
         }else{
           window.alert("Please select boxes to annotate.")
@@ -233,7 +232,7 @@ export default {
               group.push(currBox)
             }
             self.updateImageBoxes(currImageBox)
-            self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id}, "add"])
+            self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id, suggestion:agroup.suggestion}, "add"])
           }          
         },
   },

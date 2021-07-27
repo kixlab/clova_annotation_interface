@@ -122,7 +122,6 @@ export default {
     },
 
     remove(group) {
-      console.log(group)
       const self = this;
       axios.post(self.$store.state.server_url + "/api/delete-annotation/", {
         mturk_id: self.$store.state.mturk_id,

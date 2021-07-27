@@ -68,7 +68,6 @@ export default {
   },
   methods:{
     markSuggestion: function(){
-      console.log(this.value)
       this.$emit('annotate', this.subcat, this.confidence, this.value);
       this.$emit('done');},
     closeSuggestion: function(){
