@@ -11,7 +11,7 @@
       
       <v-card-text> 
         <v-row>
-          <v-col :cols="3" style="text-align:left;">
+          <v-col :cols="2" style="text-align:left;">
             Category
             <v-list >
               <v-list-item-group
@@ -49,7 +49,7 @@
               </v-list-item-group>
             </v-list>
           </v-col>
-          <v-col :cols="2" style="text-align:left;">
+          <v-col :cols="3" style="text-align:left;">
             </v-col>
         </v-row>
       </v-card-text>
