@@ -37,7 +37,7 @@
           <v-btn
             x-small outlined
             color="primary" 
-            class="close-btn" v-on:click.stop="submitSuggestion">
+            class="close-btn" v-on:click.stop="markSuggestion">
             Suggest
           </v-btn>
       </v-col>
