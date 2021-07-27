@@ -102,7 +102,7 @@ export default {
 
 
   },
-
+/*
   watch:{
     curr_image_no: {
       deep: true,
@@ -111,7 +111,7 @@ export default {
       }
     }
     
-  },
+  },*/
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
     loadNewImage: function() {
