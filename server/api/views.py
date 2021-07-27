@@ -522,7 +522,7 @@ def deleteAllAnnotations(request):
         for annot in thisAnnots: 
             annot.is_alive=False 
             annot.save()
-        return JsonResponse('')
+        return HttpResponse('')
 
 @csrf_exempt
 def submit(request):
