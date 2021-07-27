@@ -15,7 +15,7 @@ urlpatterns = [
     path('get-cats/',views.getCats),
 
     path('get-suggestions/', views.getSuggestions),
-    #path('save-suggestions/', views.saveSuggestions),
+    path('save-suggestion/', views.saveSuggestions),
 
 
     path('add-cat/', views.addCat),

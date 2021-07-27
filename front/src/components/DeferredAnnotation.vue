@@ -35,14 +35,17 @@
                   <span class='subcat-div'>
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
-                      <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
+                      <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1, '')">Exactly</v-btn>
                       <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion($event, subcat.pk, 0)">Close to</v-btn>
                       <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
-                        <suggestion  v-bind:subcatpk="subcat.pk"/>
+                        <suggestion  v-bind:subcat="subcat"  v-bind:confidence=0 @annotate="annotate"/>
                       </div>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
                         <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion($event,subcat.pk,  null)">N/A</v-btn>
+                        <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
+                        <suggestion  v-bind:subcat="subcat" v-bind:confidence='null' @annotate="annotate"/>
+                      </div>
                     </span>
                   </span>
                 </v-list-item>
@@ -155,7 +158,8 @@ export default {
           this.subcats[idx]["suggestion"]=false
       },
 
-      annotate(item, confidence) {
+      annotate(item, confidence, suggestion) {
+        console.log('annotate called', item, confidence, suggestion)
 
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
@@ -185,7 +189,8 @@ export default {
             boxes_id: group.map((i) => {return i.box_id}),
             subcatpk:subcatpk,
             catpk: catpk,
-            confidence: confidence
+            confidence: confidence,
+            suggestion: suggestion
           }).then(function (res) {
             self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, subcatpk: item.pk, catpk:catpk, boxes: group, confidence: confidence, annotpk: res.data.annot_pk}, "add"])            
           });

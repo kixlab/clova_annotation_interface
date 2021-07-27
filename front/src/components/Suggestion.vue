@@ -54,7 +54,7 @@ import axios from "axios";
 
 export default {
   name: "Suggestion",
-  props: ['subcatpk'],
+  props: ['subcat', 'confidence'],
   data: () => ({
       mysuggestions: [],
       othersuggestions: [],
@@ -67,7 +67,7 @@ export default {
       params:{
         mturk_id: self.$store.state.mturk_id, 
         doctype: self.$route.params.docType, 
-        subcatpk: self.subcatpk
+        subcatpk: self.subcat.pk
       }
     }).then(function(res){
       self.mysuggestions=res.data.mysuggestions;
@@ -79,11 +79,8 @@ export default {
 
   },
   methods:{
-    submitSuggestion: function(){
-      //const self=this;
-
-      console.log(this.value, this.subcatpk)
-    }
+    markSuggestion: function(){
+      this.$emit('annotate', this.subcat, this.confidence, this.value);}
   }
 };
 </script>
