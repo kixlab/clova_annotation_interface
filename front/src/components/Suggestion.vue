@@ -37,7 +37,7 @@ export default {
 <style scoped>
 .close-btn{
   padding:5 !important;
-  width: 20px;
+  min-width: 0px;
   position: absolute;
   right: 0;
 }
