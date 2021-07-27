@@ -41,6 +41,6 @@ export default {
 
 <style scoped>
 .close-btn{
-  padding:0,
+  padding:0 !important
 }
 </style>
