@@ -60,7 +60,7 @@ export default {
       mysuggestions: [],
       othersuggestions: [],
       suggestions:[],
-      value: null,
+      value: [{'suggested_subcat': 'default'}],
     }),
   mounted: function(){
     const self=this;
