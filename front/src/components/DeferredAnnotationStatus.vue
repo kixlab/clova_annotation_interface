@@ -167,22 +167,23 @@ export default {
     },
 
     reset() {
+      const self=this;
       axios.post(self.$store.state.server_url + "/api/delete-all-annotations/", {
         mturk_id: self.$store.state.mturk_id,
         doctype: self.$route.params.docType,
         image_id: self.$store.state.curr_image_no,
       }).then(function () {
-        for (var i in this.image_box) {
-        var temp = this.image_box[i];
+        for (var i in self.image_box) {
+        var temp = self.image_box[i];
         temp.annotated = false;
         temp.label = '';
         temp.anschecked = 'false'
       }
         });
       //this.$helpers.server_log(this, 'RL', [])
-      this.updateImageBoxes(this.image_box)
-      this.updateAnnotatedBoxes([[], "reset"])
-      this.undo_warning = false;
+      self.updateImageBoxes(self.image_box)
+      self.updateAnnotatedBoxes([[], "reset"])
+      self.undo_warning = false;
     }
 
 
