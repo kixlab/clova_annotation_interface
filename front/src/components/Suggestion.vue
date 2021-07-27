@@ -1,5 +1,5 @@
 <template>
-<v-card>
+<v-card class='suggestion-holder'>
       <v-row
       >
       <v-btn
@@ -36,7 +36,7 @@ export default {
 
 <style scoped>
 .close-btn{
-  padding:0 !important;
+  padding:5 !important;
   width: 20px;
   position: absolute;
   right: 0;
