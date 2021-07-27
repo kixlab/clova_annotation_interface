@@ -320,10 +320,16 @@ def getSuggestions(request):
         subcatpk=request.GET['subcatpk']
         subcat=InitSubCat.objects.get(pk=subcatpk)
 
-        mysuggestions=UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(user=user, subcat=subcat, nselection__gte=1).order_by('-nselection')
-        othersuggestions = UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(~Q(user=user), subcat=subcat, nselection__gte=1).order_by('-nselection')
+        candSuggestions=UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(subcat=subcat, nselection__gte=1).order_by('-nselection')
 
-    
+        mysuggestions=[]
+        othersuggestions=[]
+        for sug in candSuggestions:
+            thisSelection = SelectedSuggestion.objects.filter(suggestion=sug, user=user)
+            if(len(thisSelection)>0):
+                mysuggestions.append(sug)
+            else:
+                othersuggestions.append(sug)
 
         response={
             'mysuggestions': [i.suggested_subcat for i in mysuggestions],
