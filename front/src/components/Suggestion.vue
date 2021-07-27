@@ -2,12 +2,14 @@
 <v-card class='suggestion-holder'>
       <v-row
       >
-      <v-btn
-        x-small outlined
-        color="error" 
-        class="close-btn">
-        X
-      </v-btn>
+      <v-col cols='12'>
+          <v-btn
+            x-small outlined
+            color="error" 
+            class="close-btn">
+            X
+          </v-btn>
+      </v-col>
       </v-row>
       <v-row>
         <v-col cols="9">
