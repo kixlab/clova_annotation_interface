@@ -155,7 +155,6 @@ export default {
       },
 
       annotate(item, confidence, suggestion) {
-        console.log('annotate called', item, confidence, suggestion)
 
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
