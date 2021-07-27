@@ -72,8 +72,8 @@ export default {
     }).then(function(res){
       self.mysuggestions=res.data.mysuggestions;
       self.othersuggestions=res.data.othersuggestions;
-      self.suggestions.append(res.data.mysuggestions);
-      self.suggestions.append(res.data.othersuggestions);
+      var suggestions = res.data.mysuggestions.concat(res.data.othersuggestions)
+      self.suggestions=suggestions;
     })
 
   },
