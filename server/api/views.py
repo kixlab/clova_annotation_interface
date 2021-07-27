@@ -507,6 +507,24 @@ def deleteAnnotation(request):
         return JsonResponse(response)
 
 @csrf_exempt
+def deleteAllAnnotations(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
+        user = User.objects.get(username=username)
+        #user=request.user
+        doctypetext=query_json['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =query_json['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+
+        thisAnnots=Annotation.objects.filter(user=user, document=document)
+        for annot in thisAnnots: 
+            annot.is_alive=False 
+            annot.save()
+        return JsonResponse('')
+
+@csrf_exempt
 def submit(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
