@@ -11,7 +11,7 @@
       
       <v-card-text> 
         <v-row>
-          <v-col :cols="3" style="text-align:left;">
+          <v-col :cols="2" style="text-align:left;">
             Category
             <v-list >
               <v-list-item-group
@@ -38,7 +38,7 @@
                       <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
                       <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion($event, subcat.pk, 0)">Close to</v-btn>
                       <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
-                        <suggestion />
+                        <suggestion  v-bind:subcatpk="subcat.pk"/>
                       </div>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
@@ -49,7 +49,7 @@
               </v-list-item-group>
             </v-list>
           </v-col>
-          <v-col :cols="2" style="text-align:left;">
+          <v-col :cols="3" style="text-align:left;">
             </v-col>
         </v-row>
       </v-card-text>
@@ -305,7 +305,9 @@ th {
 }
 
 .suggestion-holder{
+  padding: 5px;
   position: absolute;
   display: inline;
+  width: 175px;
 }
 </style>
