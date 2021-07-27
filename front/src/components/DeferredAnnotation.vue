@@ -61,7 +61,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import axios from "axios";
-import Suggestion from 'Suggestion.vue'
+import Suggestion from '/Suggestion.vue'
 
 export default {
   name: 'DeferredAnnotation',
