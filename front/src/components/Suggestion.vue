@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+<div>
       <v-row
       >
       <v-btn
@@ -20,7 +20,7 @@
           ></v-autocomplete>
         </v-col>
       </v-row>
-    </v-container>
+      </div>
 </template>
 
 <script>
