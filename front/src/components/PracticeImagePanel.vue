@@ -305,7 +305,6 @@ export default {
     ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'curr_image_no']),
     
     disabled() {
-      console.log(!this.$store.getters.getShowAnswer)
       return !this.$store.getters.getShowAnswer;
     }
     /*image_url() {

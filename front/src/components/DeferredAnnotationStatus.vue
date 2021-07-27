@@ -103,8 +103,6 @@ export default {
         }
           
       }})
-      console.log(this.annotated_box)
-
     },
 
 
