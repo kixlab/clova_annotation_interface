@@ -19,7 +19,7 @@
           
           <v-combobox
             v-model="value"
-            :items="mysuggestions + othersuggestions"
+            :items="mysuggestions.append(othersuggestions)"
             :item-text="item => `${item.suggestion} `"
             dense
           >
