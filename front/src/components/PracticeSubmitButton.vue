@@ -14,7 +14,7 @@
       </v-btn>
       </div>
     </template>
-    Annotate all the images to submit!
+    Annotate all boxes to check answer!
   </v-tooltip>
 </template>
 
@@ -35,16 +35,17 @@ export default {
       for (var box in boxes) {
         var tempbox = boxes[box]
         var gt = tempbox.gtlabel.cat + '-' + tempbox.gtlabel.subcat
+        //console.log(tempbox.label, "vs.", gt)
         if (tempbox.label !== gt) {
           
           tempbox.correct = false
         } else {
           tempbox.correct = true
         }
-        //tempbox.showdata = true
       }
       self.updateImageBoxes(boxes)
-      self.setShowAnswer(!self.$store.getters.getShowAnswer)
+      //console.log(boxes.map(v => v.label))
+      self.setShowAnswer(true/*!this.$store.getters.getShowAnswer*/)
       /*
       axios.post(self.$store.state.server_url + '/api/submit/', {
         mturk_id: self.$store.state.mturk_id,
@@ -61,7 +62,8 @@ export default {
   computed: {
     
     disabled() {
-      return false;//!this.$store.getters.getIfAllImagesAnnotated
+      //console.log(this.$store.getters.getAnnotatedBoxes.map(v => v.boxes).flat(1).map(v => v.box_id).length >= 22)
+      return this.$store.getters.getAnnotatedBoxes.map(v => v.boxes).flat(1).length < 22
     }
     
   }

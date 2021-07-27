@@ -101,6 +101,7 @@ export default {
       self.category=self.cats[0];
       })
     
+    
     setTimeout( function(){
       axios.get(self.$store.state.server_url+'/api/get-annotations/',{
         params:{
@@ -113,6 +114,7 @@ export default {
         console.log(annotations)
         self.loadAnnotatedBoxes(annotations);})}
     ,1000);
+    
   },
   methods: {
       ...mapActions(['updateImageBoxes', 'updateAnnotatedBoxes', 'setAStatus', 'setStatus']),

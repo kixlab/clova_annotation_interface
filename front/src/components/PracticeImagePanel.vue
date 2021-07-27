@@ -7,6 +7,16 @@
     >
       <v-row>
         <v-col>
+          <v-btn
+            class="ma-2"
+            :disabled="disabled"
+            color="gray"
+            small
+            @click="showhideanswer"
+            outlined
+          >
+            Show / hide answers
+          </v-btn>
           <div ref="img_container">
           <v-img :src="prac_img" contain style="width: 100%; marginTop: 0; paddingTop: 0;;">
             <drag-select-container selectorClass="bnd" style="height: 100%; width: 100%">
@@ -15,14 +25,13 @@
               <div v-if="image_box" ref="img_box">
                 <div v-for="box in image_box" :key="box.id">
                   <div v-if="box.selected === true">
-                    <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
+                    <bounding-box :showans="showAnswer2" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
                   </div>
                   <div v-else-if="box.annotated === true">
-                    
-                    <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
+                    <bounding-box :showans="showAnswer2" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
                   </div>
                   <div v-else>
-                    <bounding-box circle="yes" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
+                    <bounding-box :showans="showAnswer2" color="stroke:rgb(255, 105, 105); stroke-dasharray:0;" :box_info="box"/>
                   </div>
                 </div>
               </div>
@@ -76,6 +85,7 @@ export default {
 
       prac_img: 'http://13.125.191.49:8000/media/receipt/receipt_00300.png',
       showAnswer: this.$store.getters.getShowAnswer,
+      showAnswer2: true,
 
     };
   },
@@ -99,21 +109,26 @@ export default {
       }})
     })
     
-
+    self.$store.subscribeAction({after: (action) => {
+      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
+        self.image_box = self.$store.getters.getImageBoxes;
+      }
+    }})
 
   },
-/*
+
   watch:{
+    /*
     curr_image_no: {
       deep: true,
       handler(){
         this.loadNewImage();
       }
     }
-    
-  },*/
+    */
+  },
   methods: {
-    ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
+    ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes', 'setShowAnswer']),
     loadNewImage: function() {
       const self = this;
       axios.get(self.$store.getters.prac_json_url).then(function(res) {
@@ -131,7 +146,7 @@ export default {
           
           self.original_box = json;
 
-          console.log(self.$store.getters.getImageBoxes)
+          //console.log(self.$store.getters.getImageBoxes)
       })
       .catch(function(err) {
         console.log(err);
@@ -285,6 +300,10 @@ export default {
       this.updateImageBoxes(this.image_box);
       }
     },
+
+    showhideanswer: function() {
+      this.showAnswer2 = !this.showAnswer2
+    }
   },
   created() {
     window.addEventListener("resize", this.newSize);
@@ -297,6 +316,10 @@ export default {
   computed: {
     ...mapGetters(['getImage', 'getImageBoxes', 'getImageRatio', 'curr_image_no']),
     
+    disabled() {
+      console.log(!this.$store.getters.getShowAnswer)
+      return !this.$store.getters.getShowAnswer;
+    }
     /*image_url() {
       return require('http://13.125.191.49:8000/media/receipt/receipt_00300.png')//this.$store.getters.prac_image_url;
     }*/
