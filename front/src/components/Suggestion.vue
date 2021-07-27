@@ -20,7 +20,7 @@
           <v-combobox
             v-model="value"
             :items="suggestions"
-            :item-text="item => `${item.suggestion} `"
+            :item-text="item => `${item.suggested_subcat} `"
             dense
           >
             <template v-slot>
