@@ -1,9 +1,18 @@
 <template>
-  <v-card>
     <v-container fluid>
       <v-row
-        align="center"
+        align="right"
       >
+      <v-btn
+        small 
+        color="error" 
+        depressed 
+        v-bind = "attrs"
+        v-on = "on"
+        style="margin-bottom: 10px">
+        X
+      </v-row>
+      <v-row>
         <v-col cols="12">
           <v-autocomplete
             v-model="value"
@@ -15,7 +24,6 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-card>
 </template>
 
 <script>
