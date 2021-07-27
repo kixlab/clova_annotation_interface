@@ -3,9 +3,8 @@
       <v-row
       >
       <v-btn
-        small 
+        x-small outlined
         color="error" 
-        depressed 
         class="close-btn">
         X
       </v-btn>
@@ -39,6 +38,7 @@ export default {
 
 <style scoped>
 .close-btn{
-  padding:0 !important
+  padding:0 !important;
+  width: 20px;
 }
 </style>
