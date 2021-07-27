@@ -24,7 +24,7 @@
         </v-col>
       </v-row>
   </v-container>
-  <v-container fluid style='padding:0'>
+  <v-container style='padding:0'>
       <v-row
       >
       <v-col cols='12' style='padding:0'>
