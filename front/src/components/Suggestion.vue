@@ -16,11 +16,16 @@
   <v-container>
       <v-row>
         <v-col cols="12">
-          <v-autocomplete
+          
+          <v-combobox
             v-model="value"
             :items="items"
             dense
-          ></v-autocomplete>
+          >
+            <template v-slot:selection="data">
+            {{data.suggestion}}
+          </template>
+          </v-combobox>
         </v-col>
       </v-row>
   </v-container>
@@ -47,8 +52,7 @@
 export default {
   name: "Suggestion",
   data: () => ({
-      items: ['foo', 'bar', 'fizz', 'buzz'],
-      values: ['foo', 'bar'],
+      items: [{'id': 1, 'suggestion': 'sug-menu'},{'id': 2, 'suggestion': 'sug-menu2'}],
       value: null,
     }),
 };
