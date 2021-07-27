@@ -126,7 +126,8 @@ const actions = {
                         label: "",
                         gtlabel: gt_to_cat(i.GTlabel),
                         showdata: true,
-                        correct: false,}
+                        correct: false,
+                        anschecked: false,}
             })
             //console.log("***", padding_x, padding_y)
             //console.log(processedData.map(v => v.gtlabel))

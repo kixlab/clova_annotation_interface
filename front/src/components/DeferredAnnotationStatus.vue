@@ -122,6 +122,7 @@ export default {
     },
 
     remove(group) {
+      console.log(group)
       const self = this;
       axios.post(self.$store.state.server_url + "/api/delete-annotation/", {
         mturk_id: self.$store.state.mturk_id,
@@ -136,6 +137,7 @@ export default {
             if (temp.x_pos === removedBox.x_pos && temp.y_pos === removedBox.y_pos) {
               temp.annotated = false;
               temp.label = '';
+              temp.anschecked = 'false'
             }
           }
         }
@@ -164,6 +166,7 @@ export default {
         var temp = this.image_box[i];
         temp.annotated = false;
         temp.label = '';
+        temp.anschecked = 'false'
       }
 
       //this.$helpers.server_log(this, 'RL', [])

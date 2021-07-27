@@ -100,6 +100,7 @@ export default {
       const self = this;
       var doctype=self.$router.currentRoute.fullPath.split('/')[2];
       self.$router.push('../annotation/'+doctype);
+      //alert("Please proceed to the actual annotation from now on.");
     }
   },
   mounted(){
