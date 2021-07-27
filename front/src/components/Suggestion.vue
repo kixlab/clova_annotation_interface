@@ -19,7 +19,7 @@
           
           <v-combobox
             v-model="value"
-            :items="mysuggestions.append(othersuggestions)"
+            :items="suggestions"
             :item-text="item => `${item.suggestion} `"
             dense
           >
@@ -58,6 +58,7 @@ export default {
   data: () => ({
       mysuggestions: [],
       othersuggestions: [],
+      suggestions:[],
       value: null,
     }),
   mounted: function(){
@@ -71,6 +72,8 @@ export default {
     }).then(function(res){
       self.mysuggestions=res.data.mysuggestions;
       self.othersuggestions=res.data.othersuggestions;
+      self.suggestions.append(res.data.mysuggestions);
+      self.suggestions.append(res.data.othersuggestions);
     })
 
   },
