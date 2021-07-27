@@ -53,7 +53,6 @@
       </v-card-text>
 
     </v-card>
-    <v-card class='suggestion-div'>suggestions</v-card>
   </v-col>
 </template>
 
@@ -129,6 +128,7 @@ export default {
         console.log(event, confidence)
         console.log(this.subcats)
         var currsubcat = this.subcats.filter(e=>e.pk == subcatpk);
+        console.log(currsubcat)
         currsubcat["suggestion"]=true
         console.log(this.subcats, subcatpk)
 
