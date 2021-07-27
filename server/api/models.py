@@ -83,7 +83,7 @@ class InitSubCat(models.Model):
 class UserSuggestion(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     subcat=models.ForeignKey('InitSubCat', on_delete=models.CASCADE)
-    suggested_subcat=models.CharField(max_length=255)
+    suggested_subcat=models.CharField(max_length=255, null=True, blank=True)
     def __str__(self):
         return self.user.username+'-'+self.suggested_subcat
 
