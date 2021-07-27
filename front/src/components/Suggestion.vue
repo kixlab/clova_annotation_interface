@@ -68,7 +68,7 @@ export default {
   },
   methods:{
     markSuggestion: function(){
-      this.$emit('annotate', this.subcat, this.confidence, this.value);
+      this.$emit('annotate', this.subcat, this.confidence, this.search);
       this.$emit('done');},
     closeSuggestion: function(){
       this.$emit('done');
