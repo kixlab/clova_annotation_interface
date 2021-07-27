@@ -122,7 +122,7 @@ export default {
       openInstruction: function () {
         const self=this;
         self.dialog = true;
-        self.$helpers.server_log(self, 'RI', [])
+        //self.$helpers.server_log(self, 'RI', [])
       }
     },
     mounted() {

@@ -167,11 +167,11 @@ export default {
             }
         }
 
-        this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
+        //this.$helpers.server_log(this, 'CL', group.map((i) => {return i.box_id}), label)
         this.updateImageBoxes(this.image_box)
 
         if(group.length>0){
-          axios.post(self.$store.state.server_url + "/api/save-def-annotation/", {
+          axios.post(self.$store.state.server_url + "/api/save-annotation/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
             image_id: self.$store.state.curr_image_no,

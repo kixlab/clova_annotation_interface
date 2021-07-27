@@ -23,7 +23,8 @@ export default {
         });
     },
     server_log(self, type, box_ids, label='') {
-      axios.post(self.$store.state.server_url + '/api/log/', {
+      console.log(self, type, box_ids, label);
+      /* axios.post(self.$store.state.server_url + '/api/log/', {
         mturk_id: self.$store.state.mturk_id,
         type: type,
         image_id : self.$store.state.image_order,
@@ -31,7 +32,7 @@ export default {
         label: label
       }).catch(function(err) {
         alert("Server is not responding\n" + err);
-      });
+      }); */
   },
     isWrongAccess(self) {
       if (self.$store.state.mturk_id === null) {
