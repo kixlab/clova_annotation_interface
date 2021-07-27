@@ -1,5 +1,6 @@
 <template>
 <v-card class='suggestion-holder'>
+  <v-container fluid>
       <v-row
       >
       <v-col cols='12'>
@@ -28,7 +29,8 @@
           </v-btn>
         </v-col>
       </v-row>
-      </v-card>
+      </v-container>
+    </v-card>
 </template>
 
 <script>
