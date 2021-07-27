@@ -18,9 +18,10 @@
         <v-col cols="12">
           
           <v-combobox
-            v-model="value"
+            v-model="select"
             :items="suggestions"
-            :search-input.sync="value"
+            :search-input.sync="search"
+            :menu-props="{ ...(!search && {value:false})}"
             dense
           >
           </v-combobox>
@@ -53,10 +54,9 @@ export default {
   name: "Suggestion",
   props: ['subcat', 'confidence'],
   data: () => ({
-      mysuggestions: [],
-      othersuggestions: [],
+      select: 'defalut',
       suggestions:[],
-      value: '',
+      search: null,
     }),
   mounted: function(){
     const self=this;
@@ -67,18 +67,15 @@ export default {
         subcatpk: self.subcat.pk
       }
     }).then(function(res){
-      self.mysuggestions=res.data.mysuggestions;
-      self.othersuggestions=res.data.othersuggestions;
       var suggestions = res.data.mysuggestions.concat(res.data.othersuggestions)
       self.suggestions=suggestions;
-      console.log(self.suggestions)
-    })
+     })
 
   },
   methods:{
     markSuggestion: function(){
-      console.log(this.value)
-      this.$emit('annotate', this.subcat, this.confidence, this.value);
+      console.log(this.select, this.search)
+      this.$emit('annotate', this.subcat, this.confidence, this.search);
       this.$emit('done');},
     closeSuggestion: function(){
       this.$emit('done');
