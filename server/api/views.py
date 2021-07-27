@@ -13,7 +13,9 @@ import string
 import random
 import json
 from datetime import datetime, timedelta
-from django.db.models import Max
+from django.db.models import Max, Count
+from .serializers import *
+
 
 n_documents=200
 workers_per_image=5
@@ -290,28 +292,6 @@ def getAnnotations(request):
 
         annotations=[]
         for annot in annots: 
-            annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.label.usercat.cat_text, 'subcat': annot.label.subcat_text, 'subcatpk': annot.label.pk, 'catpk':annot.label.usercat.pk})
-        
-        response={
-            'annotations':annotations
-        }
-        return JsonResponse(response)
-
-@csrf_exempt
-def getAnnotations(request):
-    if request.method=='GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
-        #user=request.user
-        doctypetext=request.GET['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        image_id =request.GET['image_id']
-        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
-        annots=Annotation.objects.filter(user=user, document=document,is_alive=True)
-        print(annots)
-
-        annotations=[]
-        for annot in annots: 
             if(annot.subcat==None):
                 annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
             else:
@@ -324,6 +304,27 @@ def getAnnotations(request):
         }
         return JsonResponse(response)
 
+
+def getSuggestions(request):
+    if request.method=='GET':
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        #user=request.user
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+
+        subcatpk=request.GET['subcatpk']
+        subcat=InitSubCat.objects.get(pk=subcatpk)
+
+        mysuggestions=UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(user=user, subcat=subcat, nselection__gte=1).order_by('-nselection')
+        othersuggestions = UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(user=user, subcat=subcat, nselection__gte=1).order_by('-nselection')
+
+        response={
+            'mysuggestions': UserSuggestionSerializer(mysuggestions, many=True).data
+            'othersuggestions': UserSuggestionSerializer(othersuggestions, many=True).data
+        }
+
+        return JsonResponse(response)
 
 
 @csrf_exempt

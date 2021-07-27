@@ -14,6 +14,10 @@ urlpatterns = [
     path('get-doctypes/', views.getDocTypes),
     path('get-cats/',views.getCats),
 
+    path('get-suggestions/', views.getSuggestions),
+    path('save-suggestions/', views.saveSuggestions),
+
+
     path('add-cat/', views.addCat),
     path('add-subcat/', views.addSubcat),
 
@@ -28,6 +32,7 @@ urlpatterns = [
 
     path('submit/', views.submit),
     path('submit-survey/', views.submitSurvey),
+
 
     path('get-annotations-by-image', views.getAnnotationsByImage),
     path('get-workers', views.getWorkers),

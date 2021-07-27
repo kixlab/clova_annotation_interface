@@ -57,8 +57,23 @@ export default {
       items: [{'id': 1, 'suggestion': 'sug-menu'},{'id': 2, 'suggestion': 'sug-menu2'}],
       value: null,
     }),
+  mounted: function(){
+    const self=this;
+    axios.get(self.$store.state.server_url + '/api/get-suggestions/',{
+      params:{
+        mturk_id: self.$store.state.mturk_id, 
+        doctype: self.$route.params.docType, 
+        subcatpk: self.subcatpk
+      }
+    }).then(function(res){
+      console.log(res.data);
+    })
+
+  },
   methods:{
     submitSuggestion: function(){
+      const self=this;
+
       console.log(this.value, this.subcatpk)
     }
   }
