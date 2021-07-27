@@ -7,7 +7,7 @@
           <v-btn
             x-small outlined
             color="error" 
-            class="close-btn">
+            class="close-btn" v-on:click.stop="closeSuggestion">
             X
           </v-btn>
       </v-col>
@@ -81,7 +81,10 @@ export default {
   methods:{
     markSuggestion: function(){
       this.$emit('annotate', this.subcat, this.confidence, this.value);
-      this.$emit('done')}
+      this.$emit('done');},
+    closeSuggestion: function(){
+      this.$emit('done');
+    }
   }
 };
 </script>
