@@ -125,12 +125,13 @@ export default {
         this.addsubcat=true;
       },
 
-      openSuggestion(event, item, confidence){
-        console.log(event);
-        console.log(event.target);
-        console.log(item, confidence)
+      openSuggestion(event, subcatpk, confidence){
         console.log(this.subcats)
-      },
+        var currsubcat = this.subcats.filter(e=>e.pk == subcatpk);
+        currsubcat["suggestion"]=true
+        console.log(this.subcats, subcatpk)
+
+    },
       annotate(item, confidence) {
 
         const imageBox = this.getImageBoxes()//this.image_box
