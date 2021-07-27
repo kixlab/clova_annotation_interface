@@ -74,8 +74,8 @@ export default {
   },
   methods:{
     markSuggestion: function(){
-      console.log(this.select, this.search)
-      this.$emit('annotate', this.subcat, this.confidence, this.search);
+      console.log(this.value)
+      this.$emit('annotate', this.subcat, this.confidence, this.value);
       this.$emit('done');},
     closeSuggestion: function(){
       this.$emit('done');
