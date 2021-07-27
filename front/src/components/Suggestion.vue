@@ -11,6 +11,7 @@
         v-on = "on"
         style="margin-bottom: 10px">
         X
+      </v-btn>
       </v-row>
       <v-row>
         <v-col cols="12">
