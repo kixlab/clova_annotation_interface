@@ -56,7 +56,8 @@ export default {
   name: "Suggestion",
   props: ['subcatpk'],
   data: () => ({
-      items: [{'id': 1, 'suggestion': 'sug-menu'},{'id': 2, 'suggestion': 'sug-menu2'}],
+      mysuggestions: [],
+      othersuggestions: [],
       value: null,
     }),
   mounted: function(){
@@ -68,7 +69,8 @@ export default {
         subcatpk: self.subcatpk
       }
     }).then(function(res){
-      console.log(res.data);
+      self.mysuggestions=res.data.mysuggestions;
+      self.othersuggestions=res.data.othersuggestions;
     })
 
   },
