@@ -6,8 +6,6 @@
         small 
         color="error" 
         depressed 
-        v-bind = "attrs"
-        v-on = "on"
         class="close-btn">
         X
       </v-btn>
