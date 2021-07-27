@@ -1,9 +1,9 @@
 <template>
 <v-card class='suggestion-holder'>
-  <v-container fluid>
+  <v-container fluid style='padding:0'>
       <v-row
       >
-      <v-col cols='12'>
+      <v-col cols='12' style='padding:0'>
           <v-btn
             x-small outlined
             color="error" 
