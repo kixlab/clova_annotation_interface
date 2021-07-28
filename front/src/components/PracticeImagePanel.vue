@@ -71,7 +71,7 @@ export default {
       width: 0,
       height: 0,
 
-      prac_img: 'http://15.165.236.102:8000/media/receipt/receipt_00300.png',
+      prac_img: 'http://13.125.191.49:8000/media/receipt/receipt_00300.png',
       showAnswer: this.$store.getters.getShowAnswer,
       showAnswer2: true,
 
@@ -308,7 +308,7 @@ export default {
       return !this.$store.getters.getShowAnswer;
     }
     /*image_url() {
-      return require('http://15.165.236.102:8000/media/receipt/receipt_00300.png')//this.$store.getters.prac_image_url;
+      return require('http://13.125.191.49:8000/media/receipt/receipt_00300.png')//this.$store.getters.prac_image_url;
     }*/
     
   }
