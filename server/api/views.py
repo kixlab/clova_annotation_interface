@@ -236,6 +236,9 @@ def getImageID(request):
         #get least unannotated document
         startdoc=Status.objects.filter(user=user, document__doctype=profile.doctype)[0]
         startno=startdoc.document.doc_no
+        response = {
+            
+        }
         return JsonResponse(response)
 
 @csrf_exempt

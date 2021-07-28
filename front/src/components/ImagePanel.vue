@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
-    loadImageID: function (callback) {
+    /* loadImageID: function (callback) {
       const self = this;
       axios.get(self.$store.state.server_url + "/api/get-image-id", {
         params: {
@@ -135,7 +135,7 @@ export default {
       }).catch(function(err) {
         alert('Please refresh this page.\nIf this error repeats, please contact us via jeongeonpark1@gmail.com \n' + err);
       });
-    },
+    }, */
     loadNewImage: function() {
       const self = this;
       axios.get(self.$store.getters.json_url).then(function(res) {
