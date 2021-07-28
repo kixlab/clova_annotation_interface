@@ -430,6 +430,7 @@ def saveAnnotation(request):
             else: #existing suggestion 
                 thisSuggestion=thisSuggestions[0]
                 newSelection = SelectedSuggestion(suggestion=thisSuggestion, user=user, annotation=newAnnot)
+                newSelection.save()
         response={
             'annot_pk': newAnnot.pk
         }
