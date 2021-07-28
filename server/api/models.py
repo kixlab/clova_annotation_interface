@@ -17,7 +17,7 @@ class Profile(models.Model):
     
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
     
-    consent_agreed=models.BooleanField(default=False)
+    #consent_agreed=models.BooleanField(default=False)
 
     instr_read=models.BooleanField(default=False)
 

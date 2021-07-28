@@ -46,23 +46,10 @@ def signup(request):
         user=User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
         login(request, user)
-        if profile.consent_agreed:
-            if profile.instr_read:
-                response = {
-                    'status': 'annotation',
-                    'doctype':profile.doctype.doctype,
-                    'user_order': profile.user_order
-                }
-            else:
-                response = {
-                    'status': 'instruction',
-                    'doctype':profile.doctype.doctype
-                }
-        else:
-            response = {
-                'status':'consent',
-                'doctype':profile.doctype.doctype
-            }
+        response = {
+            'status': 'instruction',
+            'doctype':profile.doctype.doctype
+        }
     return JsonResponse(response)
 
 @csrf_exempt
