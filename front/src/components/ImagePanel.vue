@@ -91,7 +91,7 @@ export default {
 
     this.$store.subscribeAction({after: (action) => {
       if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
-        self.image_box = self.$store.getters.getImageBoxes;
+        this.image_box = this.$store.getters.getImageBoxes;
       }
     }})
     /*
