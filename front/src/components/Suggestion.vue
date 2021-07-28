@@ -68,8 +68,12 @@ export default {
   },
   methods:{
     markSuggestion: function(){
+      if(this.search!=null){
       this.$emit('annotate', this.subcat, this.confidence, this.search);
-      this.$emit('done');},
+      this.$emit('done');}
+      else{
+        window.alert('Please suggest a proper category name for the boxes you selected.');
+      }},
     closeSuggestion: function(){
       this.$emit('done');
     }
