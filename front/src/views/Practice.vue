@@ -104,10 +104,8 @@ export default {
       const self = this;
 
       axios.post(self.$store.state.server_url+'/api/instr-done/',{
-        params: {
             mturk_id: self.$store.state.mturk_id,
             doctype: 'receipt'
-        }
       }).then(function(res){
           self.$store.commit('set_assigned_images', res.data.assigned_images);
           self.$store.commit('set_start_image_no', res.data.assigned_images[0]);
