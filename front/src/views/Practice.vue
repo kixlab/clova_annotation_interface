@@ -107,6 +107,7 @@ export default {
             mturk_id: self.$store.state.mturk_id,
             doctype: 'receipt'
       }).then(function(res){
+        console.log(res);
           self.$store.commit('set_assigned_images', res.data.assigned_images);
           self.$store.commit('set_start_image_no', res.data.assigned_images[0]);
           self.$store.commit('set_curr_image', 0);
