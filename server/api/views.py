@@ -88,6 +88,7 @@ def startTask(request):
         profile.mod_order=mod_order        
         profile.save()
 
+        print(profile.user_order, profile.mod_order)
         if(mod_order<=(n_annotators-workers_per_group)): # now: 50 -5 = 45 --> 45*4 ~ 45*4 + 20
             # assign documents 
             documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[mod_order*window:(mod_order*window+images_per_worker)]
