@@ -85,6 +85,7 @@ export default {
       {src: require('@/assets/tutorial_clova4.png')},
       {src: require('@/assets/tutorial_clova5.png')},
       {src: require('@/assets/tutorial_clova6.png')},
+      {src: require('@/assets/tutorial_clova7.png')},
       {}
     ]
   }),
