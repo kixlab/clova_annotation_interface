@@ -84,14 +84,12 @@ export default {
   },
 
   mounted() {
-    this.loadImageID(function(self) {
+    this.image = this.$store.getters.getImage;
+    this.image_box = this.$store.getters.getImageBoxes;
+    this.getInitialPosition();
+    this.loadNewImage();
 
-    self.image = self.$store.getters.getImage;
-    self.image_box = self.$store.getters.getImageBoxes;
-    self.getInitialPosition();
-    self.loadNewImage();
-
-    self.$store.subscribeAction({after: (action) => {
+    this.$store.subscribeAction({after: (action) => {
       if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
         self.image_box = self.$store.getters.getImageBoxes;
       }
@@ -103,7 +101,6 @@ export default {
       }
     }})
     */
-    })
   },
 
   watch:{
