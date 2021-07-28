@@ -91,14 +91,15 @@ def startTask(request):
         print(profile.user_order, profile.mod_order)
         if(mod_order<=(n_annotators-workers_per_group)): # now: 50 -5 = 45 --> 45*4 ~ 45*4 + 20
             # assign documents 
-            documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[mod_order*window:(mod_order*window+images_per_worker)]
+            all_documents=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')
+            documents=all_documents[mod_order*window:(mod_order*window+images_per_worker)]
+            print('all doc', all_documents)
             print('small number', mod_order*window,(mod_order*window+images_per_worker))
         else: 
             # assign documents 
             end_docs=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[mod_order*window:] # now: 184: 188: 192: 196:  
             start_docs=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[:(workers_per_group - (n_annotators-mod_order))*window] # 46 --> 4*(5-(50-46)), 49 --> 4*(5-(50-49)) 
             documents=start_docs + end_docs 
-            print(documents
  
         print(documents)
         # initialize status 
