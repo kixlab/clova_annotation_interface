@@ -16,7 +16,7 @@ for row in reader:
     [doctype]=row
     doctype=DocType.objects.create(doctype=doctype)
     doctype.save()
-    for i in range(21):
+    for i in range(220):
         Document(doctype=doctype, doc_no=(i)).save()
 
 csv_path='db_init/db_init - initcat.csv'
