@@ -231,17 +231,8 @@ def getImageID(request):
         profile=Profile.objects.get(user=user)
 
         #get least unannotated document
-        undonedocs=Status.objects.filter(user=user, document__doctype=profile.doctype, status=False)
-        print('undonedocs', undonedocs)
-        print('donedocs',Status.objects.filter(user=user, document__doctype=profile.doctype, status=True))
-        if(len(undonedocs)==0):
-            startdoc=Status.objects.filter(user=user, document__doctype=profile.doctype, status=True)[0]
-        else:
-            startdoc=undonedocs[0]
+        startdoc=Status.objects.filter(user=user, document__doctype=profile.doctype)[0]
         startno=startdoc.document.doc_no
-        response = {
-            'start_image_id': startno
-        }
         return JsonResponse(response)
 
 @csrf_exempt
