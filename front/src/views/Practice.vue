@@ -103,19 +103,19 @@ export default {
     onSubmit() {
       const self = this;
 
-      self.$helpers.server_post(self, "/api/instr-done/", 
-        function(self, res){ // eslint-disable-line no-unused-vars
+      axios.post(self.$store.state.server_url+'/api/instr-done/',{
+        params: {
+            mturk_id: self.$store.state.mturk_id,
+            doctype: 'receipt'
+        }
+      }).then(function(res){
           self.$store.commit('set_assigned_images', res.data.assigned_images);
           self.$store.commit('set_start_image_no', res.data.assigned_images[0]);
           self.$store.commit('set_curr_image', 0);
-          self.$router.push('/annotation/'+res.data.doctype);
+          setTimeout(
+                  self.$router.push('/annotation/'+res.data.doctype)    ,500);
         })
-
-//      const self = this;
-//      var doctype=self.$router.currentRoute.fullPath.split('/')[2];
-//      self.$router.push('../annotation/'+doctype);
-      //alert("Please proceed to the actual annotation from now on.");
-    }
+      }
   },
   mounted(){
     this.updateStatus();
