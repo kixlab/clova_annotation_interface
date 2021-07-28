@@ -14,6 +14,10 @@ urlpatterns = [
     path('get-doctypes/', views.getDocTypes),
     path('get-cats/',views.getCats),
 
+    path('get-suggestions/', views.getSuggestions),
+   # path('save-suggestion/', views.saveSuggestions),
+
+
     path('add-cat/', views.addCat),
     path('add-subcat/', views.addSubcat),
 
@@ -22,12 +26,14 @@ urlpatterns = [
     path('get-annotations/',views.getAnnotations),
     path('save-annotation/', views.saveAnnotation),
     path('delete-annotation/', views.deleteAnnotation),
+    path('delete-all-annotations/', views.deleteAllAnnotations),
 
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
 
     path('submit/', views.submit),
     path('submit-survey/', views.submitSurvey),
+
 
     path('get-annotations-by-image', views.getAnnotationsByImage),
     path('get-workers', views.getWorkers),

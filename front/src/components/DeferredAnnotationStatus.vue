@@ -49,8 +49,13 @@
             
           <div v-for="group in annotated_box" :key="group.id" :id="'annot_'+group.annotpk">
             <v-btn-toggle dense style="padding:5px" class="flex-wrap" >
-              <v-btn text small tile depressed @mouseover="highlightGroup(group.boxes)" @mouseout="undoHighlightGroup(group.boxes)" style="border: 0.1px solid #eeeeee !important;" v-bind:class="{success: group.confidence, error: (group.subcat=='N/A'), warning: !group.confidence}"> 
-                {{group.cat}}-{{group.subcat}} 
+              <v-btn text small tile depressed @mouseover="highlightGroup(group.boxes)" @mouseout="undoHighlightGroup(group.boxes)" style="border: 0.1px solid #eeeeee !important;" v-bind:class="{success: group.confidence, error: (group.subcat=='n/a'), warning: !group.confidence}">
+                <span v-if="group.confidence">
+                    {{group.cat}}-{{group.subcat}} 
+                </span>
+                <span v-if="!group.confidence">
+                    {{group.cat}}-{{group.subcat}} ({{group.suggestion}})
+                </span>
               </v-btn>
               
               <div v-for="box in group.boxes" :key="box.id">
@@ -98,7 +103,6 @@ export default {
         }
           
       }})
-
     },
 
 
@@ -122,7 +126,6 @@ export default {
     },
 
     remove(group) {
-      console.log(group)
       const self = this;
       axios.post(self.$store.state.server_url + "/api/delete-annotation/", {
         mturk_id: self.$store.state.mturk_id,
@@ -162,17 +165,23 @@ export default {
     },
 
     reset() {
-      for (var i in this.image_box) {
-        var temp = this.image_box[i];
+      const self=this;
+      axios.post(self.$store.state.server_url + "/api/delete-all-annotations/", {
+        mturk_id: self.$store.state.mturk_id,
+        doctype: self.$route.params.docType,
+        image_id: self.$store.state.curr_image_no,
+      }).then(function () {
+        for (var i in self.image_box) {
+        var temp = self.image_box[i];
         temp.annotated = false;
         temp.label = '';
         temp.anschecked = 'false'
       }
-
+        });
       //this.$helpers.server_log(this, 'RL', [])
-      this.updateImageBoxes(this.image_box)
-      this.updateAnnotatedBoxes([[], "reset"])
-      this.undo_warning = false;
+      self.updateImageBoxes(self.image_box)
+      self.updateAnnotatedBoxes([[], "reset"])
+      self.undo_warning = false;
     }
 
 

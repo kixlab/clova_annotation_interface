@@ -38,7 +38,7 @@ const actions = {
     },
  */
     setShowAnswer({ commit }, bool) {
-        console.log("action -- ", bool)
+     //   console.log("action -- ", bool)
         commit('resetShowAnswer', bool)
     },
     setImage({ commit },docType, id) {

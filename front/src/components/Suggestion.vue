@@ -7,7 +7,7 @@
           <v-btn
             x-small outlined
             color="error" 
-            class="close-btn">
+            class="close-btn" v-on:click.stop="closeSuggestion">
             X
           </v-btn>
       </v-col>
@@ -18,30 +18,22 @@
         <v-col cols="12">
           
           <v-combobox
-            v-model="value"
-            :items="items"
-            :item-text="item => `${item.suggestion} `"
+            v-model="select"
+            :items="suggestions"
+            :search-input.sync="search"
             dense
           >
-            <template v-slot>
-            {{ data.suggestion }}
-          </template>
           </v-combobox>
         </v-col>
       </v-row>
   </v-container>
-  <v-container style='padding:0'>
-      <v-row
-      >
-      <v-col cols='12' style='padding:0'>
+  <v-container style='padding-bottom:20px;'>
           <v-btn
             x-small outlined
             color="primary" 
-            class="close-btn" v-on:click.stop="submitSuggestion">
+            class="close-btn" v-on:click.stop="markSuggestion">
             Suggest
           </v-btn>
-      </v-col>
-      </v-row>
   </v-container>
   
     </v-card>
@@ -49,17 +41,37 @@
 
 <script>
 //import { mapActions, mapGetters} from 'vuex'
+import axios from "axios";
+
 
 export default {
   name: "Suggestion",
-  props: ['subcatpk'],
+  props: ['subcat', 'confidence'],
   data: () => ({
-      items: [{'id': 1, 'suggestion': 'sug-menu'},{'id': 2, 'suggestion': 'sug-menu2'}],
-      value: null,
+      select: '',
+      suggestions:[],
+      search: null,
     }),
+  mounted: function(){
+    const self=this;
+    axios.get(self.$store.state.server_url + '/api/get-suggestions/',{
+      params:{
+        mturk_id: self.$store.state.mturk_id, 
+        doctype: self.$route.params.docType, 
+        subcatpk: self.subcat.pk
+      }
+    }).then(function(res){
+      var suggestions = res.data.mysuggestions.concat(res.data.othersuggestions)
+      self.suggestions=suggestions;
+     })
+
+  },
   methods:{
-    submitSuggestion: function(){
-      console.log(this.value, this.subcatpk)
+    markSuggestion: function(){
+      this.$emit('annotate', this.subcat, this.confidence, this.search);
+      this.$emit('done');},
+    closeSuggestion: function(){
+      this.$emit('done');
     }
   }
 };
@@ -70,6 +82,10 @@ export default {
   padding:5 !important;
   min-width: 0px !important;
   position: absolute;
-  right: 0;
+  right: 10px;
+}
+
+.suggestion-holder{
+  border: 1px solid grey;
 }
 </style>

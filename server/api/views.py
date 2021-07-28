@@ -13,7 +13,9 @@ import string
 import random
 import json
 from datetime import datetime, timedelta
-from django.db.models import Max
+from django.db.models import Max, Count, Q
+from .serializers import *
+
 
 n_documents=200
 workers_per_image=5
@@ -290,40 +292,51 @@ def getAnnotations(request):
 
         annotations=[]
         for annot in annots: 
-            annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.label.usercat.cat_text, 'subcat': annot.label.subcat_text, 'subcatpk': annot.label.pk, 'catpk':annot.label.usercat.pk})
-        
+            thisSuggestion= SelectedSuggestion.objects.filter(user=user, annotation=annot)
+            suggestion=''
+            if(len(thisSuggestion)>0):
+                suggestion=thisSuggestion[0].suggestion.suggested_subcat
+            if(annot.subcat==None):
+                annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None, 'suggestion': suggestion})
+            else:
+                if(annot.subcat.subcat_text=="N/A"):
+                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None,  'suggestion': suggestion})
+                else:
+                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence,  'suggestion': suggestion})
         response={
             'annotations':annotations
         }
         return JsonResponse(response)
 
-@csrf_exempt
-def getAnnotations(request):
+
+def getSuggestions(request):
     if request.method=='GET':
         username = request.GET['mturk_id']
         user = User.objects.get(username=username)
         #user=request.user
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
-        image_id =request.GET['image_id']
-        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
-        annots=Annotation.objects.filter(user=user, document=document,is_alive=True)
-        print(annots)
 
-        annotations=[]
-        for annot in annots: 
-            if(annot.subcat==None):
-                annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
+        subcatpk=request.GET['subcatpk']
+        subcat=InitSubCat.objects.get(pk=subcatpk)
+
+        candSuggestions=UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(subcat=subcat, nselection__gte=1).order_by('-nselection')
+
+        mysuggestions=[]
+        othersuggestions=[]
+        for sug in candSuggestions:
+            thisSelection = SelectedSuggestion.objects.filter(suggestion=sug, user=user)
+            if(len(thisSelection)>0):
+                mysuggestions.append(sug)
             else:
-                if(annot.subcat.subcat_text=="N/A"):
-                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
-                else:
-                    annotations.append({'group_id':annot.pk, 'boxes_id': annot.boxes_id, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
-        response={
-            'annotations':annotations
-        }
-        return JsonResponse(response)
+                othersuggestions.append(sug)
 
+        response={
+            'mysuggestions': [i.suggested_subcat for i in mysuggestions],
+            'othersuggestions': [i.suggested_subcat for i in othersuggestions]
+        }
+
+        return JsonResponse(response)
 
 
 @csrf_exempt
@@ -412,13 +425,28 @@ def saveAnnotation(request):
         subcatpk = query_json['subcatpk']
         catpk = query_json['catpk']
         confidence=query_json['confidence']
+        suggestion=query_json['suggestion']
+
         thisSubcat=InitSubCat.objects.get(pk=subcatpk)
         thisCat=InitCat.objects.get(pk=catpk)
+
         if(thisSubcat.subcat_text=='n/a'):
             newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=False, is_alive=True)
         else:
             newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisCat, subcat=thisSubcat, confidence=confidence, is_alive=True)
         newAnnot.save()
+
+        if(confidence!=1):
+            thisSuggestions=UserSuggestion.objects.filter(subcat=thisSubcat, suggested_subcat=suggestion)
+            if(len(thisSuggestions)==0): # new suggestion
+                newSuggestion = UserSuggestion(user=user, subcat=thisSubcat, suggested_subcat=suggestion)
+                newSuggestion.save()
+                # add selection count 
+                newSelection = SelectedSuggestion(suggestion=newSuggestion, user=user, annotation=newAnnot)
+                newSelection.save()
+            else: #existing suggestion 
+                thisSuggestion=thisSuggestions[0]
+                newSelection = SelectedSuggestion(suggestion=thisSuggestion, user=user, annotation=newAnnot)
         response={
             'annot_pk': newAnnot.pk
         }
@@ -483,6 +511,24 @@ def deleteAnnotation(request):
             'annot_pk': annot_pk
         }
         return JsonResponse(response)
+
+@csrf_exempt
+def deleteAllAnnotations(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
+        user = User.objects.get(username=username)
+        #user=request.user
+        doctypetext=query_json['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        image_id =query_json['image_id']
+        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
+
+        thisAnnots=Annotation.objects.filter(user=user, document=document)
+        for annot in thisAnnots: 
+            annot.is_alive=False 
+            annot.save()
+        return HttpResponse('')
 
 @csrf_exempt
 def submit(request):

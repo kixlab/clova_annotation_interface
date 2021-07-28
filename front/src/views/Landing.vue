@@ -24,7 +24,8 @@
     <h3> STEPS </h3>
     <ol>
       <li> Read instruction </li>
-      <li> Annotate 21 receipt images </li>
+      <li> Practice session with one receipt image </li>
+      <li> Annotate 20 receipt images </li>
       <li> Do a simple survey and submit a token to Amazon MTurk webpage</li>
     </ol>
     <br>

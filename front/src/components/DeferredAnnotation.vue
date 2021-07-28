@@ -1,6 +1,6 @@
 <template>
   <v-col cols="12">
-    <v-card tile>
+    <v-card tile style='padding-bottom: 100px;'>
       <v-card-title style="font-size: 110%">
         <b> 2. Choose a label that best describes the <span >selected box(es)</span>.</b> 
       </v-card-title>
@@ -35,14 +35,17 @@
                   <span class='subcat-div'>
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
-                      <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1)">Exactly</v-btn>
-                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion($event, subcat.pk, 0)">Close to</v-btn>
+                      <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1, '')">Exactly</v-btn>
+                      <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion(subcat.pk)">Close to</v-btn>
                       <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
-                        <suggestion  v-bind:subcatpk="subcat.pk"/>
+                        <suggestion  v-bind:subcat="subcat"  v-bind:confidence=0 @annotate="annotate" @done="closeSuggestion(subcat.pk)"/>
                       </div>
                     </span>
                     <span v-if="subcat.subcat=='n/a'" class='conf-btn'>
-                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion($event,subcat.pk,  null)">N/A</v-btn>
+                        <v-btn x-small outlined color="error" style='margin-right:1px;' v-on:click.stop="openSuggestion(subcat.pk)">N/A</v-btn>
+                        <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
+                        <suggestion  v-bind:subcat="subcat" v-bind:confidence='null' @annotate="annotate" @done="closeSuggestion(subcat.pk)"/>
+                      </div>
                     </span>
                   </span>
                 </v-list-item>
@@ -110,7 +113,6 @@ export default {
         }
       }).then(function(res){
         var annotations=res.data.annotations;
-        console.log(annotations)
         self.loadAnnotatedBoxes(annotations);})}
     ,1000);
   },
@@ -132,8 +134,7 @@ export default {
         this.addsubcat=true;
       },
 
-      openSuggestion(event, subcatpk, confidence){
-        console.log(event, confidence)
+      openSuggestion(subcatpk){
         //find idx 
         var idx = 0;
         for(let i =0;i<this.subcats.length;i++){
@@ -143,11 +144,9 @@ export default {
         }
         this.subcats[idx]["suggestion"]=true
       },
-      closeSuggestion(subcatpk, confidence){
-        console.log(confidence)
+      closeSuggestion(subcatpk){
         var idx = 0;
           for(let i =0;i<this.subcats.length;i++){
-            console.log(this.subcats[i])
             if(this.subcats[i].pk===subcatpk){
               idx=i;
             }
@@ -155,11 +154,14 @@ export default {
           this.subcats[idx]["suggestion"]=false
       },
 
-      annotate(item, confidence) {
+      annotate(item, confidence, suggestion) {
 
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
         var label = item.cat + "-" + item.subcat
+        if(confidence!=1){
+          label=label+' (suggested: '+ suggestion+')'
+        }
         var subcatpk=item.pk
         var catpk=item.catpk
         const self = this;
@@ -185,9 +187,10 @@ export default {
             boxes_id: group.map((i) => {return i.box_id}),
             subcatpk:subcatpk,
             catpk: catpk,
-            confidence: confidence
+            confidence: confidence,
+            suggestion: suggestion
           }).then(function (res) {
-            self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, subcatpk: item.pk, catpk:catpk, boxes: group, confidence: confidence, annotpk: res.data.annot_pk}, "add"])            
+            self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, subcatpk: item.pk, catpk:catpk, boxes: group, confidence: confidence, annotpk: res.data.annot_pk, suggestion: suggestion}, "add"])            
           });
         }else{
           window.alert("Please select boxes to annotate.")
@@ -229,7 +232,7 @@ export default {
               group.push(currBox)
             }
             self.updateImageBoxes(currImageBox)
-            self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id}, "add"])
+            self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id, suggestion:agroup.suggestion}, "add"])
           }          
         },
   },
