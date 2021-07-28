@@ -95,9 +95,9 @@ def startTask(request):
             # assign documents 
             end_docs=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[mod_order*window:] # now: 184: 188: 192: 196:  
             start_docs=Document.objects.filter(doctype=profile.doctype).order_by('doc_no')[:(workers_per_group - (n_annotators-mod_order))*window] # 46 --> 4*(5-(50-46)), 49 --> 4*(5-(50-49)) 
-            documents=start_docs 
-            documents.append(end_docs)
+            documents=start_docs + end_docs 
  
+        print(documents)
         # initialize status 
         for document in documents:
             Status(user=user, document=document, status=False).save()
@@ -226,7 +226,6 @@ def recordLog(request):
 @csrf_exempt
 def getImageID(request):
     if request.method == 'GET':
-#        user=request.user
         username = request.GET['mturk_id']        
         user = User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
