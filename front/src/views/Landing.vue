@@ -89,17 +89,7 @@ export default {
         username: self.$store.state.mturk_id,
       }).then( function(res){
 //        self.$store.commit('set_mturk_id', self.turk_id.trim())
-        if(res.data.status=='instruction'){
-          self.$router.push('/instruction/')
-        } else{
-          if(res.data.status=='annotation'){
-            self.$store.commit('set_start_image_no', res.data.user_order*7);
-            self.$router.push('/annotation/'+res.data.doctype)
-          }else{
-            self.$store.commit('update_status', new Array(21).fill(false));
-            self.$router.push('../informed-consent/')                    }
-        }
-      });
+          self.$helpers.server_get(self, "/api/consent-agreed", function(){ }) });
     }
   },
   mounted() {
