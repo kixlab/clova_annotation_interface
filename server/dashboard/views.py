@@ -87,7 +87,7 @@ def getNAs(doctype_text, expert_id):
     expert=User.objects.get(username=expert_id)
     suggestions=UserSuggestion.objects.filter(subcat__subcat_text="n/a")
 
-    u_suggestions=list(set([{'cat':suggestion.subcat.initcat.cat_text, 'suggested_subcat': suggestion.suggested_subcat} for suggestion in suggestions]))
+    u_suggestions=list(set([[suggestion.subcat.initcat.cat_text,  suggestion.suggested_subcat] for suggestion in suggestions]))
 
     print(u_suggestions)
 
