@@ -87,6 +87,8 @@ def getNAs(doctype_text, expert_id):
     expert=User.objects.get(username=expert_id)
     suggestions=UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(subcat__subcat_text="n/a").order_by('-selectedsuggestion')
 
+    if(len(suggestion)>100):
+        suggestions=suggestions[0:100]
     targetBoxes=TargetBoxAnnotation.objects.filter(expert=expert, is_reviewed=False)
     # count 
     na_suggestions=[]
