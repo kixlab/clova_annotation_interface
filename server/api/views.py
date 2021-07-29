@@ -61,49 +61,52 @@ def startTask(request):
         profile=Profile.objects.get(user=user)
         profile.instr_read = True
 
+        if(len(Status.objects.filter(user=user))==0):
         # assign task by assigning start image number 
         ## get smallest available user_order 
         # check if there is a user order taken but not completed
-
-        remaining_dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
-        
-        if(len(remaining_dropouts)==0):
-            active_profiles=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False)
-            if(len(active_profiles)==0):
-                order=0
-            else:
-                last_order= active_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
-                order=last_order+1 
-        else:
-            # drop out exist, take those in dropout list
-            dropout=remaining_dropouts[0]
-            dropout.dropout = True
-            # remove this profile from dropout list 
-            dropout.save()
-            order=dropout.user_order
-
-        profile.starttime=datetime.now()
-        profile.user_order=order
-        mod_order = (order % n_annotators)
-        profile.mod_order=mod_order        
-        profile.save()
-
-        print(profile.user_order, profile.mod_order)
-        if(mod_order<=(n_annotators-workers_per_group)): # now: 50 -5 = 45 --> 45*4 ~ 45*4 + 20
-            # assign documents 
-            print(mod_order, window, images_per_worker)
-            documents=Document.objects.filter(doctype=profile.doctype, doc_no__gte=(mod_order*window), doc_no__lt=(mod_order*window+images_per_worker))
+            remaining_dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
             
+            if(len(remaining_dropouts)==0):
+                active_profiles=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False)
+                if(len(active_profiles)==0):
+                    order=0
+                else:
+                    last_order= active_profiles.order_by('-user_order')[0].user_order  #aggregate(Max('user_order'))
+                    order=last_order+1 
+            else:
+                # drop out exist, take those in dropout list
+                dropout=remaining_dropouts[0]
+                dropout.dropout = True
+                # remove this profile from dropout list 
+                dropout.save()
+                order=dropout.user_order
+
+            profile.starttime=datetime.now()
+            profile.user_order=order
+            mod_order = (order % n_annotators)
+            profile.mod_order=mod_order        
+            profile.save()
+
+            print(profile.user_order, profile.mod_order)
+            if(mod_order<=(n_annotators-workers_per_group)): # now: 50 -5 = 45 --> 45*4 ~ 45*4 + 20
+                # assign documents 
+                print(mod_order, window, images_per_worker)
+                documents=Document.objects.filter(doctype=profile.doctype, doc_no__gte=(mod_order*window), doc_no__lt=(mod_order*window+images_per_worker))
+                
+            else: 
+                # assign documents 
+                end_docs=Document.objects.filter(doctype=profile.doctype, doc_no__gte=mod_order*window) # now: 184: 188: 192: 196:  
+                start_docs=Document.objects.filter(doctype=profile.doctype, doc_no__lt=int((workers_per_group - (n_annotators-mod_order))*window)) # 46 --> 4*(5-(50-46)), 49 --> 4*(5-(50-49)) 
+                documents=start_docs + end_docs 
+    
+            print(len(documents), documents)
+            # initialize status 
+            for document in documents:
+                Status(user=user, document=document, status=False).save()
         else: 
-            # assign documents 
-            end_docs=Document.objects.filter(doctype=profile.doctype, doc_no__gte=mod_order*window) # now: 184: 188: 192: 196:  
-            start_docs=Document.objects.filter(doctype=profile.doctype, doc_no__lt=int((workers_per_group - (n_annotators-mod_order))*window)) # 46 --> 4*(5-(50-46)), 49 --> 4*(5-(50-49)) 
-            documents=start_docs + end_docs 
- 
-        print(len(documents), documents)
-        # initialize status 
-        for document in documents:
-            Status(user=user, document=document, status=False).save()
+            statuses=Status.objects.filter(user=user)
+            documents=[status.document for status in statuses]
 
         response={
             'assigned_images': [doc.doc_no for doc in documents],
