@@ -87,13 +87,6 @@ def getNAs(doctype_text, expert_id):
     expert=User.objects.get(username=expert_id)
     suggestions=UserSuggestion.objects.filter(subcat__subcat_text="n/a")
 
-    suggestions_pairs=[[suggestion.subcat.initcat.cat_text,  suggestion.suggested_subcat] for suggestion in suggestions]
-
-    u_suggestions=[list(i) for i in set(tuple(i) for i in suggestions_pairs)]
-
-
-    print(u_suggestions)
-
     targetBoxes=TargetBoxAnnotation.objects.filter(expert=expert, is_reviewed=False)
     # count 
     na_suggestions=[]
@@ -132,6 +125,7 @@ def getCTs(doctype_text, expert_id):
     expert=User.objects.get(username=expert_id)
     allsuggestions=UserSuggestion.objects.all()
     suggestions=[]
+    
     for sug in allsuggestions:
         if(sug.subcat.subcat_text!='n/a'):
             suggestions.append(sug)
