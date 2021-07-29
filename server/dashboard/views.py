@@ -97,7 +97,9 @@ def getNAs(doctype_text, expert_id):
         # get candidate docs 
         selections = SelectedSuggestion.objects.filter(suggestion=suggestion, annotation__document__doctype=doctype)
         cand_docs = [selection.annotation.document for selection in selections]
-        for doc in cand_docs:
+        cand_docs_no=list(set([doc.doc_no for doc in cand_docs]))
+        for doc_no in cand_docs_no:
+            doc=Document.objects.get(doctype=doctype, doc_no=doc_no)
             #thisDoc=Document.objects.get(doctype=doctype, doc_no=doc_no)
             selections = SelectedSuggestion.objects.filter(suggestion=suggestion, annotation__document=doc) # 이 document에서 이 suggestion을 선택한 경우 
             boxes_id=[]
@@ -140,8 +142,10 @@ def getCTs(doctype_text, expert_id):
         # get candidate docs 
         selections = SelectedSuggestion.objects.filter(suggestion=suggestion, annotation__document__doctype=doctype)
         cand_docs = [selection.annotation.document for selection in selections]
-        for doc in cand_docs:
-            #thisDoc=Document.objects.get(doctype=doctype, doc_no=doc_no)
+        cand_docs_no=list(set([doc.doc_no for doc in cand_docs]))
+
+        for doc_no in cand_docs_no:
+            doc=Document.objects.get(doctype=doctype, doc_no=doc_no)
             selections = SelectedSuggestion.objects.filter(suggestion=suggestion, annotation__document=doc) # 이 document에서 이 suggestion을 선택한 경우 
             boxes_id=[]
             for selection in selections: 
