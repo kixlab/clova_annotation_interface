@@ -5,6 +5,8 @@ from dashboard.models import *
 # python manage.py shell
 # exec(open('generate_raw_annotations.py').read())
 
+RawAnnotation.objects.all().delete()
+
 max_docno=210
 
 for doc_no in range(max_docno):
