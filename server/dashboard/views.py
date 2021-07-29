@@ -85,7 +85,11 @@ def getDocTypes(request):
 def getNAs(doctype_text, expert_id):
     doctype=DocType.objects.get(doctype=doctype_text)
     expert=User.objects.get(username=expert_id)
-    suggestions=UserSuggestion.objects.annotate(nselection=Count('selectedsuggestion')).filter(subcat__subcat_text="n/a").order_by('-selectedsuggestion')
+    suggestions=UserSuggestion.objects.filter(subcat__subcat_text="n/a")
+
+    u_suggestions=list(set([{'cat':suggestion.subcat.initcat.cat_text, 'suggested_subcat': suggestion.suggested_subcat} for suggestion in suggestions]))
+
+    print(u_suggestions)
 
     if(len(suggestions)>100):
         suggestions=suggestions[0:100]
