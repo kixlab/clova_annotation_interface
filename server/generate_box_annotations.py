@@ -10,7 +10,7 @@ BoxAnnotation.objects.all().delete()
 
 annotations=Annotation.objects.filter(is_alive=True)
 
-annotations=annotations[0:300]
+annotations=annotations[0:500]
 
 
 for annotation in annotations: 
