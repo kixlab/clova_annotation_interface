@@ -11,7 +11,7 @@ max_docno=210
 
 for doc_no in range(max_docno):
     document=Document.objects.get(doctype__doctype='receipt', doc_no=doc_no)
-    thisBoxAnnots=BoxAnnotation.objects.filter(document=document)[:20]
+    thisBoxAnnots=BoxAnnotation.objects.filter(document=document)[0:5]
     cand_box_ids=list(set([box.box_id for box in thisBoxAnnots]))
     for box_id in cand_box_ids: 
         currBoxAnnots=thisBoxAnnots.filter(box_id=box_id)
