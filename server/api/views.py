@@ -542,7 +542,7 @@ def getSuggestionsToReview(request):
             for myselection in mySelections:
                 mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason})    
             for otherselection in otherSelections:
-                others.append({'image_no': otherselection.annotation.document.doc_no, 'boxes_id': otherselection.annotation.boxes_id, 'reason': otherselection.reason}) 
+                others.append({'image_no': otherselection.annotation.document.doc_no, 'boxes_id': otherselection.annotation.boxes_id, 'reason': otherselection.reason, 'worker': otherselection.user.username}) 
             response.append({'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_mine': len(mine), 'n_others': len(others), 'mine': mine, 'others': others})            
         return JsonResponse({
             'suggestions': response
