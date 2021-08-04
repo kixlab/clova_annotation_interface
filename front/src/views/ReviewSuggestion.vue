@@ -17,8 +17,8 @@
                     <v-row style="min-height: 45vh;">
                         <v-col cols="3" style="border: 1px solid black; ">
                             <h3>Issues</h3>
-                            <div v-for="v in [1, 2, 3, 4, 5, 6, 7, 8, 9]" :key="v" style="overflow-y: scroll">
-                                <v-btn depressed color="primary" small style="margin: 5px"> menu - name </v-btn>
+                            <div v-for="v in issue_list" :key="v" style="overflow-y: scroll">
+                                <v-btn depressed color="primary" small style="margin: 5px"> {{v.suggestion_cat}}-{{v.suggestion_subcat}}={{v.suggestion_text}} </v-btn>
                             </div>
                         </v-col>
                         <v-col cols="3" style="border: 1px solid black; ">
@@ -104,6 +104,7 @@ export default {
       }
     }).then(function(res){
         console.log(res);
+        this.issue_list=res.data;
     })
         // get annotation 단위 --> image id, box id(s), suggestion
     },
