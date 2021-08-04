@@ -538,7 +538,7 @@ def getSuggestionsToReview(request):
             others=[]
             # get my annotation with this suggestion 
             mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion)
-            otherSelections=SelectedSuggestion.objects.filter(user!=user, suggestion=suggestion)
+            otherSelections=SelectedSuggestion.objects.filter(~Q(user=user), suggestion=suggestion)
             for myselection in mySelections:
                 mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason})    
             for otherselection in otherSelections:
