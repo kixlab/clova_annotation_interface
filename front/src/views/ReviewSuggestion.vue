@@ -17,7 +17,7 @@
                     <v-row style="min-height: 45vh;">
                         <v-col cols="3" style="border: 1px solid black; ">
                             <h3>Issues</h3>
-                            <div v-for="v in issue_list" :key="v" style="overflow-y: scroll">
+                            <div v-for="(v, idx) in issue_list" :key="idx" style="overflow-y: scroll">
                                 <v-btn depressed color="primary" small style="margin: 5px"> {{v.suggestion_cat}}-{{v.suggestion_subcat}}={{v.suggestion_text}} </v-btn>
                             </div>
                         </v-col>
