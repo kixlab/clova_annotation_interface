@@ -109,7 +109,7 @@ export default {
 
     setTimeout( function(){
         console.log("group");
-      groupIssues([349], [326]);
+      self.groupIssues([349], [326]);
       }
     ,5000);
 
