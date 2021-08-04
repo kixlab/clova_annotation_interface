@@ -35,7 +35,7 @@
                   <span class='subcat-div'>
                     <b>{{subcat.subcat}}</b>: {{subcat.description}}
                     <span v-if="subcat.subcat!='n/a'" class='conf-btn'>
-                      <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1, '')">Exactly</v-btn>
+                      <v-btn x-small outlined color="success" style='margin-right:1px;' v-on:click.stop="annotate(subcat, 1, '', '')">Exactly</v-btn>
                       <v-btn x-small outlined color="warning" style='margin-right:1px;' v-on:click.stop="openSuggestion(subcat.pk)">Close to</v-btn>
                       <div v-if="subcat.suggestion" :id="'suggestion-'+subcat.pk" class='suggestion-holder'>
                         <suggestion  v-bind:subcat="subcat"  v-bind:confidence=0 @annotate="annotate" @done="closeSuggestion(subcat.pk)"/>
@@ -67,7 +67,7 @@ import axios from "axios";
 import Suggestion from '@/components/Suggestion.vue'
 
 export default {
-  name: 'DeferredAnnotation',
+  name: 'PracticeDeferredAnnotation',
   components: {
     Suggestion
   },
@@ -156,7 +156,7 @@ export default {
           this.subcats[idx]["suggestion"]=false
       },
 
-      annotate(item, confidence, suggestion) {
+      annotate(item, confidence, suggestion, reason) {
 
         const imageBox = this.getImageBoxes()//this.image_box
         var group = []
@@ -187,7 +187,8 @@ export default {
             subcatpk:subcatpk,
             catpk: catpk,
             confidence: confidence,
-            suggestion: suggestion
+            suggestion: suggestion,
+            reason: reason,
           }).then(function (res) {
             self.updateAnnotatedBoxes([{cat: item.cat, subcat: item.subcat, subcatpk: item.pk, catpk:catpk, boxes: group, confidence: confidence, annotpk: res.data.annot_pk, suggestion: suggestion}, "add"])            
           });
