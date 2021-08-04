@@ -10,6 +10,7 @@ import PageNotFound from '../views/404.vue'
 import DocTypeList from '../views/DocTypeList.vue'
 import AnnotDone from '../views/AnnotDone.vue'
 import Review from '../views/Review.vue'
+import ReviewSuggestion from '../views/ReviewSuggestion.vue'
 
 Vue.use(VueRouter)
 
@@ -60,6 +61,11 @@ Vue.use(VueRouter)
     path: '/after-done',
     name: 'AfterDone',
     component: AfterDone
+  },
+  {
+    path: '/review-suggestion/:docType/',
+    name: 'ReviewSuggestion',
+    component: ReviewSuggestion
   },
   {
     path: "*",
