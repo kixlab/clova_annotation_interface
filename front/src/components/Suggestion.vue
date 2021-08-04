@@ -16,7 +16,7 @@
   <v-container>
       <v-row>
         <v-col cols="12">
-          
+          Sub-category
           <v-combobox
             v-model="select"
             :items="suggestions"
@@ -24,6 +24,15 @@
             dense
           >
           </v-combobox>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          Reason
+          <v-text-field v-model="reason" @change="reasonHandler"
+          dense
+          >
+          </v-text-field>
         </v-col>
       </v-row>
   </v-container>
@@ -51,6 +60,7 @@ export default {
       select: '',
       suggestions:[],
       search: null,
+      reason:'',
     }),
   mounted: function(){
     const self=this;
@@ -63,19 +73,32 @@ export default {
     }).then(function(res){
       var suggestions = res.data.mysuggestions.concat(res.data.othersuggestions)
       self.suggestions=suggestions;
+      
+      var descriptions = res.data.mydescrtipthios.concat(res.data.otherdescriptions)
+      self.descriptions=descriptions;
+
      })
 
   },
   methods:{
     markSuggestion: function(){
       if(this.search!=null){
-      this.$emit('annotate', this.subcat, this.confidence, this.search);
-      this.$emit('done');}
+        if(this.desc_search!=null){
+          this.$emit('annotate', this.subcat, this.confidence, this.search, this.reason);
+          this.$emit('done');}
+        else{
+          window.alert('Please suggest a proper description for for the subcategory you selected.');
+        }}
       else{
         window.alert('Please suggest a proper category name for the boxes you selected.');
       }},
     closeSuggestion: function(){
       this.$emit('done');
+    },
+
+    reasonHandler: function(reason){
+      this.reason=reason;
+      console.log(reason, this.reason);
     }
   }
 };

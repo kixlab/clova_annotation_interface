@@ -31,6 +31,8 @@ urlpatterns = [
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
 
+    path('get-suggestions-to-review/', views.getSuggestionsToReview),
+
     path('submit/', views.submit),
     path('submit-survey/', views.submitSurvey),
 

@@ -91,6 +91,7 @@ class SelectedSuggestion(models.Model):
     suggestion=models.ForeignKey('UserSuggestion', on_delete=models.CASCADE)
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     annotation=models.ForeignKey('Annotation', on_delete=models.CASCADE)
+    reason=models.TextField(max_length=255, default="No reason", null=True, blank=True)
     def __str__(self):
         return self.user.username+'-'+str(self.suggestion)
 

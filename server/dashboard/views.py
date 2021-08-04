@@ -524,6 +524,7 @@ def saveAnnotation(request):
         catpk = query_json['catpk']
         confidence=query_json['confidence']
         suggestion=query_json['suggestion']
+        reason=query_json['reason']
 
         thisSubcat=InitSubCat.objects.get(pk=subcatpk)
         thisCat=InitCat.objects.get(pk=catpk)
@@ -540,11 +541,11 @@ def saveAnnotation(request):
                 newSuggestion = UserSuggestion(user=user, subcat=thisSubcat, suggested_subcat=suggestion)
                 newSuggestion.save()
                 # add selection count 
-                newSelection = SelectedSuggestion(suggestion=newSuggestion, user=user, annotation=newAnnot)
+                newSelection = SelectedSuggestion(suggestion=newSuggestion, user=user, annotation=newAnnot, reason=reason)
                 newSelection.save()
             else: #existing suggestion 
                 thisSuggestion=thisSuggestions[0]
-                newSelection = SelectedSuggestion(suggestion=thisSuggestion, user=user, annotation=newAnnot)
+                newSelection = SelectedSuggestion(suggestion=thisSuggestion, user=user, annotation=newAnnot, reason=reason)
         response={
             'annot_pk': newAnnot.pk
         }

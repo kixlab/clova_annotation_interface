@@ -412,6 +412,7 @@ def saveAnnotation(request):
         catpk = query_json['catpk']
         confidence=query_json['confidence']
         suggestion=query_json['suggestion']
+        reason=query_json['reason']
 
         thisSubcat=InitSubCat.objects.get(pk=subcatpk)
         thisCat=InitCat.objects.get(pk=catpk)
@@ -428,11 +429,11 @@ def saveAnnotation(request):
                 newSuggestion = UserSuggestion(user=user, subcat=thisSubcat, suggested_subcat=suggestion)
                 newSuggestion.save()
                 # add selection count 
-                newSelection = SelectedSuggestion(suggestion=newSuggestion, user=user, annotation=newAnnot)
+                newSelection = SelectedSuggestion(suggestion=newSuggestion, user=user, annotation=newAnnot, reason=reason)
                 newSelection.save()
             else: #existing suggestion 
                 thisSuggestion=thisSuggestions[0]
-                newSelection = SelectedSuggestion(suggestion=thisSuggestion, user=user, annotation=newAnnot)
+                newSelection = SelectedSuggestion(suggestion=thisSuggestion, user=user, annotation=newAnnot, reason=reason)
                 newSelection.save()
         response={
             'annot_pk': newAnnot.pk
@@ -516,6 +517,32 @@ def deleteAllAnnotations(request):
             annot.is_alive=False 
             annot.save()
         return HttpResponse('')
+
+@csrf_exempt
+def getSuggestionsToReview(request):
+    if request.method =='GET':
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        # get my suggestions 
+        mySelections=SelectedSuggestion.objects.filter(user=user)
+        mySuggestions=list(set([selection.suggestion for selection in mySelections]))
+        response=[]
+        for suggestion in mySuggestions:
+            mine=[]
+            others=[]
+            # get my annotation with this suggestion 
+            mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion)
+            otherSelections=SelectedSuggestion.objects.filter(user!=user, suggestion=suggestion)
+            for myselection in mySelections:
+                mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason})    
+            for otherselection in otherSelections:
+                others.append({'image_no': otherselection.annotation.document.doc_no, 'boxes_id': otherselection.annotation.boxes_id, 'reason': otherselection.reason}) 
+            response.append({'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_mine': len(mine), 'n_others': len(others), 'mine': mine, 'others': others})            
+        return JsonResponse({
+            'suggestions': response
+        })
 
 @csrf_exempt
 def submit(request):
