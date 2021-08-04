@@ -80,7 +80,7 @@ export default {
   methods:{
     markSuggestion: function(){
       if(this.search!=null){
-        if(this.desc_search!=null){
+        if(this.reason!=''){
           this.$emit('annotate', this.subcat, this.confidence, this.search, this.reason);
           this.$emit('done');}
         else{
