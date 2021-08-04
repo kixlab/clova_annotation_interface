@@ -95,6 +95,7 @@ export default {
     },
 
     mounted: function() {
+        const self=this;
 
     axios.get(self.$store.state.server_url + "/api/get-suggestions-to-review/",{
       params:{
