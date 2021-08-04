@@ -528,7 +528,10 @@ def getSuggestionsToReview(request):
         user = User.objects.get(username=username)
         # get my suggestions 
         mySelections=SelectedSuggestion.objects.filter(user=user)
+        print(mySelections, flush=True)
         mySuggestions=list(set([selection.suggestion for selection in mySelections]))
+        print(mySuggestions, flush=True)
+
         response=[]
         for suggestion in mySuggestions:
             mine=[]
