@@ -71,7 +71,6 @@ export default {
         subcatpk: self.subcat.pk
       }
     }).then(function(res){
-      console.log(res)
       var suggestions = res.data.mysuggestions.concat(res.data.othersuggestions)
       self.suggestions=suggestions;
      })
@@ -95,7 +94,6 @@ export default {
 
     reasonHandler: function(reason){
       this.reason=reason;
-      console.log(reason, this.reason);
     }
   }
 };
