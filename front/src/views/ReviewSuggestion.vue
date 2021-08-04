@@ -104,7 +104,7 @@ export default {
       }
     }).then(function(res){
         console.log(res);
-        self.issue_list=res.data;
+        self.issue_list=res.data.suggestions;
     })
         // get annotation 단위 --> image id, box id(s), suggestion
     },
