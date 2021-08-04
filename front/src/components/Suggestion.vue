@@ -27,7 +27,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" style='padding-top:0, padding-bottom:0'>
           Reason
           <v-text-field v-model="reason" @change="reasonHandler"
           dense
@@ -36,7 +36,7 @@
         </v-col>
       </v-row>
   </v-container>
-  <v-container style='padding-bottom:20px;'>
+  <v-container style='padding-bottom:20px;padding-top:0px;'>
           <v-btn
             x-small outlined
             color="primary" 
