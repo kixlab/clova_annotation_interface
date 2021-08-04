@@ -103,7 +103,7 @@ export default {
         doctype: self.$route.params.docType
       }
     }).then(function(res){
-        console.log(res);
+        console.log('init', res.data);
         self.issue_list=res.data.suggestions;
     })
         // get annotation 단위 --> image id, box id(s), suggestion
@@ -124,7 +124,8 @@ export default {
                 other_issue_pks: other_issue_pks
             }).then(function (res) { // get issue list again 
                 self.issue_list=res.data.suggestions;
-                });
+                console.log(res.data)
+            });
       }
     },
 
