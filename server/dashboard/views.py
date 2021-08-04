@@ -38,7 +38,6 @@ def signup(request):
 
 
     initstatus=initialize('receipt', username)
-    print(initstatus)
 
     login(request, new_user)
 

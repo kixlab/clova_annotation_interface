@@ -88,10 +88,8 @@ def startTask(request):
             profile.mod_order=mod_order        
             profile.save()
 
-            print(profile.user_order, profile.mod_order)
             if(mod_order<=(n_annotators-workers_per_group)): # now: 50 -5 = 45 --> 45*4 ~ 45*4 + 20
                 # assign documents 
-                print(mod_order, window, images_per_worker)
                 documents=Document.objects.filter(doctype=profile.doctype, doc_no__gte=(mod_order*window), doc_no__lt=(mod_order*window+images_per_worker))
                 
             else: 
@@ -100,7 +98,6 @@ def startTask(request):
                 start_docs=Document.objects.filter(doctype=profile.doctype, doc_no__lt=int((workers_per_group - (n_annotators-mod_order))*window)) # 46 --> 4*(5-(50-46)), 49 --> 4*(5-(50-49)) 
                 documents=start_docs + end_docs 
     
-            print(len(documents), documents)
             # initialize status 
             for document in documents:
                 Status(user=user, document=document, status=False).save()
@@ -274,8 +271,7 @@ def getAnnotations(request):
         image_id =request.GET['image_id']
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         annots=Annotation.objects.filter(user=user, document=document,is_alive=True)
-        print(annots)
-
+        
         annotations=[]
         for annot in annots: 
             thisSuggestion= SelectedSuggestion.objects.filter(user=user, annotation=annot)
@@ -335,12 +331,10 @@ def getWorkerAnnotations(request):
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         statuses=Status.objects.filter(document=document, status=True)
         workerannots=[]
-        print(statuses)
         for status in statuses: 
             user=status.user
             annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
             annotations=[]
-            print(annots)
             for annot in annots: 
                 boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
                 for box in boxes:
@@ -401,7 +395,6 @@ def saveAnnotation(request):
 def saveAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
-        print(query_json, flush=True)
         username=query_json['mturk_id']
         user = User.objects.get(username=username)
         #user=request.user
@@ -622,7 +615,6 @@ def updateStatus(request):
         image_id = query_json['image_id']
         status= query_json['status']
         doctype=profile.doctype
-        print(image_id)
 
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         user = User.objects.get(username=username)
@@ -676,7 +668,6 @@ def addSubcat(request):
         doctype=DocType.objects.get(doctype=doctypetext)
         user = User.objects.get(username=username)
         #user=request.user
-        print(cat)
         cat = UserCat.objects.get(user=user, doctype=doctype, cat_text=cat)
 
 
@@ -773,12 +764,10 @@ def getAnnotationsByImage(request):
         document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
         statuses=Status.objects.filter(document=document, status=True)
         workerannots=[]
-        print(statuses)
         for status in statuses: 
             user=status.user
             annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
             annotations=[]
-            print(annots)
             for annot in annots: 
                 boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
                 for box in boxes:
@@ -819,9 +808,9 @@ def getWorkers(request):
     if request.method=='GET':
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
-        print(doctype)
+        
         profiles=Profile.objects.filter(doctype=doctype)
-        print('profiles', profiles)
+        
 
         users=[]
         for prof in profiles:

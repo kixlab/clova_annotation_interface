@@ -103,15 +103,9 @@ export default {
         doctype: self.$route.params.docType
       }
     }).then(function(res){
-        console.log('init', res.data);
         self.issue_list=res.data.suggestions;
     })
 
-    setTimeout( function(){
-        console.log("group");
-      self.groupIssues([349], [326]);
-      }
-    ,5000);
 
         // get annotation 단위 --> image id, box id(s), suggestion
     },
@@ -123,6 +117,7 @@ export default {
         groupIssues(my_issue_pks, other_issue_pks){
             // my_issues_pks: [1,2,3,4,5]
             // other_issues_pks: [10,11,12,13] 
+            // e.g.,       self.groupIssues([349], [326]) 형태로 사용하시면 됩니다! 
             const self=this;
             axios.post(self.$store.state.server_url + "/api/save-grouped-issues/", {
                 doctype: self.$route.params.docType,
@@ -131,7 +126,6 @@ export default {
                 other_issue_pks: other_issue_pks
             }).then(function (res) { // get issue list again 
                 self.issue_list=res.data.suggestions;
-                console.log(res.data)
             });
       }
     },
