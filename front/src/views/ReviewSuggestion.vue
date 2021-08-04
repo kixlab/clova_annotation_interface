@@ -93,6 +93,15 @@ export default {
     },
 
     mounted: function() {
+
+    axios.get(self.$store.state.server_url + "/api/get-suggestions-to-review/",{
+      params:{
+        mturk_id: self.$store.state.mturk_id,
+        doctype: self.$route.params.docType
+      }
+    }).then(function(res){
+        console.log(res);
+    })
         // get annotation 단위 --> image id, box id(s), suggestion
     },
 
