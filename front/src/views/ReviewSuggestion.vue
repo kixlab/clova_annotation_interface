@@ -18,7 +18,7 @@
                         <v-col cols="3" style="border: 1px solid black; ">
                             <h3>Issues</h3>
                             <div v-for="(v, idx) in issue_list" :key="idx" style="overflow-y: scroll">
-                                <v-btn depressed color="primary" small style="margin: 5px"> {{v.suggestion_cat}}-{{v.suggestion_subcat}}={{v.suggestion_text}} </v-btn>
+                                <v-btn depressed color="primary" small style="margin: 5px"> {{v.suggestion_cat}}-{{v.suggestion_subcat}}-{{v.suggestion_text}} </v-btn>
                             </div>
                         </v-col>
                         <v-col cols="3" style="border: 1px solid black; ">
@@ -113,6 +113,19 @@ export default {
         validate () {
             this.$refs.form.validate()
         },
+        groupIssues(my_issue_pks, other_issue_pks){
+            // my_issues_pks: [1,2,3,4,5]
+            // other_issues_pks: [10,11,12,13] 
+            const self=this;
+            axios.post(self.$store.state.server_url + "/api/save-grouped-issues/", {
+                doctype: self.$route.params.docType,
+                mturk_id: self.$store.state.mturk_id,
+                my_issue_pks: my_issue_pks,
+                other_issue_pks: other_issue_pks
+            }).then(function (res) { // get issue list again 
+                self.issue_list=res.data.suggestions;
+                });
+      }
     },
 
 }

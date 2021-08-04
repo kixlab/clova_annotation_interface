@@ -92,8 +92,15 @@ class SelectedSuggestion(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     annotation=models.ForeignKey('Annotation', on_delete=models.CASCADE)
     reason=models.TextField(max_length=255, default="No reason", null=True, blank=True)
+    is_grouped=models.BooleanField(default=False, null=True, blank=True)
     def __str__(self):
         return self.user.username+'-'+str(self.suggestion)
+
+class GroupLink(models.Model):
+    target_suggestions=models.TextField(validators=[validate_comma_separated_integer_list], null=True) # list of target suggestions
+    grouped_suggestions=models.TextField(validators=[validate_comma_separated_integer_list], null=True) # list of grouped suggestions from others
+    made_by=models.ForeignKey(User, on_delete=models.CASCADE)
+
 
 class Annotation(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
@@ -122,3 +129,4 @@ class Image(models.Model):
 class Json(models.Model):
     json_id = models.CharField(max_length=256, primary_key=True)
     json = models.FileField(upload_to="resume/")
+

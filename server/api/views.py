@@ -519,6 +519,26 @@ def deleteAllAnnotations(request):
             annot.save()
         return HttpResponse('')
 
+
+def getUngroupedIssues(user, doctype):
+    mySelections=SelectedSuggestion.objects.filter(user=user, is_grouped=False)
+    mySuggestions=list(set([selection.suggestion for selection in mySelections]))
+    
+    response=[]
+    for suggestion in mySuggestions:
+        mine=[]
+        others=[]
+        # get my annotation with this suggestion 
+        mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion, is_grouped=False)
+        otherSelections=SelectedSuggestion.objects.filter(~Q(user=user), suggestion=suggestion)
+        for myselection in mySelections:
+            mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason, 'issue_pk': myselection.pk})    
+        for otherselection in otherSelections:
+            others.append({'image_no': otherselection.annotation.document.doc_no, 'boxes_id': otherselection.annotation.boxes_id, 'reason': otherselection.reason, 'worker': otherselection.user.username, 'issue_pk': otherselection.pk}) 
+        response.append({'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_mine': len(mine), 'n_others': len(others), 'mine': mine, 'others': others})            
+    return response
+
+
 @csrf_exempt
 def getSuggestionsToReview(request):
     if request.method =='GET':
@@ -526,27 +546,35 @@ def getSuggestionsToReview(request):
         doctype=DocType.objects.get(doctype=doctypetext)
         username = request.GET['mturk_id']
         user = User.objects.get(username=username)
-        # get my suggestions 
-        mySelections=SelectedSuggestion.objects.filter(user=user)
-        print(mySelections, flush=True)
-        mySuggestions=list(set([selection.suggestion for selection in mySelections]))
-        print(mySuggestions, flush=True)
-
-        response=[]
-        for suggestion in mySuggestions:
-            mine=[]
-            others=[]
-            # get my annotation with this suggestion 
-            mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion)
-            otherSelections=SelectedSuggestion.objects.filter(~Q(user=user), suggestion=suggestion)
-            for myselection in mySelections:
-                mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason})    
-            for otherselection in otherSelections:
-                others.append({'image_no': otherselection.annotation.document.doc_no, 'boxes_id': otherselection.annotation.boxes_id, 'reason': otherselection.reason, 'worker': otherselection.user.username}) 
-            response.append({'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_mine': len(mine), 'n_others': len(others), 'mine': mine, 'others': others})            
+        # get my suggestions           
         return JsonResponse({
-            'suggestions': response
+            'suggestions': getUngroupedIssues(user, doctype)
         })
+
+@csrf_exempt
+def saveGroupedIssues(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
+        user = User.objects.get(username=username)
+        doctypetext=query_json['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        myIssues=query_json['my_issue_pks']
+        otherIssues=query_json['other_issues_pks']
+        newGroup=GroupLink(target_suggestions=myIssues, grouped_suggestons=otherIssues, made_by=user)
+        newGroup.save()
+
+        my_selections=myIssues.replace('[',' ').replace(']',' ').replace(', ',' ').split()
+        for my_selection in my_selections:
+            # mark selections as grouped 
+            my_selection.is_grouped=True
+            my_selection.save()
+        
+        return JsonResponse({
+            'suggestions': getUngroupedIssues(user, doctype)
+        })
+
+
 
 @csrf_exempt
 def submit(request):

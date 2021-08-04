@@ -32,6 +32,7 @@ urlpatterns = [
     path('get-status/', views.getStatus),
 
     path('get-suggestions-to-review/', views.getSuggestionsToReview),
+    path('save-grouped-issues/', views.saveGroupedIssues),
 
     path('submit/', views.submit),
     path('submit-survey/', views.submitSurvey),
