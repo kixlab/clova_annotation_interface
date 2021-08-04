@@ -74,10 +74,6 @@ export default {
       console.log(res)
       var suggestions = res.data.mysuggestions.concat(res.data.othersuggestions)
       self.suggestions=suggestions;
-      
-      var descriptions = res.data.mydescrtipthios.concat(res.data.otherdescriptions)
-      self.descriptions=descriptions;
-
      })
 
   },
