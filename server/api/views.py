@@ -401,6 +401,7 @@ def saveAnnotation(request):
 def saveAnnotation(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
+        print(query_json, flush=True)
         username=query_json['mturk_id']
         user = User.objects.get(username=username)
         #user=request.user
