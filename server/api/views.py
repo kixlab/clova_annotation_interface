@@ -561,7 +561,7 @@ def saveGroupedIssues(request):
         doctype=DocType.objects.get(doctype=doctypetext)
         myIssues=query_json['my_issue_pks']
         otherIssues=query_json['other_issue_pks']
-        newGroup=GroupLink(target_suggestions=myIssues, grouped_suggestons=otherIssues, made_by=user)
+        newGroup=GroupLink(target_suggestions=myIssues, grouped_suggestions=otherIssues, made_by=user)
         newGroup.save()
 
         my_selections=myIssues.replace('[',' ').replace(']',' ').replace(', ',' ').split()
