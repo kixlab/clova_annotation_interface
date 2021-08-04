@@ -106,6 +106,13 @@ export default {
         console.log('init', res.data);
         self.issue_list=res.data.suggestions;
     })
+
+    setTimeout( function(){
+        console.log("group");
+      groupIssues([349], [326]);
+      }
+    ,5000);
+
         // get annotation 단위 --> image id, box id(s), suggestion
     },
 
