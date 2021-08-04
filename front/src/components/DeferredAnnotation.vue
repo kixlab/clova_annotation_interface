@@ -180,6 +180,7 @@ export default {
         this.updateImageBoxes(this.image_box)
 
         if(group.length>0){
+          console.log(reason)
           axios.post(self.$store.state.server_url + "/api/save-annotation/", {
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType,
