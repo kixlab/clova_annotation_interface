@@ -71,6 +71,7 @@ export default {
         subcatpk: self.subcat.pk
       }
     }).then(function(res){
+      console.log(res)
       var suggestions = res.data.mysuggestions.concat(res.data.othersuggestions)
       self.suggestions=suggestions;
       
