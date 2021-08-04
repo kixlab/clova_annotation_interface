@@ -1,6 +1,6 @@
 <template>
   <v-col cols="12">
-    <v-card tile style='padding-bottom: 150px;'>
+    <v-card tile style='padding-bottom: 200px;'>
       <v-card-title style="font-size: 110%">
         <b> 2. Choose a label that best describes the <span >selected box(es)</span>.</b> 
       </v-card-title>
