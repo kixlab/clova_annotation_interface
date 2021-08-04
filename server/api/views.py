@@ -564,7 +564,7 @@ def saveGroupedIssues(request):
         newGroup=GroupLink(target_suggestions=myIssues, grouped_suggestions=otherIssues, made_by=user)
         newGroup.save()
 
-        my_selections=myIssues.replace('[',' ').replace(']',' ').replace(', ',' ').split()
+        my_selections=[SelectedSuggestions.objects.get(pk=pk) for pk in myIssues]
         for my_selection in my_selections:
             # mark selections as grouped 
             my_selection.is_grouped=True
