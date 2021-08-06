@@ -629,7 +629,7 @@ def getIssuesWithRandomSuggestions(user, doctype):
 
 @csrf_exempt
 def getRandomSuggestionsToReview(request):
-    if reqeust.method=='GET':
+    if request.method=='GET':
         doctypetext=request.GET['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
         username = request.GET['mturk_id']
