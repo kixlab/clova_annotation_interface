@@ -136,7 +136,7 @@ export default {
             console.log(self.issues_with_suggestions)
         })
 
-        axios.get(self.$store.state.server_url + "/api/get-unreviewed_issues/",{
+        axios.get(self.$store.state.server_url + "/api/get-unreviewed-issues/",{
         params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType
