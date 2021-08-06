@@ -593,9 +593,9 @@ def getUnreviewedIssues(request):
             mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion)
 
             for selection in mySelections:
-                issues.append({
+                issues.append(
                     {'image_no': selection.annotation.document.doc_no, 'boxes_id': selection.annotation.boxes_id, 'reason': selection.reason, 'issue_pk': selection.pk}
-                })
+                )
             response.append({
                 'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_issues': len(list(mySelections)), 'issues':issues
             })
