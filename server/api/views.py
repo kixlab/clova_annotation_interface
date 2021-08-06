@@ -558,7 +558,7 @@ def getRandomSuggestions(user, doctype, selection):
     else: 
         suggestions=selections_samesubcat
     
-    selections_samecat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat=thisSubCat))), annotation__subcat__initcat=thisCat)
+    selections_samecat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat=thisSubCat)), annotation__subcat__initcat=thisCat))
     if(len(selections_samecat)>=2):
         rand_selections_samecat=random.sample(selections_samecat, 2)
         suggestions = suggestions+rand_selections_samecat
