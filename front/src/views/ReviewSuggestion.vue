@@ -102,6 +102,9 @@ export default {
 
             sel_sim_issues: [],
 
+            unreviewed_issues: [],
+            issues_with_suggestions:[],
+
 
 
 
@@ -123,14 +126,24 @@ export default {
     mounted: function() {
         const self=this;
 
-        axios.get(self.$store.state.server_url + "/api/get-suggestions-to-review/",{
+        axios.get(self.$store.state.server_url + "/api/get-random-suggestions-to-review/",{
         params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType
         }
         }).then(function(res){
-            self.issue_list=res.data.suggestions;
-            console.log(self.issue_list)
+            self.issues_with_suggestions=res.data.suggestions;
+            console.log(self.issues_with_suggestions)
+        })
+
+        axios.get(self.$store.state.server_url + "/api/get-unreviewed_issues/",{
+        params:{
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType
+        }
+        }).then(function(res){
+            self.unreviewed_issues=res.data.unreviewed_issues;
+            console.log(self.unreviewed_issues)
         })
 
 
@@ -152,7 +165,7 @@ export default {
                 my_issue_pks: my_issue_pks,
                 other_issue_pks: other_issue_pks
             }).then(function (res) { // get issue list again 
-                self.issue_list=res.data.suggestions;
+                self.unreviewed_issues=res.data.unreviewed_issues;
             });
         },
 
