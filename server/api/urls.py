@@ -33,6 +33,7 @@ urlpatterns = [
 
     path('get-suggestions-to-review/', views.getSuggestionsToReview),
     path('get-random-suggestions-to-review/', views.getRandomSuggestionsToReview),
+    path('get-unreviewed-issues/', views.getUnreviewedIssues),
     path('save-grouped-issues/', views.saveGroupedIssues),
 
     path('submit/', views.submit),
