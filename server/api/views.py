@@ -548,7 +548,7 @@ def getSuggestionsToReview(request):
 def getRandomSuggestions(user, doctype, selection):
     thisSuggestion=selection.suggestion
     thisSubCat=thisSuggestion.subcat
-    thisCat=thisSubCat.InitCat
+    thisCat=thisSubCat.initcat
     suggestions=[]
     
     selections_samesubcat=list(SelectedSuggestion.objects.filter(~Q(user=user), annotation__subcat=thisSubCat))
