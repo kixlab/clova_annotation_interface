@@ -133,7 +133,7 @@ export default {
         }
         }).then(function(res){
             self.issues_with_suggestions=res.data.suggestions;
-            console.log(self.issues_with_suggestions)
+            console.log("Hi", self.issues_with_suggestions)
         })
 
         axios.get(self.$store.state.server_url + "/api/get-unreviewed-issues/",{
