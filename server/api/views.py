@@ -545,8 +545,7 @@ def getSuggestionsToReview(request):
         })
 
 
-def getRandomSuggestions(user, doctype, selection):
-    thisSuggestion=selection.suggestion
+def getRandomSuggestions(user, doctype, thisSuggestion):
     thisSubCat=thisSuggestion.subcat
     thisCat=thisSubCat.initcat
     suggestions=[]
@@ -609,21 +608,19 @@ def getIssuesWithRandomSuggestions(user, doctype):
     
     response=[]
     for suggestion in mySuggestions:
-        issues=[]
         # get my annotation with this suggestion 
         mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion)
-
+        mine=[]
         for myselection in mySelections: 
-            randomSuggestions=getRandomSuggestions(user, doctype, myselection)
-            random_issues=[]
-            for issue in randomSuggestions:
-                random_issues.append({'image_no': issue.annotation.document.doc_no, 'boxes_id': issue.annotation.boxes_id, 'reason': issue.reason, 'worker': issue.user.username, 'issue_pk': issue.pk})
-            issues.append({
-                'target': {'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason, 'issue_pk': myselection.pk},
-                'random_suggestions': random_issues
-            })
+            mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason, 'issue_pk': myselection.pk})
+            
+        randomSuggestions=getRandomSuggestions(user, doctype, suggestion)
+        others=[]
+        for issue in randomSuggestions:
+            others.append({'image_no': issue.annotation.document.doc_no, 'boxes_id': issue.annotation.boxes_id, 'reason': issue.reason, 'worker': issue.user.username, 'issue_pk': issue.pk})
+
         response.append({
-            'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_issues': len(list(mySelections)), 'issues':issues
+            'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_issues': len(list(mySelections)), 'mine':mine, 'others':others
         })
     return response
 
