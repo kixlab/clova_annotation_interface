@@ -98,7 +98,10 @@ export default {
     data () {
         return {
             issue_list: [],
-            sel_issue: [],
+            sel_issue: {
+                mine:[],
+                otehrs: []
+            },
 
             sel_sim_issues: [],
 
