@@ -184,13 +184,13 @@ export default {
 
 
         clickCloseto(sugg) {
-            console.log(sugg)
-            this.sel_issue = sugg
+            const sugg_pk=sugg.suggestions.sugg_pk
+            this.sel_issue = this.issues_with_suggestions.filter(v => v.suggestion_pk == sugg_pk)[0]
         },
 
         clickNa(sugg) {
-            console.log(sugg)
-            this.sel_issue = sugg
+            const sugg_pk=sugg.suggestions.sugg_pk
+            this.sel_issue = this.issues_with_suggestions.filter(v => v.suggestion_pk == sugg_pk)[0]
         },
 
 
