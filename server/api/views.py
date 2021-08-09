@@ -544,6 +544,100 @@ def getSuggestionsToReview(request):
             'suggestions': getUngroupedIssues(user, doctype)
         })
 
+
+def getRandomSuggestions(user, doctype, thisSuggestion):
+    thisSubCat=thisSuggestion.subcat
+    thisCat=thisSubCat.initcat
+    suggestions=[]
+    
+    selections_samesubcat=list(SelectedSuggestion.objects.filter(~Q(user=user), annotation__subcat=thisSubCat))
+    if(len(selections_samesubcat)>=2):
+        rand_selections_samesubcat = random.sample(selections_samesubcat,2)
+        suggestions=rand_selections_samesubcat
+    else: 
+        suggestions=selections_samesubcat
+    
+    selections_samecat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat=thisSubCat)), annotation__subcat__initcat=thisCat))
+    if(len(selections_samecat)>=2):
+        rand_selections_samecat=random.sample(selections_samecat, 2)
+        suggestions = suggestions+rand_selections_samecat
+    else:
+        suggestions=suggestions+selections_samecat
+    
+
+    n_needed=6-len(suggestions)
+    selections_othercat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat__initcat=thisCat))))
+    if(len(selections_othercat)>=n_needed):
+        rand_selections_othercat = random.sample(selections_othercat, n_needed)
+        suggestions=suggestions + rand_selections_othercat
+    else:
+        suggestions=suggestions + rand_selections_othercat 
+    
+    return suggestions 
+
+@csrf_exempt
+def getUnreviewedIssues(request):
+    if request.method=='GET':
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        mySelections=SelectedSuggestion.objects.filter(user=user, annotation__document__doctype=doctype, is_grouped=False)
+
+        mySuggestions=list(set([selection.suggestion for selection in mySelections]))
+
+        response=[]
+        for suggestion in mySuggestions:
+            issues=[]
+            mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion)
+
+            for selection in mySelections:
+                issues.append(
+                    {'image_no': selection.annotation.document.doc_no, 'boxes_id': selection.annotation.boxes_id, 'reason': selection.reason, 'issue_pk': selection.pk}
+                )
+            response.append({
+                'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_issues': len(list(mySelections)), 'issues':issues
+            })
+    return JsonResponse({
+        'unreviewed_issues': response
+    })
+
+def getIssuesWithRandomSuggestions(user, doctype):
+    mySelections=SelectedSuggestion.objects.filter(user=user)
+    mySuggestions=list(set([selection.suggestion for selection in mySelections]))
+    
+    response=[]
+    for suggestion in mySuggestions:
+        # get my annotation with this suggestion 
+        mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion)
+        mine=[]
+        for myselection in mySelections: 
+            mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason, 'issue_pk': myselection.pk})
+            
+        randomSuggestions=getRandomSuggestions(user, doctype, suggestion)
+        others=[]
+        for issue in randomSuggestions:
+            others.append({'image_no': issue.annotation.document.doc_no, 'boxes_id': issue.annotation.boxes_id, 'reason': issue.reason, 'worker': issue.user.username, 'issue_pk': issue.pk})
+
+        response.append({
+            'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_issues': len(list(mySelections)), 'mine':mine, 'others':others
+        })
+    return response
+
+@csrf_exempt
+def getRandomSuggestionsToReview(request):
+    if request.method=='GET':
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        # get my suggestions           
+        return JsonResponse({
+            'suggestions': getIssuesWithRandomSuggestions(user, doctype)
+        })
+
+
+
 @csrf_exempt
 def saveGroupedIssues(request):
     if request.method == 'POST':

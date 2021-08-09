@@ -19,14 +19,14 @@
                             <!--<h3>Suggestions</h3>-->
                             <div>Please click on one of your suggestions!</div>
                             <h4 style="text-align: left; margin-top: 10px">Close To Suggestions</h4>
-                            <div v-for="(v, idx) in issue_list.filter(v => v.suggestion_subcat !== 'n/a')" :key="'closeto-' + idx" style="overflow-y: scroll">
+                            <div v-for="(v, idx) in unreviewed_issues.filter(v => v.suggestion_subcat !== 'n/a')" :key="'closeto-' + idx" style="overflow-y: scroll">
                                 <v-btn depressed :outlined="v !== sel_issue" color="warning" small style="margin: 5px" @click="clickCloseto(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
                                 x {{v.n_mine}}
                             </div>
                             <h4 style="text-align: left; margin-top: 10px">N/A Suggestions</h4>
-                            <div v-for="(v, idx) in issue_list.filter(v => v.suggestion_subcat === 'n/a')" :key="'n/a-' + idx" style="overflow-y: scroll">
+                            <div v-for="(v, idx) in unreviewed_issues.filter(v => v.suggestion_subcat === 'n/a')" :key="'n/a-' + idx" style="overflow-y: scroll">
                                 <v-btn depressed :outlined="v !== sel_issue" color="error" small style="margin: 5px" @click="clickNa(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
@@ -98,9 +98,15 @@ export default {
     data () {
         return {
             issue_list: [],
-            sel_issue: [],
+            sel_issue: {
+                mine:[],
+                otehrs: []
+            },
 
             sel_sim_issues: [],
+
+            unreviewed_issues: [],
+            issues_with_suggestions:[],
 
 
 
@@ -123,14 +129,24 @@ export default {
     mounted: function() {
         const self=this;
 
-        axios.get(self.$store.state.server_url + "/api/get-suggestions-to-review/",{
+        axios.get(self.$store.state.server_url + "/api/get-random-suggestions-to-review/",{
         params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType
         }
         }).then(function(res){
-            self.issue_list=res.data.suggestions;
-            console.log(self.issue_list)
+            self.issues_with_suggestions=res.data.suggestions;
+            console.log("Hi", self.issues_with_suggestions)
+        })
+
+        axios.get(self.$store.state.server_url + "/api/get-unreviewed-issues/",{
+        params:{
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType
+        }
+        }).then(function(res){
+            self.unreviewed_issues=res.data.unreviewed_issues;
+            console.log(self.unreviewed_issues)
         })
 
 
@@ -152,7 +168,7 @@ export default {
                 my_issue_pks: my_issue_pks,
                 other_issue_pks: other_issue_pks
             }).then(function (res) { // get issue list again 
-                self.issue_list=res.data.suggestions;
+                self.unreviewed_issues=res.data.unreviewed_issues;
             });
         },
 
@@ -168,15 +184,13 @@ export default {
 
 
         clickCloseto(sugg) {
-            console.log(sugg)
-            this.sel_issue = sugg
-            this.sel_sim_issues = []
+            const sugg_pk=sugg.suggestion_pk
+            this.sel_issue = this.issues_with_suggestions.filter(v => v.suggestion_pk == sugg_pk)[0]
         },
 
         clickNa(sugg) {
-            console.log(sugg)
-            this.sel_issue = sugg
-            this.sel_sim_issues = []
+            const sugg_pk=sugg.suggestion_pk
+            this.sel_issue = this.issues_with_suggestions.filter(v => v.suggestion_pk == sugg_pk)[0]
         },
 
 
