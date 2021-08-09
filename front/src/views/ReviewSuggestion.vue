@@ -190,7 +190,7 @@ export default {
     methods: {
         submit () {
             this.$refs.form.validate()
-            console.log(this.q1, this.q2, this.q3, this.q4)
+            
             this.onSubmit()
         },
         reset () {
@@ -359,6 +359,7 @@ export default {
 
         onSubmit: function() {
             const self=this;
+            console.log(this.q1, this.q2, this.q3, this.q4) // 보내게 될 4가지 질문에 대한 답이 여기에 저장되어있어요!
             axios.post(self.$store.state.server_url + '/api/submit-survey/', {
                 mturk_id: self.$store.state.mturk_id,
                 // 여기에 survey detail들 넣고 싶다!
