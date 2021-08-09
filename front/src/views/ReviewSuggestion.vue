@@ -19,14 +19,14 @@
                             <!--<h3>Suggestions</h3>-->
                             <div>Please click on one of your suggestions!</div>
                             <h4 style="text-align: left; margin-top: 10px">Close To Suggestions</h4>
-                            <div v-for="(v, idx) in unreviewed_issues.filter(v => v.suggestion_subcat !== 'n/a')" :key="'closeto-' + idx" style="overflow-y: scroll">
+                            <div v-for="(v, idx) in issues_with_suggestions.filter(v => v.suggestion_subcat !== 'n/a')" :key="'closeto-' + idx" style="overflow-y: scroll">
                                 <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="warning" small style="margin: 5px" @click="clickCloseto(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
                                 x {{v.n_issues}}
                             </div>
                             <h4 style="text-align: left; margin-top: 10px">N/A Suggestions</h4>
-                            <div v-for="(v, idx) in unreviewed_issues.filter(v => v.suggestion_subcat === 'n/a')" :key="'n/a-' + idx" style="overflow-y: scroll">
+                            <div v-for="(v, idx) in issues_with_suggestions.filter(v => v.suggestion_subcat === 'n/a')" :key="'n/a-' + idx" style="overflow-y: scroll">
                                 <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="error" small style="margin: 5px" @click="clickNa(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
@@ -51,9 +51,9 @@
                             </v-row>
                         </v-col>
                         <v-col cols="6" style="border: 1px solid black; ">
-                            <h3>Similar suggestions (6 total)</h3>
+                            <h3>Similar suggestions ({{sel_issue.others.length}} total)</h3>
                             <v-row style="height: 400px; overflow-y: auto; border: 0px solid lightgray; margin: 10px 3px 0; background-color: #eeeeee;">
-                                <v-col v-for="(annot, idx) in sel_issue.others" :key="idx" style="border: 1px solid black">
+                                <v-col cols="auto" v-for="(annot, idx) in sel_issue.others" :key="idx" style="border: 1px solid black">
                                     <!--<v-checkbox hide-details style="margin: 0;" v-model="sel_sim_issues" :label="''+(idx+1)+'. Suggestion from Image #'+annot.image_no" :value="annot"/>-->
                                     <div style="text-align: left; ">{{idx+1}}. Suggestion from image #{{annot.image_no}}</div>
                                     <v-img :src="imageNo2Url(annot.image_no)" width="250" @click="selectIssues(annot)" :style="'border: '+sel_sim_issues.indexOf(annot) > -1 ? 1 : 0+'px solid black;'">
@@ -76,42 +76,34 @@
                 </v-row>
                 <v-row style="height: 20px; border: 0px solid orange"></v-row>
                 <v-row>
-                    <h2>Post-survey</h2>
-                    <div style="border: 1px solid black; text-align: left">
-                            <v-form ref='form' v-model='valid' lazy-validation>
-                                <v-text-field
-                                v-model="name"
-                                :counter="10"
-                                :rules="nameRules"
-                                label="Name"
-                                required
-                                style="margin-bottom: 10px"
-                                ></v-text-field>
-
-                                When did you decide to use the *close to* button to annotate? Why? *
-                                <v-text-field
-                                v-model="name"
-                                :counter="10"
-                                :rules="nameRules"
-                                label="Name"
-                                required
-                                >
-
-                                </v-text-field>
+                    <h2 style="width: 100%; text-align: left">Post-survey</h2>
+                    <div style="border: 1px solid black; text-align: left; width: 100%;">
+                        <v-form ref='form' v-model='valid' style="padding: 10px 2%">
                             
-                            When did you decide to use the *n/a* button to annotate? Why? *
-                            Tell us the *overall confidence* in your annotation (Enter a number between 0% and 100%) *
-                            Do you have any additional questions, suggestions, or feedback regarding the task?
-                            </v-form>
+                            <v-text-field v-model="q1" counter :rules="q1Rules" 
+                            label="Q1. When did you decide to use the *close to* button to annotate? Why?" required />
+                            
+                            <v-text-field v-model="q2" counter :rules="q1Rules" 
+                            label="Q2. When did you decide to use the *n/a* button to annotate? Why?" required />
 
-                            <v-btn
-                            :disabled="!valid"
-                            color="success"
-                            class="mr-4"
-                            @click="validate"
-                            >
-                            Validate
+                            <v-text-field v-model="q3" counter :rules="q1Rules" 
+                            label="Q3. Tell us the *overall confidence* in your annotation (Enter a number between 0% and 100%)" required />
+
+                            <v-text-field v-model="q4" counter
+                            label="Q4. Do you have any additional questions, suggestions, or feedback regarding the task?" />
+                        
+                            <v-btn :disabled="!valid_actual" color="success" class="mr-4" @click="submit">
+                                Submit and get the code
                             </v-btn>
+                            <v-btn color="error" class="mr-4" @click="reset">
+                                Reset Form
+                            </v-btn>
+                            <span v-if="showCode">
+                                <div style="margin-top: 10px; ">Code to enter in MTurk: <b style="color: blue">{{this.token}}</b></div>
+                                <div style="padding-bottom: 1%">Thanks again for the participation!</div>
+                            </span>
+
+                        </v-form>
                     </div>
                 </v-row>
             </v-col>
@@ -139,8 +131,8 @@ export default {
 
             sel_sim_issues: [],
 
-            unreviewed_issues: [],
-            issues_with_suggestions:[],
+            unreviewed_issues: [], // 내가 한 suggestion 단위로 없어짐
+            issues_with_suggestions:[], // 처음에 mount 함
 
 
 
@@ -153,6 +145,17 @@ export default {
                 v => (v && v.length <= 10) || 'Name must be less than 10 characters',
             ],
 
+            q1: '',
+            q2: '',
+            q3: '',
+            q4: '',
+            q1Rules: [
+                v => !!v || 'Answer cannot be empty',
+                v => (v && v.length >= 5) || 'Answer must be more than 5 characters',
+            ],
+            
+            showCode: false,
+            token: '',
 
             annot_boxes: {},
 
@@ -185,9 +188,15 @@ export default {
     },
 
     methods: {
-        validate () {
+        submit () {
             this.$refs.form.validate()
+            console.log(this.q1, this.q2, this.q3, this.q4)
+            this.onSubmit()
         },
+        reset () {
+            this.$refs.form.reset()
+        },
+
         groupIssues(my_issue_pks, other_issue_pks){
             // my_issues_pks: [1,2,3,4,5]
             // other_issues_pks: [10,11,12,13] 
@@ -232,10 +241,15 @@ export default {
             const mine = self.sel_issue.mine.map(v => v.issue_pk)
             const other = [annot.issue_pk]
             self.groupIssues(mine, other)
+            const new_others = self.sel_issue.others
+            new_others.splice(new_others.indexOf(annot), 1)
         },
 
         notsimilar(annot) {
-            console.log(annot)
+            //console.log(annot)
+            const self = this
+            const new_others = self.sel_issue.others
+            new_others.splice(new_others.indexOf(annot), 1)
         },
 
 
@@ -341,6 +355,18 @@ export default {
             }
             return response
         },
+
+
+        onSubmit: function() {
+            const self=this;
+            axios.post(self.$store.state.server_url + '/api/submit-survey/', {
+                mturk_id: self.$store.state.mturk_id,
+                // 여기에 survey detail들 넣고 싶다!
+            }).then(function(res){
+                self.token = res.data.token
+                self.showCode = true
+            });
+        }
     },
 
 
@@ -362,7 +388,10 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['getImageBoxes'])
+        ...mapGetters(['getImageBoxes']),
+        valid_actual() {
+            return (this.valid & true); // true 대신 this.issues_with_suggestions 가 0일때 true 하라고 넣으면 될듯!
+        }
     },
 
 }
