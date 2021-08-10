@@ -19,18 +19,18 @@
                             <!--<h3>Suggestions</h3>-->
                             <div>Please click on one of your suggestions!</div>
                             <h4 style="text-align: left; margin-top: 10px">Close To Suggestions</h4>
-                            <div v-for="(v, idx) in unreviewed_issues.filter(v => v.suggestion_subcat !== 'n/a')" :key="'closeto-' + idx" style="overflow-y: scroll">
-                                <v-btn depressed :outlined="v !== sel_issue" color="warning" small style="margin: 5px" @click="clickCloseto(v)"> 
+                            <div v-for="(v, idx) in issues_with_suggestions.filter(v => v.suggestion_subcat !== 'n/a')" :key="'closeto-' + idx" style="overflow-y: scroll">
+                                <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="warning" small style="margin: 5px" @click="clickCloseto(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
-                                x {{v.n_mine}}
+                                x {{v.n_issues}}
                             </div>
                             <h4 style="text-align: left; margin-top: 10px">N/A Suggestions</h4>
-                            <div v-for="(v, idx) in unreviewed_issues.filter(v => v.suggestion_subcat === 'n/a')" :key="'n/a-' + idx" style="overflow-y: scroll">
-                                <v-btn depressed :outlined="v !== sel_issue" color="error" small style="margin: 5px" @click="clickNa(v)"> 
+                            <div v-for="(v, idx) in issues_with_suggestions.filter(v => v.suggestion_subcat === 'n/a')" :key="'n/a-' + idx" style="overflow-y: scroll">
+                                <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="error" small style="margin: 5px" @click="clickNa(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
-                                x {{v.n_mine}}
+                                x {{v.n_issues}}
                             </div>
                         </v-col>
                         <v-col cols="3" style="border: 1px solid black; ">
@@ -38,19 +38,36 @@
                             <v-row style="height: 400px; overflow-y: auto; border: 0px solid lightgray; margin: 10px 3px 0; background-color: #eeeeee;">
                                 <div v-for="(annot, idx) in sel_issue.mine" :key="idx" >
                                     <v-img :src="imageNo2Url(annot.image_no)" width="250">
+                                        <div v-if="annot_boxes[annot.issue_pk]">
+                                            <div style="margin: 0; background: gray; color: white; font-size: 90%">{{annot_boxes[annot.issue_pk].map(v=>v.text)}}</div>
+                                            <div v-for="box in annot_boxes[annot.issue_pk]" :key="box.id"><!--{{annot_boxes[annot.issue_pk].length}}-->
+                                                <bounding-box circle="no" color="stroke:red; fill:red; fill-opacity:0.1;" :box_info="box"/>
+                                            </div>
+                                        </div>
+                                        <div style="opacity: 0.0;">{{waitForJson(annot.image_no, annot.boxes_id, annot.issue_pk)}}</div>
                                     </v-img>
                                     <div style="text-align: left; margin-bottom: 5px;">Reason: <b>{{annot.reason}}</b></div>
                                 </div>
                             </v-row>
                         </v-col>
                         <v-col cols="6" style="border: 1px solid black; ">
-                            <h3>Similar suggestions (6 total)</h3>
+                            <h3>Similar suggestions ({{sel_issue.others.length}} total)</h3>
                             <v-row style="height: 400px; overflow-y: auto; border: 0px solid lightgray; margin: 10px 3px 0; background-color: #eeeeee;">
-                                <v-col v-for="(annot, idx) in sel_issue.others" :key="idx" >
-                                    <v-checkbox hide-details style="margin: 0;" v-model="sel_sim_issues" :label="'Suggestion from Image #'+annot.image_no" :value="annot"/>
+                                <v-col cols="auto" v-for="(annot, idx) in sel_issue.others" :key="idx" style="border: 1px solid black">
+                                    <!--<v-checkbox hide-details style="margin: 0;" v-model="sel_sim_issues" :label="''+(idx+1)+'. Suggestion from Image #'+annot.image_no" :value="annot"/>-->
+                                    <div style="text-align: left; ">{{idx+1}}. Suggestion from image #{{annot.image_no}}</div>
                                     <v-img :src="imageNo2Url(annot.image_no)" width="250" @click="selectIssues(annot)" :style="'border: '+sel_sim_issues.indexOf(annot) > -1 ? 1 : 0+'px solid black;'">
+                                        <div v-if="annot_boxes[annot.issue_pk]">
+                                            <div style="margin: 0; background: gray; color: white; font-size: 90%">{{annot_boxes[annot.issue_pk].map(v=>v.text)}}</div>
+                                            <div v-for="box in annot_boxes[annot.issue_pk]" :key="box.id"><!--{{annot_boxes[annot.issue_pk].length}}-->
+                                                <bounding-box circle="no" color="stroke:red; fill:red; fill-opacity:0.1;" :box_info="box"/>
+                                            </div>
+                                        </div>
+                                        <div style="opacity: 0.0;">{{waitForJson(annot.image_no, annot.boxes_id, annot.issue_pk)}}</div>
                                     </v-img>
                                     <div style="text-align: left; margin-bottom: 5px;">Reason: <b>{{annot.reason}}</b></div>
+                                    <v-btn x-small depressed color="success" style="margin-right: 5px;" @click="similar(annot)">Similar</v-btn>
+                                    <v-btn x-small depressed color="error" style="margin-left: 5px;" @click="notsimilar(annot)">Not similar</v-btn>
                                 </v-col>
                             </v-row>
                         </v-col>
@@ -59,30 +76,34 @@
                 </v-row>
                 <v-row style="height: 20px; border: 0px solid orange"></v-row>
                 <v-row>
-                    <h2>Post-survey</h2>
-                    <div style="border: 1px solid black; ">
-                            <v-form ref='form' v-model='valid' lazy-validation>
-                                <v-text-field
-                                v-model="name"
-                                :counter="10"
-                                :rules="nameRules"
-                                label="Name"
-                                required
-                                ></v-text-field>
-                            When did you decide to use the *close to* button to annotate? Why? *
-                            When did you decide to use the *n/a* button to annotate? Why? *
-                            Tell us the *overall confidence* in your annotation (Enter a number between 0% and 100%) *
-                            Do you have any additional questions, suggestions, or feedback regarding the task?
-                            </v-form>
+                    <h2 style="width: 100%; text-align: left">Post-survey</h2>
+                    <div style="border: 1px solid black; text-align: left; width: 100%;">
+                        <v-form ref='form' v-model='valid' style="padding: 10px 2%">
+                            
+                            <v-text-field v-model="q1" counter :rules="q1Rules" 
+                            label="Q1. When did you decide to use the *close to* button to annotate? Why?" required />
+                            
+                            <v-text-field v-model="q2" counter :rules="q1Rules" 
+                            label="Q2. When did you decide to use the *n/a* button to annotate? Why?" required />
 
-                            <v-btn
-                            :disabled="!valid"
-                            color="success"
-                            class="mr-4"
-                            @click="validate"
-                            >
-                            Validate
+                            <v-text-field v-model="q3" counter :rules="q1Rules" 
+                            label="Q3. Tell us the *overall confidence* in your annotation (Enter a number between 0% and 100%)" required />
+
+                            <v-text-field v-model="q4" counter
+                            label="Q4. Do you have any additional questions, suggestions, or feedback regarding the task?" />
+                        
+                            <v-btn :disabled="!valid_actual" color="success" class="mr-4" @click="submit">
+                                Submit and get the code
                             </v-btn>
+                            <v-btn color="error" class="mr-4" @click="reset">
+                                Reset Form
+                            </v-btn>
+                            <span v-if="showCode">
+                                <div style="margin-top: 10px; ">Code to enter in MTurk: <b style="color: blue">{{this.token}}</b></div>
+                                <div style="padding-bottom: 1%">Thanks again for the participation!</div>
+                            </span>
+
+                        </v-form>
                     </div>
                 </v-row>
             </v-col>
@@ -92,21 +113,26 @@
 
 <script>
 import axios from "axios";
+import BoundingBox from '@/components/BoundingBox.vue'
+import {mapGetters} from 'vuex';
 
 export default {
     name: 'ReviewSuggestion',
+    components: {
+        BoundingBox,
+    },
     data () {
         return {
             issue_list: [],
             sel_issue: {
                 mine:[],
-                otehrs: []
+                others: []
             },
 
             sel_sim_issues: [],
 
-            unreviewed_issues: [],
-            issues_with_suggestions:[],
+            unreviewed_issues: [], // 내가 한 suggestion 단위로 없어짐
+            issues_with_suggestions:[], // 처음에 mount 함
 
 
 
@@ -119,9 +145,19 @@ export default {
                 v => (v && v.length <= 10) || 'Name must be less than 10 characters',
             ],
 
+            q1: '',
+            q2: '',
+            q3: '',
+            q4: '',
+            q1Rules: [
+                v => !!v || 'Answer cannot be empty',
+                v => (v && v.length >= 5) || 'Answer must be more than 5 characters',
+            ],
+            
+            showCode: false,
+            token: '',
 
-
-
+            annot_boxes: {},
 
         }
     },
@@ -136,7 +172,7 @@ export default {
         }
         }).then(function(res){
             self.issues_with_suggestions=res.data.suggestions;
-            console.log("Hi", self.issues_with_suggestions)
+            console.log("== issues w/ sugg ==", self.issues_with_suggestions)
         })
 
         axios.get(self.$store.state.server_url + "/api/get-unreviewed-issues/",{
@@ -146,17 +182,21 @@ export default {
         }
         }).then(function(res){
             self.unreviewed_issues=res.data.unreviewed_issues;
-            console.log(self.unreviewed_issues)
+            console.log("== issues unreviewed ==", self.unreviewed_issues)
         })
 
-
-        // get annotation 단위 --> image id, box id(s), suggestion
     },
 
     methods: {
-        validate () {
+        submit () {
             this.$refs.form.validate()
+            
+            this.onSubmit()
         },
+        reset () {
+            this.$refs.form.reset()
+        },
+
         groupIssues(my_issue_pks, other_issue_pks){
             // my_issues_pks: [1,2,3,4,5]
             // other_issues_pks: [10,11,12,13] 
@@ -168,7 +208,9 @@ export default {
                 my_issue_pks: my_issue_pks,
                 other_issue_pks: other_issue_pks
             }).then(function (res) { // get issue list again 
-                self.unreviewed_issues=res.data.unreviewed_issues;
+                console.log(res)
+                self.unreviewed_issues=res.data.suggestions;
+                console.log("== issues unreviewed NEW ==", self.unreviewed_issues)
             });
         },
 
@@ -191,6 +233,23 @@ export default {
         clickNa(sugg) {
             const sugg_pk=sugg.suggestion_pk
             this.sel_issue = this.issues_with_suggestions.filter(v => v.suggestion_pk == sugg_pk)[0]
+        },
+
+        similar(annot) {
+            const self = this
+            console.log("other", [annot.issue_pk], "original", self.sel_issue.mine.map(v => v.issue_pk))
+            const mine = self.sel_issue.mine.map(v => v.issue_pk)
+            const other = [annot.issue_pk]
+            self.groupIssues(mine, other)
+            const new_others = self.sel_issue.others
+            new_others.splice(new_others.indexOf(annot), 1)
+        },
+
+        notsimilar(annot) {
+            //console.log(annot)
+            const self = this
+            const new_others = self.sel_issue.others
+            new_others.splice(new_others.indexOf(annot), 1)
         },
 
 
@@ -249,6 +308,8 @@ export default {
         },
 
         imageNo2Json(no, box_id, annot) {
+            const box_id_list = JSON.parse(box_id)
+
             const self = this;
             var docType= 'receipt'
             var three_digit_id = ("00" + no).slice(-3);
@@ -268,24 +329,70 @@ export default {
                 //console.log(resbox)
                 //self.$forceUpdate();
                 self.done = ''
-                //console.log(box_id)
                 var texts = []
-                if (resbox && box_id) {
-                    for (var b in resbox) {
-                        if (box_id.indexOf(resbox[b].box_id) > -1) {
-                            //console.log(resbox[b].text)
-                            texts.push(resbox[b].text)
-                        }
-                    }
-                }
+                var boxes = []
+
+                boxes = resbox.filter(v => box_id_list.includes(v.box_id))
+                texts = boxes.map(v => v.text)
                 if (annot) {
                     annot.boxes_text = texts
                 }
 
+                //console.log(resbox)
+                //console.log(texts)
+                //console.log(boxes)
 
-                return resbox
+                return boxes
             })
         },
+
+        async waitForJson(no, box_id, pk) {
+            const response = await this.imageNo2Json(no, box_id, false)
+            //console.log(response)
+            if (this.annot_boxes[pk] === undefined) {
+                this.$set(this.annot_boxes, pk, response)
+                //console.log(this.annot_boxes)
+            }
+            return response
+        },
+
+
+        onSubmit: function() {
+            const self=this;
+            console.log(this.q1, this.q2, this.q3, this.q4) // 보내게 될 4가지 질문에 대한 답이 여기에 저장되어있어요!
+            axios.post(self.$store.state.server_url + '/api/submit-survey/', {
+                mturk_id: self.$store.state.mturk_id,
+                // 여기에 survey detail들 넣고 싶다!
+            }).then(function(res){
+                self.token = res.data.token
+                self.showCode = true
+            });
+        }
+    },
+
+
+    watch: {
+        sel_issue: {
+            deep: true,
+            handler() {
+                //console.log("WATCH", this.sel_issue)
+            }
+        },
+        /*
+        annot_boxes: {
+            deep: true,
+            handler(after, before) {
+                console.log("change in annot_boxes", this.annot_boxes)
+                console.log(after, before)
+            }
+        },*/
+    },
+
+    computed: {
+        ...mapGetters(['getImageBoxes']),
+        valid_actual() {
+            return (this.valid & true); // true 대신 this.issues_with_suggestions 가 0일때 true 하라고 넣으면 될듯!
+        }
     },
 
 }
