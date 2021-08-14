@@ -41,7 +41,7 @@ class TargetAnnotation(models.Model):
     is_reviewed=models.BooleanField(default=False)
     def __str__(self):
         return 'boxannot-'+self.expert.username+'-'+str(self.document)+'-'+str(self.box_id)+'-'+self.annot_type
-
+""" 
 class TargetBoxAnnotation(models.Model):
     expert=models.ForeignKey(User, on_delete=models.CASCADE, related_name='expert_users')
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_users')
@@ -57,7 +57,7 @@ class TargetBoxAnnotation(models.Model):
     is_reviewed=models.BooleanField(default=False)
     def __str__(self):
         return 'boxannot-'+self.expert.username+'-'+str(self.document)+'-'+str(self.box_id)+'-'+self.annot_type
-
+ """
 class FinalLabel(models.Model):
     expert=models.ForeignKey(User, on_delete=models.CASCADE)
     doctype=models.ForeignKey(DocType, on_delete=models.CASCADE)
