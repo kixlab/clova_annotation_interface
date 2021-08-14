@@ -172,6 +172,7 @@ export default {
         }
         }).then(function(res){
             self.issues_with_suggestions=res.data.suggestions;
+            self.unreviewed_issues=res.data.suggestions.filter(v => (v.others.length>0);
             console.log("== issues w/ sugg ==", self.issues_with_suggestions)
         })
 
