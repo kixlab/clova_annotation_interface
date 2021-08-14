@@ -172,10 +172,11 @@ export default {
         }
         }).then(function(res){
             self.issues_with_suggestions=res.data.suggestions;
+            self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
             console.log("== issues w/ sugg ==", self.issues_with_suggestions)
         })
 
-        axios.get(self.$store.state.server_url + "/api/get-unreviewed-issues/",{
+        /* axios.get(self.$store.state.server_url + "/api/get-unreviewed-issues/",{
         params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType
@@ -183,7 +184,7 @@ export default {
         }).then(function(res){
             self.unreviewed_issues=res.data.unreviewed_issues;
             console.log("== issues unreviewed ==", self.unreviewed_issues)
-        })
+        }) */
 
     },
 
