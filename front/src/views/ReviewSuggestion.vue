@@ -165,7 +165,7 @@ export default {
     mounted: function() {
         const self=this;
 
-        axios.get(self.$store.state.server_url + "/api/get-issues-with-random-suggestions/",{
+        axios.get(self.$store.state.server_url + "/api/get-random-suggestions-to-review/",{
         params:{
             mturk_id: self.$store.state.mturk_id,
             doctype: self.$route.params.docType
