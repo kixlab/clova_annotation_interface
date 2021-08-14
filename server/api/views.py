@@ -658,10 +658,10 @@ def getIssuesWithRandomSuggestions(user, doctype):
         for myselection in mySelections: 
             mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason, 'issue_pk': myselection.pk})
             
-        randomSuggestions=getSuggestionsToReview(user, doctype, suggestion)
+        assignedSuggestions=getSuggestionsToReview(user, doctype, suggestion)
         others=[]
-        for issue in randomSuggestions:
-            others.append({'image_no': issue.annotation.document.doc_no, 'boxes_id': issue.annotation.boxes_id, 'reason': issue.reason, 'worker': issue.user.username, 'issue_pk': issue.pk})
+        for assignment in assignedSuggestions:
+            others.append({'image_no': assignment.others.annotation.document.doc_no, 'boxes_id': assignment.others.annotation.boxes_id, 'reason': assignment.others.reason, 'worker': assignment.others.user.username, 'issue_pk': assignment.others.pk})
 
         response.append({
             'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_issues': len(list(mySelections)), 'mine':mine, 'others':others
