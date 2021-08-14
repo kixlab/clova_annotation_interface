@@ -545,7 +545,8 @@ def getSuggestionsToReview(request):
         })
 
 
-def getRandomSuggestions(user, doctype, thisSuggestion):
+
+def assignRandomSuggestions(user, thisSuggestion): # assume that we have enough issue pull to choose from
     thisSubCat=thisSuggestion.subcat
     thisCat=thisSubCat.initcat
     suggestions=[]
@@ -563,7 +564,50 @@ def getRandomSuggestions(user, doctype, thisSuggestion):
         suggestions = suggestions+rand_selections_samecat
     else:
         suggestions=suggestions+selections_samecat
+
+    n_needed=6-len(suggestions)
+    selections_othercat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat__initcat=thisCat))))
+    if(len(selections_othercat)>=n_needed):
+        rand_selections_othercat = random.sample(selections_othercat, n_needed)
+        suggestions=suggestions + rand_selections_othercat
+    else:
+        suggestions=suggestions + rand_selections_othercat 
     
+    assigned_suggestions=[]
+    for suggestion in suggestions: 
+        newAssignedSuggestion=AssignedSuggestion(user=user, mine=thisSuggestion, others=suggestion, is_reviewed=False, is_similar=None)
+        newAssignedSuggestion.save()
+        assigned_suggestions.append(newAssignedSuggestion)
+    
+    return assigned_suggestions
+
+def getSuggestionsToReview(user, doctype, thisSuggestion):
+    assigned_suggestions=AssignedSuggestion.objects.filter(user=user, mine=thisSuggestion)
+    if(len(assigned_suggestions)>0):
+        unreviewed_suggestions=assigned_suggestions.filter(is_reviewed=False)
+    else:
+        unreviewed_suggestions=assignRandomSuggestions(user, thisSuggestion)
+    return unreviewed_suggestions
+
+
+def getRandomSuggestions(user, doctype, thisSuggestion):
+    thisSubCat=thisSuggestion.subcat
+    thisCat=thisSubCat.initcat
+    suggestions=[]
+
+    selections_samesubcat=list(SelectedSuggestion.objects.filter(~Q(user=user), annotation__subcat=thisSubCat))
+    if(len(selections_samesubcat)>=2):
+        rand_selections_samesubcat = random.sample(selections_samesubcat,2)
+        suggestions=rand_selections_samesubcat
+    else: 
+        suggestions=selections_samesubcat
+    
+    selections_samecat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat=thisSubCat)), annotation__subcat__initcat=thisCat))
+    if(len(selections_samecat)>=2):
+        rand_selections_samecat=random.sample(selections_samecat, 2)
+        suggestions = suggestions+rand_selections_samecat
+    else:
+        suggestions=suggestions+selections_samecat
 
     n_needed=6-len(suggestions)
     selections_othercat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat__initcat=thisCat))))
@@ -614,7 +658,7 @@ def getIssuesWithRandomSuggestions(user, doctype):
         for myselection in mySelections: 
             mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason, 'issue_pk': myselection.pk})
             
-        randomSuggestions=getRandomSuggestions(user, doctype, suggestion)
+        randomSuggestions=getSuggestionsToReview(user, doctype, suggestion)
         others=[]
         for issue in randomSuggestions:
             others.append({'image_no': issue.annotation.document.doc_no, 'boxes_id': issue.annotation.boxes_id, 'reason': issue.reason, 'worker': issue.user.username, 'issue_pk': issue.pk})
