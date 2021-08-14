@@ -87,19 +87,21 @@ class UserSuggestion(models.Model):
     def __str__(self):
         return self.user.username+'-'+str(self.subcat) + '-'+str(self.suggested_subcat)
 
-class SelectedSuggestion(models.Model):
+class SelectedSuggestion(models.Model): # 각 issue! 
     suggestion=models.ForeignKey('UserSuggestion', on_delete=models.CASCADE)
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     annotation=models.ForeignKey('Annotation', on_delete=models.CASCADE)
     reason=models.TextField(max_length=255, default="No reason", null=True, blank=True)
-    is_grouped=models.BooleanField(default=False, null=True, blank=True)
     def __str__(self):
         return self.user.username+'-'+str(self.suggestion)
 
-class GroupLink(models.Model):
-    target_suggestions=models.TextField(validators=[validate_comma_separated_integer_list], null=True) # list of target suggestions
-    grouped_suggestions=models.TextField(validators=[validate_comma_separated_integer_list], null=True) # list of grouped suggestions from others
-    made_by=models.ForeignKey(User, on_delete=models.CASCADE)
+
+class AssignedSuggestion(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    mine=models.ForeignKey(UserSuggestion, on_delete=models.CASCADE)
+    others=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE)
+    is_reviewed=models.BooleanField(default=False, null=False)
+    is_similar=models.BooleanField(null=True, blank=True)
 
 
 class Annotation(models.Model):
