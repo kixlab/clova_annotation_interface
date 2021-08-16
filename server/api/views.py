@@ -119,21 +119,6 @@ def startTask(request):
         }
         return JsonResponse(response)
 
-""" @csrf_exempt
-def checkUser(request):
-    if request.method =='GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
-        if(user == None):
-            response={
-                'login_status': False
-            }
-        else:
-            response={
-                'login_status': True,
-                'username': user.username
-            }
-        return JsonResponse(response) """
 @csrf_exempt
 def consentAgreed(request):
     if request.method =='POST':
@@ -223,13 +208,6 @@ def recordSurveyDone(user):
     profile.survey_done=True
     profile.survey_endtime=datetime.now()
     profile.save()
-
-""" @csrf_exempt
-def getDocTypes(request):
-    if request.method == 'GET':
-        doctypes=[doctype.doctype for doctype in DocType.objects.all()]
-        return JsonResponse({'doctypes':doctypes})
- """
 
 @csrf_exempt
 def getImageID(request):
@@ -325,77 +303,6 @@ def getSuggestions(request):
 
         return JsonResponse(response)
 
-""" 
-@csrf_exempt
-def getWorkerAnnotations(request):
-    if request.method=='GET':
-        doctypetext=request.GET['doctype']
-        doctypetext=request.GET['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        image_id =request.GET['image_id']
-        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
-        statuses=Status.objects.filter(document=document, status=True)
-        workerannots=[]
-        for status in statuses: 
-            user=status.user
-            annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
-            annotations=[]
-            for annot in annots: 
-                boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
-                for box in boxes:
-                    if(annot.subcat==None):
-                        annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
-                    else:
-                        if(annot.subcat.subcat_text=="N/A"):
-                            annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
-                        else:
-                            annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
-            annotations.sort(key=lambda s: int(s['box_id']))
-
-            # remove duplicate 
-
-            workerannots.append({'user': user.username, 'annotations': getLastAnnotations(annotations)})
-        for i in range(4-len(workerannots)):
-            workerannots.append({'user': 'null', 'annotations': []})
-        response={
-            'workerannots':workerannots
-        }
-        return JsonResponse(response)
-
-
-def getLastAnnotations(jsonlist):
-    result=[]
-    result.append(jsonlist[0])
-    for idx in range(len(jsonlist)-1):
-        row=jsonlist[idx+1]
-        if(row["box_id"]==result[-1]["box_id"]):
-            result[-1]=row
-        else: 
-            result.append(row)
-    return result """
-        
-        
-""" 
-@csrf_exempt
-def saveAnnotation(request):
-    if request.method == 'POST':
-        query_json = json.loads(request.body)
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
-        profile=Profile.objects.get(user=user)
-
-        image_id =query_json['image_id']
-        document=Document.objects.get(doctype=profile.doctype, doc_no=int(image_id))
-        boxes = query_json['boxes_id']
-        labelpk = query_json['labelpk']
-        thisLabel = InitSubCat.objects.get(pk=labelpk)
-        newAnnot=Annotation(user=user, document=document, boxes_id = boxes, cat=thisLabel.initcat, subcat=thisLabel, is_alive=True)
-        newAnnot.save()
-        response={
-            'annot_pk': newAnnot.pk
-        }
-        return JsonResponse(response) """
-
 @csrf_exempt
 def saveAnnotation(request):
     if request.method == 'POST':
@@ -439,46 +346,6 @@ def saveAnnotation(request):
         }
         return JsonResponse(response)
 
-""" 
-@csrf_exempt
-def saveAsRegular(request):
-    if request.method == 'POST':
-        query_json = json.loads(request.body)
-#        user=request.user
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
-        doctypetext=query_json['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-
-        confDefAnnots=DefAnnotation.objects.filter(user=user, confidence=True, is_alive=True)
-        for annot in confDefAnnots:
-            newAnnot=Annotation(user=user, document=annot.document, boxes_id=annot.boxes_id, cat=annot.cat, subcat=annot.subcat, is_alive=True)
-            newAnnot.save()
-        response={
-            'annot_pk': newAnnot.pk
-        }
-        return JsonResponse(response)
- """
-
-""" @csrf_exempt
-def deleteAnnotation(request):
-    if request.method == 'POST':
-        query_json = json.loads(request.body)
-#        user=request.user
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
-        doctypetext=query_json['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        image_id =query_json['image_id']
-        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
-        annot_pk = query_json['annot_pk']
-        thisAnnot=Annotation.objects.get(user=user, pk=annot_pk)
-        thisAnnot.is_alive=False
-        thisAnnot.save()
-        response={
-            'annot_pk': annot_pk
-        }
-        return JsonResponse(response) """
 @csrf_exempt
 def deleteAnnotation(request):
     if request.method == 'POST':
@@ -516,40 +383,6 @@ def deleteAllAnnotations(request):
             annot.is_alive=False 
             annot.save()
         return HttpResponse('')
-
-""" 
-def getUngroupedIssues(user, doctype):
-    mySelections=SelectedSuggestion.objects.filter(user=user, is_grouped=False)
-    mySuggestions=list(set([selection.suggestion for selection in mySelections]))
-    
-    response=[]
-    for suggestion in mySuggestions:
-        mine=[]
-        others=[]
-        # get my annotation with this suggestion 
-        mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion, is_grouped=False)
-        otherSelections=SelectedSuggestion.objects.filter(~Q(user=user), suggestion=suggestion)
-        for myselection in mySelections:
-            mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason, 'issue_pk': myselection.pk})    
-        for otherselection in otherSelections:
-            others.append({'image_no': otherselection.annotation.document.doc_no, 'boxes_id': otherselection.annotation.boxes_id, 'reason': otherselection.reason, 'worker': otherselection.user.username, 'issue_pk': otherselection.pk}) 
-        response.append({'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_mine': len(mine), 'n_others': len(others), 'mine': mine, 'others': others})            
-    return response """
-
-""" 
-@csrf_exempt
-def getSuggestionsToReview(request):
-    if request.method =='GET':
-        doctypetext=request.GET['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
-        # get my suggestions           
-        return JsonResponse({
-            'suggestions': getUngroupedIssues(user, doctype)
-        })
-
- """
 
 def assignRandomSuggestions(user, thisSuggestion): # assume that we have enough issue pull to choose from
     thisSubCat=thisSuggestion.subcat
@@ -596,68 +429,11 @@ def getSuggestionsToReview(user, doctype, thisSuggestion):
 
 def checkIfEnoughSuggestions(user):
     others_suggestions=list(SelectedSuggestion.objects.filter(~Q(user=user)))
-    if(len(others_suggestions)>1200):
+    if(len(others_suggestions)>11):
         response=True
     else: 
         response=False
     return response
-
-""" 
-def getRandomSuggestions(user, doctype, thisSuggestion):
-    thisSubCat=thisSuggestion.subcat
-    thisCat=thisSubCat.initcat
-    suggestions=[]
-
-    selections_samesubcat=list(SelectedSuggestion.objects.filter(~Q(user=user), annotation__subcat=thisSubCat))
-    if(len(selections_samesubcat)>=2):
-        rand_selections_samesubcat = random.sample(selections_samesubcat,2)
-        suggestions=rand_selections_samesubcat
-    else: 
-        suggestions=selections_samesubcat
-    selections_samecat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat=thisSubCat)), annotation__subcat__initcat=thisCat))
-    if(len(selections_samecat)>=2):
-        rand_selections_samecat=random.sample(selections_samecat, 2)
-        suggestions = suggestions+rand_selections_samecat
-    else:
-        suggestions=suggestions+selections_samecat
-
-    n_needed=6-len(suggestions)
-    selections_othercat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat__initcat=thisCat))))
-    if(len(selections_othercat)>=n_needed):
-        rand_selections_othercat = random.sample(selections_othercat, n_needed)
-        suggestions=suggestions + rand_selections_othercat
-    else:
-        suggestions=suggestions + rand_selections_othercat 
-    return suggestions  """
-
-""" @csrf_exempt
-def getUnreviewedIssues(request):
-    if request.method=='GET':
-        doctypetext=request.GET['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
-        mySelections=SelectedSuggestion.objects.filter(user=user, annotation__document__doctype=doctype, is_grouped=False)
-
-        mySuggestions=list(set([selection.suggestion for selection in mySelections]))
-
-        response=[]
-        for suggestion in mySuggestions:
-            issues=[]
-            mySelections=SelectedSuggestion.objects.filter(user=user, suggestion=suggestion)
-
-            for selection in mySelections:
-                issues.append(
-                    {'image_no': selection.annotation.document.doc_no, 'boxes_id': selection.annotation.boxes_id, 'reason': selection.reason, 'issue_pk': selection.pk}
-                )
-            response.append({
-                'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_issues': len(list(mySelections)), 'issues':issues
-            })
-    return JsonResponse({
-        'unreviewed_issues': response
-    })
- """
-
 
 def getIssuesWithRandomSuggestions(user, doctype):
     mySelections=SelectedSuggestion.objects.filter(user=user)
@@ -734,20 +510,6 @@ def saveSimilarity(request):
             return JsonResponse({
                 'result': False
             })
-""" 
-@csrf_exempt
-def submit(request):
-    if request.method == 'POST':
-        query_json = json.loads(request.body)
-        username = query_json['mturk_id']
-        user = User.objects.get(username=username)
-
-        profile=Profile.objects.get(user=user)
-        profile.endtime=datetime.now()
-        profile.done=True
-        profile.save()
-        return HttpResponse('') """
-
 
 @csrf_exempt
 def updateStatus(request):
@@ -769,8 +531,6 @@ def updateStatus(request):
             Status.objects.filter(user=user, document=document).update(status=False)
         return HttpResponse('')
 
-
-
 @csrf_exempt
 def getStatus(request):
     if request.method=='GET':
@@ -779,257 +539,3 @@ def getStatus(request):
         profile=Profile.objects.get(user=user)
         status=Status.objects.filter(user=user).values_list('status', flat=True)
         return JsonResponse({'status': list(status)})
-
-""" @csrf_exempt
-def addCat(request):
-    if request.method=='POST':
-        query_json = json.loads(request.body)
-        username = query_json['mturk_id']
-        doctypetext=query_json['doctype']
-        image_id = query_json['image_id']
-        cat= query_json['cat']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        user = User.objects.get(username=username)
-        #user=request.user
-        newCat=UserCat(user=user, doctype=doctype, cat_text=cat, made_at=int(image_id))
-        newCat.save()
-        response = {
-            'newcat_pk': newCat.pk,
-        }
-        return JsonResponse(response)
-
-
-@csrf_exempt
-def addSubcat(request):
-    if request.method=='POST':
-        query_json = json.loads(request.body)
-        username = query_json['mturk_id']
-        doctypetext=query_json['doctype']
-        image_id = query_json['image_id']
-        cat= query_json['cat']
-        subcat=query_json['subcat']
-        desc=query_json['description']
-
-        doctype=DocType.objects.get(doctype=doctypetext)
-        user = User.objects.get(username=username)
-        #user=request.user
-        cat = UserCat.objects.get(user=user, doctype=doctype, cat_text=cat)
-
-
-        newSubcat=UserSubcat(usercat=cat, subcat_text=subcat, subcat_description=desc, made_at=int(image_id))
-        newSubcat.save()
-        response = {
-            'newsubcat_pk': newSubcat.pk,
-        }
-        return JsonResponse(response) """
-""" 
-@csrf_exempt
-def reviseCat(request):
-    if request.method=='POST':
-        query_json = json.loads(request.body)
-        username = query_json['mturk_id']
-        doctypetext=query_json['doctype']
-        cat_pk= query_json['cat_pk']
-        revcat=query_json['revcat']
-
-        doctype=DocType.objects.get(doctype=doctypetext)
-        user = User.objects.get(username=username)
-        #user=request.user
-
-        UserCat.objects.filter(user=user, doctype=doctype, pk=int(cat_pk)).update(cat_text=revcat)
-        return HttpResponse('')
- """
-""" 
-@csrf_exempt
-def reviseSubcat(request):
-    if request.method=='POST':
-        query_json = json.loads(request.body)
-        username = query_json['mturk_id']
-        doctypetext=query_json['doctype']
-        subcat_pk= query_json['subcat_pk']
-        revsubcat=query_json['revsubcat']
-        revdesc=query_json['revdesc']
-
-        doctype=DocType.objects.get(doctype=doctypetext)
-        user = User.objects.get(username=username)
-#        user=request.user
-
-        UserSubcat.objects.filter(pk=int(subcat_pk)).update(subcat_text=revsubcat, subcat_description=revdesc)
-        return HttpResponse('')
- """
-""" 
-@csrf_exempt
-def getImage(request, image_id):
-    if request.method == 'GET':
-        item = Image.objects.get(image_id=image_id)
-        # item = Image.objects.filter(is_done=True)[int(num)]
-        return HttpResponse(item.image.url)
-
-@csrf_exempt
-def uploadImage(request):
-    if request.method == 'POST':
-        file = request.FILES["image_file"]
-        image_id = file.name.replace(".png", "")
-        if len(Image.objects.filter(image_id=image_id)) != 0:
-            return HttpResponseBadRequest("The image_id exists!")
-
-        data = request.POST
-        image = Image(image_id=file.name.replace(".png", ""), image=file, box_info=data["text"])
-        image.save()
-        return HttpResponse("Uploaded!")
-
-@csrf_exempt
-def getJson(request, json_id):
-    if request.method == 'GET':
-        item = Json.objects.get(json_id=json_id)
-        # item = Image.objects.filter(is_done=True)[int(num)]
-        return HttpResponse(item.json.url)
-
-
-@csrf_exempt
-def uploadJson(request):
-    if request.method == 'POST':
-        file = request.FILES["json_file"]
-        json_id = file.name.replace(".json", "")
-        if len(Image.objects.filter(json_id=json_id)) != 0:
-            return HttpResponseBadRequest("The json_id exists!")
-
-        data = request.POST
-        json = Json(image_id=file.name.replace(".json", ""), image=file)
-        json.save()
-        return HttpResponse("Uploaded!")
-
-# view for api call from resolution interface 
-@csrf_exempt
-def getAnnotationsByImage(request):
-    if request.method=='GET':
-        doctypetext=request.GET['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        image_id =request.GET['image_id']
-        document=Document.objects.get(doctype=doctype, doc_no=int(image_id))
-        statuses=Status.objects.filter(document=document, status=True)
-        workerannots=[]
-        for status in statuses: 
-            user=status.user
-            annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
-            annotations=[]
-            for annot in annots: 
-                boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
-                for box in boxes:
-                    if(annot.subcat==None):
-                        annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
-                    else:
-                        if(annot.subcat.subcat_text=="N/A"):
-                            annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
-                        else:
-                            annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
-            annotations.sort(key=lambda s: int(s['box_id']))
-
-            # remove duplicate 
-
-            workerannots.append({'user': user.username, 'annotations': getLastAnnotations(annotations)})
-        for i in range(4-len(workerannots)):
-            workerannots.append({'user': 'null', 'annotations': []})
-        response={
-            'workerannots':workerannots
-        }
-        return JsonResponse(response)
-
-
-def getLastAnnotations(jsonlist):
-    result=[]
-    result.append(jsonlist[0])
-    for idx in range(len(jsonlist)-1):
-        row=jsonlist[idx+1]
-        if(row["box_id"]==result[-1]["box_id"]):
-            result[-1]=row
-        else: 
-            result.append(row)
-    return result
-        
-      
-@csrf_exempt
-def getWorkers(request):
-    if request.method=='GET':
-        doctypetext=request.GET['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        
-        profiles=Profile.objects.filter(doctype=doctype)
-        
-
-        users=[]
-        for prof in profiles:
-            # should be modified later to if (prof.endtime and prof.done)
-            if (prof.consent_agreed and prof.instr_read):
-                users.append({'username': prof.user.username, 'user_order': prof.user_order})
-        return JsonResponse(users, safe=False)            
-
-
-@csrf_exempt
-def getAnnotationsByWorker(request):
-    if request.method=='GET':
-        username =request.GET['mturk_id']
-        user = User.objects.get(username=username)
-        profile=Profile.objects.get(user=user)
-        statuses=Status.objects.filter(user=user, status=True)
-        response={}
-        response["username"]=username
-        workerannot=[]
-        for stat in statuses:
-            document=stat.document            
-            annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
-            annotations=[]
-            for annot in annots: 
-                boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
-                for box in boxes:
-                    if(annot.subcat==None):
-                        annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
-                    else:
-                        if(annot.subcat.subcat_text=="N/A"):
-                            annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
-                        else:
-                            annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
-            annotations.sort(key=lambda s: int(s['box_id']))
-            workerannot.append({'document_pk': document.pk, 'annotations': getLastAnnotations(annotations)})
-        response["annotations"]=workerannot
-        response["start_time"]=profile.starttime 
-        response['end_time']=profile.endtime
-        response['user_order']=profile.user_order
-        response['start_image_no']=profile.user_order*7
-        response['end_image_no']=profile.user_order*7+20
-        return JsonResponse(response)
-
-
-@csrf_exempt
-def getEveryAnnotations(request):
-    if request.method=='GET':
-        doctypetext=request.GET['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        profiles=Profile.objects.filter(doctype=doctype)
-        response=[]
-        for prof in profiles:
-            user=prof.user
-            statuses=Status.objects.filter(user=user, status=True)
-            userannots={}
-            userannots["username"]=user.username
-            workerannot=[]
-            for stat in statuses:
-                document=stat.document            
-                annots=Annotation.objects.filter(user=user, document=document, is_alive=True)
-                annotations=[]
-                for annot in annots: 
-                    boxes=annot.boxes_id.replace('[',' ').replace(']',' ').replace(', ',' ').split()
-                    for box in boxes:
-                        if(annot.subcat==None):
-                            annotations.append({'group_id':annot.pk, 'box_id': box, 'cat': annot.cat.cat_text, 'subcat':None, 'subcatpk': None, 'catpk':annot.cat.pk, 'confidence': None })
-                        else:
-                            if(annot.subcat.subcat_text=="N/A"):
-                                annotations.append({'group_id':annot.pk,  'box_id': box,'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': None})
-                            else:
-                                annotations.append({'group_id':annot.pk,  'box_id': box, 'cat': annot.cat.cat_text, 'subcat':annot.subcat.subcat_text, 'subcatpk':annot.subcat.pk, 'catpk':annot.cat.pk, 'confidence': annot.confidence})
-                annotations.sort(key=lambda s: int(s['box_id']))
-                workerannot.append({'document_pk': document.pk, 'annotations': getLastAnnotations(annotations)})
-            userannots["annotations"]=workerannot
-            response.append(userannots)
-    return JsonResponse(response, safe=False)
- """
