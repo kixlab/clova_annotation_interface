@@ -91,7 +91,7 @@ export default {
 
   },
   methods:{
-    ...mapActions(['setCurrOrder']),
+    ...mapActions(['setCurrOrder', 'setShowAnswer']),
 
     updateStatus(){
       const self=this;
@@ -123,6 +123,8 @@ export default {
   },
   mounted(){
     this.updateStatus();
+    console.log(this.$store.getters.getShowAnswer)
+    this.setShowAnswer(false);
   },
   computed: {
     disabled() {
