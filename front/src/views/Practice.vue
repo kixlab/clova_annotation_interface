@@ -69,6 +69,8 @@ import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
 
 
 import axios from 'axios'
+import { mapActions} from 'vuex'
+
 //import SubmitButton from '../components/SubmitButton.vue'
 
 export default {
