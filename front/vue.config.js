@@ -1,7 +1,7 @@
 module.exports = {
     devServer:{
         disableHostCheck:true,
-        host: '13.125.191.49',
+        host: '3.38.105.16',
         port: 8080,
         public: '0.0.0.0:8080',
     },
