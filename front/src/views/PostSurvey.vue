@@ -33,8 +33,8 @@ export default {
         document.getElementById('postsurvey').onload=function(){
         axios.post(self.$store.state.server_url + '/api/submit-survey/', {
             mturk_id: self.$store.state.mturk_id,
-            // 여기에 survey detail들 넣고 싶다!
         }).then(function(res){
+          console.log('submitted')
             self.token = res.data.token
             self.showCode = true
         });        }
