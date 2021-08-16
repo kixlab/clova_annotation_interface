@@ -37,7 +37,7 @@ def signup(request):
     new_user.save()
 
 
-    initstatus=initialize('receipt', username)
+    #initstatus=initialize('receipt', username)
 
     login(request, new_user)
 
