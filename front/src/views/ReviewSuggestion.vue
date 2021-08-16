@@ -173,19 +173,7 @@ export default {
         }).then(function(res){
             self.issues_with_suggestions=res.data.suggestions;
             self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
-            console.log("== issues w/ sugg ==", self.issues_with_suggestions)
         })
-
-        /* axios.get(self.$store.state.server_url + "/api/get-unreviewed-issues/",{
-        params:{
-            mturk_id: self.$store.state.mturk_id,
-            doctype: self.$route.params.docType
-        }
-        }).then(function(res){
-            self.unreviewed_issues=res.data.unreviewed_issues;
-            console.log("== issues unreviewed ==", self.unreviewed_issues)
-        }) */
-
     },
 
     methods: {
@@ -196,23 +184,6 @@ export default {
         },
         reset () {
             this.$refs.form.reset()
-        },
-
-        groupIssues(my_issue_pks, other_issue_pks){
-            // my_issues_pks: [1,2,3,4,5]
-            // other_issues_pks: [10,11,12,13] 
-            // e.g.,       self.groupIssues([349], [326]) 형태로 사용하시면 됩니다! 
-            const self=this;
-            axios.post(self.$store.state.server_url + "/api/save-grouped-issues/", {
-                doctype: self.$route.params.docType,
-                mturk_id: self.$store.state.mturk_id,
-                my_issue_pks: my_issue_pks,
-                other_issue_pks: other_issue_pks
-            }).then(function (res) { // get issue list again 
-                console.log(res)
-                self.unreviewed_issues=res.data.suggestions;
-                console.log("== issues unreviewed NEW ==", self.unreviewed_issues)
-            });
         },
 
         selectIssues(annot) {
@@ -238,19 +209,49 @@ export default {
 
         similar(annot) {
             const self = this
-            console.log("other", [annot.issue_pk], "original", self.sel_issue.mine.map(v => v.issue_pk))
             const mine = self.sel_issue.mine.map(v => v.issue_pk)
-            const other = [annot.issue_pk]
-            self.groupIssues(mine, other)
-            const new_others = self.sel_issue.others
-            new_others.splice(new_others.indexOf(annot), 1)
+            const others = annot.issue_pk
+
+            axios.post(self.$store.state.server_url + "/api/save-similarity/", {
+                doctype: self.$route.params.docType,
+                mturk_id: self.$store.state.mturk_id,
+                suggestion_pk: self.sel_issue.suggestion_pk,
+                my_issue_pks: mine,
+                other_issue_pk: others,
+                similarity: true
+            }).then(function (res) { // get issue list again 
+                console.log(res)
+                if(res.result){
+                    const new_others = self.sel_issue.others
+                    new_others.splice(new_others.indexOf(annot), 1)
+                    self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
+                }
+            });
+
+
         },
 
         notsimilar(annot) {
             //console.log(annot)
             const self = this
-            const new_others = self.sel_issue.others
-            new_others.splice(new_others.indexOf(annot), 1)
+            const mine = self.sel_issue.mine.map(v => v.issue_pk)
+            const others = annot.issue_pk
+
+            axios.post(self.$store.state.server_url + "/api/save-similarity/", {
+                doctype: self.$route.params.docType,
+                mturk_id: self.$store.state.mturk_id,
+                suggestion_pk: self.sel_issue.suggestion_pk,
+                my_issue_pks: mine,
+                other_issue_pks: others,
+                similarity: false
+            }).then(function (res) { // get issue list again 
+                console.log(res)
+                if(res.result){
+                    const new_others = self.sel_issue.others
+                    new_others.splice(new_others.indexOf(annot), 1)
+                    self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
+                }
+            });
         },
 
 

@@ -512,7 +512,7 @@ def getSuggestionsToReview(user, doctype, thisSuggestion):
         unreviewed_suggestions=assignRandomSuggestions(user, thisSuggestion)
     return unreviewed_suggestions
 
-
+""" 
 def getRandomSuggestions(user, doctype, thisSuggestion):
     thisSubCat=thisSuggestion.subcat
     thisCat=thisSubCat.initcat
@@ -524,7 +524,6 @@ def getRandomSuggestions(user, doctype, thisSuggestion):
         suggestions=rand_selections_samesubcat
     else: 
         suggestions=selections_samesubcat
-    
     selections_samecat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat=thisSubCat)), annotation__subcat__initcat=thisCat))
     if(len(selections_samecat)>=2):
         rand_selections_samecat=random.sample(selections_samecat, 2)
@@ -539,10 +538,9 @@ def getRandomSuggestions(user, doctype, thisSuggestion):
         suggestions=suggestions + rand_selections_othercat
     else:
         suggestions=suggestions + rand_selections_othercat 
-    
-    return suggestions 
+    return suggestions  """
 
-@csrf_exempt
+""" @csrf_exempt
 def getUnreviewedIssues(request):
     if request.method=='GET':
         doctypetext=request.GET['doctype']
@@ -568,6 +566,8 @@ def getUnreviewedIssues(request):
     return JsonResponse({
         'unreviewed_issues': response
     })
+ """
+
 
 def getIssuesWithRandomSuggestions(user, doctype):
     mySelections=SelectedSuggestion.objects.filter(user=user)
@@ -602,6 +602,21 @@ def getRandomSuggestionsToReview(request):
         return JsonResponse({
             'suggestions': getIssuesWithRandomSuggestions(user, doctype)
         })
+@csrf_exempt
+def saveSimilarity(request):
+    if(request.method=='POST'):
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        doctype=query_json['doctype']
+        suggestion_pk=query_json['suggestion_pk']
+        my_issue_pks=query_json['my_issue_pks']
+        other_issue_pk=query_json['other_issue_pk']
+        similarity=query_json['similarity']
+
+        print(suggestion_pk, my_issue_pks, other_issue_pk, similarity)
+        return JsonResponse(
+            {'result': False}
+        )
 
 
 
