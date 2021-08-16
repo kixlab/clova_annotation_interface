@@ -682,31 +682,6 @@ def getRandomSuggestionsToReview(request):
 
 
 
-@csrf_exempt
-def saveGroupedIssues(request):
-    if request.method == 'POST':
-        query_json = json.loads(request.body)
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
-        doctypetext=query_json['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        myIssues_pk=query_json['my_issue_pk']
-        otherIssue_pk=query_json['other_issue_pk']
-
-        myIssue=
-        newGroup=GroupLink(target_suggestions=myIssues, grouped_suggestions=otherIssues, made_by=user)
-        newGroup.save()
-
-        my_selections=[SelectedSuggestion.objects.get(pk=pk) for pk in myIssues]
-        for my_selection in my_selections:
-            # mark selections as grouped 
-            my_selection.is_grouped=True
-            my_selection.save()
-        
-        return JsonResponse({
-            'suggestions': getUngroupedIssues(user, doctype)
-        })
-
 
 
 @csrf_exempt
