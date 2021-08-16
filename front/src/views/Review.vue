@@ -60,7 +60,7 @@ export default {
     ImagePanel,
     AnnotationStatus,
     SubmitButton,
-    InstructionButton,
+//    InstructionButton,
   //  OverviewButton,
     DeferredAnnotation,
     BoxSelectionStatus,
