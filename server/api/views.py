@@ -596,7 +596,7 @@ def getSuggestionsToReview(user, doctype, thisSuggestion):
 
 def checkIfEnoughSuggestions(user):
     others_suggestions=list(SelectedSuggestion.objects.filter(~Q(user=user)))
-    if(len(others_suggestions)>12):
+    if(len(others_suggestions)>1200):
         response=True
     else: 
         response=False
