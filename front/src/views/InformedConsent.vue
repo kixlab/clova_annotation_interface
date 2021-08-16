@@ -46,9 +46,10 @@ export default {
   methods: {
     onClickNext: function () {
       const self = this;
-      self.$helpers.server_get(self, "/api/consent-agreed", 
-        function(self, res){ // eslint-disable-line no-unused-vars
-          self.$router.push('../instruction')
+      axios.post(self.$store.state.server_url + '/api/consent-agreed/', {
+        mturk_id: self.$store.state.mturk_id,
+      }).then( function(){
+          self.$router.push('../instruction/')
         })  
       ;
     }

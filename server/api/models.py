@@ -16,17 +16,21 @@ class Profile(models.Model):
     signuptime=models.DateTimeField(auto_now_add=True, blank=True)
     
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
-    
-    #consent_agreed=models.BooleanField(default=False)
-
-    instr_read=models.BooleanField(default=False)
-
-    starttime=models.DateTimeField(blank=True, null=True)
     user_order=models.IntegerField(default=0)
     mod_order=models.IntegerField(default=0, blank=True, null=True)
+    
+    consent_agreed=models.BooleanField(default=False)
+    instr_done=models.BooleanField(default=False)
+    practice_done=models.BooleanField(default=False)
+    annotation_done=models.BooleanField(default=False)
+    review_done=models.BooleanField(default=False)
+    survey_done=models.BooleanField(default=False)
 
-    endtime=models.DateTimeField(blank=True, null=True)
-    endsurveytime=models.DateTimeField(blank=True, null=True)
+    practice_starttime=models.DateTimeField(blank=True, null=True)
+    practice_endtime=models.DateTimeField(blank=True, null=True)
+    annot_endtime=models.DateTimeField(blank=True, null=True)
+    review_endtime=models.DateTimeField(blank=True, null=True)
+    survey_endtime=models.DateTimeField(blank=True, null=True)
 
     dropout=models.BooleanField(default=False)
 
