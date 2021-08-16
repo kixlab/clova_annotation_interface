@@ -224,7 +224,10 @@ export default {
                 if(res.data.result){
                     const new_others = self.sel_issue.others
                     new_others.splice(new_others.indexOf(annot), 1)
+                    console.log(self.issues_with_suggestions)
+
                     self.unreviewed_issues=self.issues_with_suggestions.filter(v => v.others.length>0)
+                    console.log(self.unreviewed_issues)
                 }else{
                     window.alert('Error!')
                 }
@@ -252,6 +255,7 @@ export default {
                 if(res.data.result){
                     const new_others = self.sel_issue.others
                     new_others.splice(new_others.indexOf(annot), 1)
+
                     self.unreviewed_issues=self.issues_with_suggestions.filter(v => v.others.length>0)
                 }else{
                     window.alert('Error!')
