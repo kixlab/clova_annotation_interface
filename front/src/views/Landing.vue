@@ -23,9 +23,11 @@
 
     <h3> STEPS </h3>
     <ol>
-      <li> Read instruction </li>
+      <li> Read the informed consent and agree to participate </li>
+      <li> Read the instruction </li>
       <li> Practice session with one receipt image </li>
       <li> Annotate 20 receipt images </li>
+      <li> Review your annotation </li>
       <li> Do a simple survey and submit a token to Amazon MTurk webpage</li>
     </ol>
     <br>
