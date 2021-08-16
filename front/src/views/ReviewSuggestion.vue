@@ -52,18 +52,18 @@
                                 <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="warning" small style="margin: 5px" @click="clickCloseto(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
-                                x {{v.n_issues}}
+                                ({{v.n_issues}} annotations)
                             </div>
                             <h4 style="text-align: left; margin-top: 10px">N/A Suggestions</h4>
                             <div v-for="(v, idx) in unreviewed_issues.filter(v => v.suggestion_subcat === 'n/a')" :key="'n/a-' + idx" style="overflow-y: scroll">
                                 <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="error" small style="margin: 5px" @click="clickNa(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
-                                x {{v.n_issues}}
+                                ({{v.n_issues}} annotations)
                             </div>
                         </v-col>
                         <v-col cols="3" style="border: 1px solid black; ">
-                            <h3>Corresponding annotations</h3>
+                            <h3>Your annotations for with this suggestion.</h3>
                             <v-row style="height: 400px; overflow-y: auto; border: 0px solid lightgray; margin: 10px 3px 0; background-color: #eeeeee;">
                                 <div v-for="(annot, idx) in sel_issue.mine" :key="idx" >
                                     <v-img :src="imageNo2Url(annot.image_no)" width="250">
@@ -335,7 +335,13 @@ export default {
         },
         onSubmit: function() {
             const self=this;
-            self.$router.push('../../postsurvey/');
+            axios.post(self.$store.state.server_url + '/api/review-done/', {
+                mturk_id: self.$store.state.mturk_id,
+            }).then( function(){
+                self.$router.push('../../postsurvey/');
+            });
+
+
         },
         async waitForJson(no, box_id, pk) {
             const response = await this.imageNo2Json(no, box_id, false)
