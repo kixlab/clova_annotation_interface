@@ -35,6 +35,7 @@ export default {
           console.log('submitted')
             self.token = res.data.token
             self.showCode = true
+            window.scrollTo({top:0});
         });        }
       }, 1000);
   },     
