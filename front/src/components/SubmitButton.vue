@@ -35,8 +35,6 @@ export default {
         const doctype=self.$route.params.docType
         self.$router.push('../../review-suggestion/'+doctype+'/');
       });
-
-      
  }
   },
 

@@ -170,6 +170,27 @@ def reviewDone(request):
         recordReviewDone(user)
         return HttpResponse('')
 
+@csrf_exempt
+def submitSurvey(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username = query_json['mturk_id']
+        user = User.objects.get(username=username)
+        recordSurveyDone(user)
+        
+        profile.survey_endtime=datetime.now()
+
+        token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        profile.token=token
+
+        profile.save()
+
+        response={
+            'token': token
+        }
+        return JsonResponse(response)
+
+
 
 def recordConsentAgreed(user):
     profile=Profile.objects.get(user=user)
@@ -714,27 +735,6 @@ def submit(request):
         profile.done=True
         profile.save()
         return HttpResponse('')
-
-
-@csrf_exempt
-def submitSurvey(request):
-    if request.method == 'POST':
-        query_json = json.loads(request.body)
-        username = query_json['mturk_id']
-        user = User.objects.get(username=username)
-
-        profile=Profile.objects.get(user=user)
-        profile.endsurveytime=datetime.now()
-
-        token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        profile.token=token
-
-        profile.save()
-
-        response={
-            'token': token
-        }
-        return JsonResponse(response)
 
 
 @csrf_exempt
