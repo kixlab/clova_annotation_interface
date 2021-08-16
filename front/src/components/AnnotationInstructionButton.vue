@@ -111,7 +111,7 @@
 
 <script>
 export default {
-    name: "PracticeInstructionButton",
+    name: "AnnotationInstructionButton",
     data() {
         return {
           dialog: false,
@@ -126,7 +126,7 @@ export default {
     },
     mounted() {
       // this.dialog = true;
-      //this.openInstruction();
+      this.openInstruction();
     },
 }
 </script>

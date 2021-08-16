@@ -9,6 +9,7 @@
     >
       <v-toolbar-title>Image Annotation (ID: {{this.$store.state.mturk_id}})</v-toolbar-title>
       <v-spacer/>
+      <review-instruction-button/>
 
     <v-tooltip bottom :disabled="valid">
             <template v-slot:activator="{ on, attrs }">
@@ -123,12 +124,14 @@
 <script>
 import axios from "axios";
 import BoundingBox from '@/components/BoundingBox.vue'
+import ReviewInstructionButton from "@/components/ReviewInstructionButton.vue"
 import {mapGetters} from 'vuex';
 
 export default {
     name: 'ReviewSuggestion',
     components: {
         BoundingBox,
+        ReviewInstructionButton,
     },
     data () {
         return {
