@@ -104,8 +104,8 @@ class AssignedSuggestion(models.Model):
 
 class Similarity(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-    mine=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE)
-    others=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE)
+    mine=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE, related_name='mine')
+    others=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE, related_name='others')
     is_similar=models.BooleanField(default=False, null=False)
 
 class Annotation(models.Model):
