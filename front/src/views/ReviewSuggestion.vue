@@ -1,10 +1,39 @@
 <template>
-    <v-container fluid fill-height>
+  <v-app class="annotation">
+    <v-app-bar
+      app
+      color="indigo lighten-1"
+      dark
+      dense
+      fixed
+    >
+      <v-toolbar-title>Image Annotation (ID: {{this.$store.state.mturk_id}})</v-toolbar-title>
+      <v-spacer/>
+
+    <v-tooltip bottom :disabled="!disabled">
+            <template v-slot:activator="{ on, attrs }">
+            <div v-on="on">
+            <v-btn
+                class="ma-2"
+                :disabled="!valid"
+                color="error"
+                @click="onSubmit"
+                v-bind="attrs"
+                v-on="on"
+            >
+                Next
+            </v-btn>
+            </div>
+            </template>
+            Mark the similarity for every suggestions you have made. 
+        </v-tooltip>
+      </v-app-bar>
+
+     <v-main>
+      <v-container fluid fill-height>
         <v-row align-content='center'>
             <v-col>
-                <h2>Thank you for the annotations! We hope it was fun :)</h2> <br>
-                <h3>In this page, we ask you to choose annotations <u>that represent similar suggestions</u>, <br/>
-                and to fill out a <u>short survey</u> regarding the overall task.</h3>
+                <h3>In this page, we ask you to choose annotations <u>that represent similar suggestions. After finishing marking similar suggestions, click the button on the top right to proceed to post-survey.</h3>
             </v-col>
         </v-row>
         <v-row align-content='center' style="border: 0px solid red; height: 100%; overflow-y: auto">
@@ -74,41 +103,13 @@
                     </v-row>
                     </v-col>
                 </v-row>
-                <v-row style="height: 20px; border: 0px solid orange"></v-row>
-                <v-row>
-                    <h2 style="width: 100%; text-align: left">Post-survey</h2>
-                    <div style="border: 1px solid black; text-align: left; width: 100%;">
-                        <v-form ref='form' v-model='valid' style="padding: 10px 2%">
-                            
-                            <v-text-field v-model="q1" counter :rules="q1Rules" 
-                            label="Q1. When did you decide to use the *close to* button to annotate? Why?" required />
-                            
-                            <v-text-field v-model="q2" counter :rules="q1Rules" 
-                            label="Q2. When did you decide to use the *n/a* button to annotate? Why?" required />
-
-                            <v-text-field v-model="q3" counter :rules="q1Rules" 
-                            label="Q3. Tell us the *overall confidence* in your annotation (Enter a number between 0% and 100%)" required />
-
-                            <v-text-field v-model="q4" counter
-                            label="Q4. Do you have any additional questions, suggestions, or feedback regarding the task?" />
-                        
-                            <v-btn :disabled="!valid_actual" color="success" class="mr-4" @click="submit">
-                                Submit and get the code
-                            </v-btn>
-                            <v-btn color="error" class="mr-4" @click="reset">
-                                Reset Form
-                            </v-btn>
-                            <span v-if="showCode">
-                                <div style="margin-top: 10px; ">Code to enter in MTurk: <b style="color: blue">{{this.token}}</b></div>
-                                <div style="padding-bottom: 1%">Thanks again for the participation!</div>
-                            </span>
-
-                        </v-form>
-                    </div>
-                </v-row>
             </v-col>
         </v-row>
     </v-container>
+    </v-main>
+  </v-app>
+
+    
 </template>
 
 <script>
@@ -139,23 +140,7 @@ export default {
 
             // Related to the survey
             valid: true,
-            name: '',
-            nameRules: [
-                v => !!v || 'Name is required',
-                v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-            ],
-
-            q1: '',
-            q2: '',
-            q3: '',
-            q4: '',
-            q1Rules: [
-                v => !!v || 'Answer cannot be empty',
-                v => (v && v.length >= 5) || 'Answer must be more than 5 characters',
-            ],
-            
-            showCode: false,
-            token: '',
+        
 
             annot_boxes: {},
 
@@ -173,19 +158,11 @@ export default {
         }).then(function(res){
             self.issues_with_suggestions=res.data.suggestions;
             self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
+            self.valid=(self.unreviewed_issues.length==0);
         })
     },
 
     methods: {
-        submit () {
-            this.$refs.form.validate()
-            
-            this.onSubmit()
-        },
-        reset () {
-            this.$refs.form.reset()
-        },
-
         selectIssues(annot) {
             if (this.sel_sim_issues.indexOf(annot) > -1) {
                 this.sel_sim_issues.splice(this.sel_sim_issues.indexOf(annot), 1)
@@ -224,10 +201,9 @@ export default {
                 if(res.data.result){
                     const new_others = self.sel_issue.others
                     new_others.splice(new_others.indexOf(annot), 1)
-                    console.log(self.issues_with_suggestions)
 
                     self.unreviewed_issues=self.issues_with_suggestions.filter(v => v.others.length>0)
-                    console.log(self.unreviewed_issues)
+                    self.valid=(self.unreviewed_issues.length==0);
                 }else{
                     window.alert('Error!')
                 }
@@ -256,7 +232,8 @@ export default {
                     const new_others = self.sel_issue.others
                     new_others.splice(new_others.indexOf(annot), 1)
 
-                    self.unreviewed_issues=self.issues_with_suggestions.filter(v => v.others.length>0)
+                    self.unreviewed_issues=self.issues_with_suggestions.filter(v => v.others.length>0);
+                    self.valid=(self.unreviewed_issues.length==0);
                 }else{
                     window.alert('Error!')
                 }
@@ -356,7 +333,10 @@ export default {
                 return boxes
             })
         },
-
+        onSubmit: function() {
+            const self=this;
+            self.$router.push('../../postsurvey/');
+        },
         async waitForJson(no, box_id, pk) {
             const response = await this.imageNo2Json(no, box_id, false)
             //console.log(response)
@@ -366,19 +346,6 @@ export default {
             }
             return response
         },
-
-
-        onSubmit: function() {
-            const self=this;
-            console.log(this.q1, this.q2, this.q3, this.q4) // 보내게 될 4가지 질문에 대한 답이 여기에 저장되어있어요!
-            axios.post(self.$store.state.server_url + '/api/submit-survey/', {
-                mturk_id: self.$store.state.mturk_id,
-                // 여기에 survey detail들 넣고 싶다!
-            }).then(function(res){
-                self.token = res.data.token
-                self.showCode = true
-            });
-        }
     },
 
 

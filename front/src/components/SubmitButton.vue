@@ -10,7 +10,7 @@
         v-bind="attrs"
         v-on="on"
       >
-        Submit
+        Next
       </v-btn>
       </div>
     </template>
