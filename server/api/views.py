@@ -178,8 +178,7 @@ def submitSurvey(request):
         user = User.objects.get(username=username)
         recordSurveyDone(user)
         
-        profile.survey_endtime=datetime.now()
-
+        profile=Profile.objects.get(user=user)
         token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         profile.token=token
 
@@ -198,7 +197,6 @@ def recordConsentAgreed(user):
     profile.save()
 
 def recordInstructionDone(user):
-    profile=Profile.objects.get(user=user)
     profile.instr_done=True
     profile.practice_starttime=datetime.now()
     profile.save()
