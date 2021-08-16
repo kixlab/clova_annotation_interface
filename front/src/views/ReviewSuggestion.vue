@@ -30,13 +30,13 @@
       </v-app-bar>
 
      <v-main>
-      <v-container fluid fill-height>
+      <v-container v-if="enough_suggestions" fluid fill-height>
         <v-row align-content='center'>
             <v-col>
                 <h3>In this page, we ask you to choose annotations <u>that represent similar suggestions</u>. After finishing marking similar suggestions, click the button on the top right to proceed to post-survey.</h3>
             </v-col>
         </v-row>
-        <v-row align-content='center' style="border: 0px solid red; height: 100%; overflow-y: auto">
+        <v-row  align-content='center' style="border: 0px solid red; height: 100%; overflow-y: auto">
             <v-col>
                 <v-row>
                     <v-col>
@@ -106,6 +106,12 @@
             </v-col>
         </v-row>
     </v-container>
+    <v-container v-else fluid fill-height>
+        <v-row align-content='center'>
+            <v-col>
+                <h3>There is no enough others' suggestions to compare with yours. You can skip this 'review' process and proceed to post-survey. Click 'NEXT' button on the top right!</h3>
+            </v-col>
+        </v-row>
     </v-main>
   </v-app>
 
@@ -130,6 +136,8 @@ export default {
                 others: []
             },
 
+            enough_suggestions: true,
+
             sel_sim_issues: [],
 
             unreviewed_issues: [], // 내가 한 suggestion 단위로 없어짐
@@ -139,7 +147,7 @@ export default {
 
 
             // Related to the survey
-            valid: true,
+            valid: false,
         
 
             annot_boxes: {},
@@ -159,6 +167,10 @@ export default {
             self.issues_with_suggestions=res.data.suggestions;
             self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
             self.valid=(self.unreviewed_issues.length==0);
+            self.enough_suggestions=res.data.status;
+            if(!self.enough_suggestions){
+                self.valid=true;
+            }
         })
     },
 
