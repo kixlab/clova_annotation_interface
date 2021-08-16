@@ -55,15 +55,6 @@ export default {
       self.updateImageBoxes(boxes)
       //console.log(boxes.map(v => v.label))
       self.setShowAnswer(true/*!this.$store.getters.getShowAnswer*/)
-      /*
-      axios.post(self.$store.state.server_url + '/api/submit/', {
-        mturk_id: self.$store.state.mturk_id,
-      }).then( function(){
-        var doctype=self.$router.currentRoute.fullPath.split('/')[2];
-        self.$router.push('../../annot-done/'+doctype);
-      });
-      */
-
       
     }
   },

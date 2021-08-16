@@ -119,7 +119,7 @@ def startTask(request):
         }
         return JsonResponse(response)
 
-@csrf_exempt
+""" @csrf_exempt
 def checkUser(request):
     if request.method =='GET':
         username = request.GET['mturk_id']
@@ -133,7 +133,7 @@ def checkUser(request):
                 'login_status': True,
                 'username': user.username
             }
-        return JsonResponse(response)
+        return JsonResponse(response) """
 @csrf_exempt
 def consentAgreed(request):
     if request.method =='POST':
@@ -189,8 +189,6 @@ def submitSurvey(request):
         }
         return JsonResponse(response)
 
-
-
 def recordConsentAgreed(user):
     profile=Profile.objects.get(user=user)
     profile.consent_agreed=True
@@ -225,12 +223,12 @@ def recordSurveyDone(user):
     profile.survey_endtime=datetime.now()
     profile.save()
 
-@csrf_exempt
+""" @csrf_exempt
 def getDocTypes(request):
     if request.method == 'GET':
         doctypes=[doctype.doctype for doctype in DocType.objects.all()]
         return JsonResponse({'doctypes':doctypes})
-
+ """
 
 @csrf_exempt
 def getImageID(request):
@@ -537,7 +535,7 @@ def getUngroupedIssues(user, doctype):
         response.append({'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_mine': len(mine), 'n_others': len(others), 'mine': mine, 'others': others})            
     return response
 
-
+""" 
 @csrf_exempt
 def getSuggestionsToReview(request):
     if request.method =='GET':
@@ -550,7 +548,7 @@ def getSuggestionsToReview(request):
             'suggestions': getUngroupedIssues(user, doctype)
         })
 
-
+ """
 
 def assignRandomSuggestions(user, thisSuggestion): # assume that we have enough issue pull to choose from
     thisSubCat=thisSuggestion.subcat
@@ -720,7 +718,7 @@ def saveSimilarity(request):
             return JsonResponse({
                 'result': False
             })
-
+""" 
 @csrf_exempt
 def submit(request):
     if request.method == 'POST':
@@ -732,7 +730,7 @@ def submit(request):
         profile.endtime=datetime.now()
         profile.done=True
         profile.save()
-        return HttpResponse('')
+        return HttpResponse('') """
 
 
 @csrf_exempt
@@ -766,7 +764,7 @@ def getStatus(request):
         status=Status.objects.filter(user=user).values_list('status', flat=True)
         return JsonResponse({'status': list(status)})
 
-@csrf_exempt
+""" @csrf_exempt
 def addCat(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
@@ -807,7 +805,7 @@ def addSubcat(request):
         response = {
             'newsubcat_pk': newSubcat.pk,
         }
-        return JsonResponse(response)
+        return JsonResponse(response) """
 """ 
 @csrf_exempt
 def reviseCat(request):
@@ -843,7 +841,7 @@ def reviseSubcat(request):
         UserSubcat.objects.filter(pk=int(subcat_pk)).update(subcat_text=revsubcat, subcat_description=revdesc)
         return HttpResponse('')
  """
-
+""" 
 @csrf_exempt
 def getImage(request, image_id):
     if request.method == 'GET':
@@ -1018,3 +1016,4 @@ def getEveryAnnotations(request):
             userannots["annotations"]=workerannot
             response.append(userannots)
     return JsonResponse(response, safe=False)
+ """
