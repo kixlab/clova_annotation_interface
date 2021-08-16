@@ -71,7 +71,7 @@ export default {
       width: 0,
       height: 0,
 
-      prac_img: 'http://13.125.191.49:8000/media/receipt/receipt_00300.png',
+      prac_img: 'http://3.38.105.16:8000/media/receipt/receipt_00300.png',
       showAnswer: this.$store.getters.getShowAnswer,
       showAnswer2: true,
 
@@ -224,11 +224,6 @@ export default {
           if (x11-1 < this.startPoint[0]-this.initialPosition[0] && x22+1 > this.startPoint[0]-this.initialPosition[0] && y11-1 < this.startPoint[1]-this.initialPosition[1] && y22+1 > this.startPoint[1]-this.initialPosition[1]) {
             if (boxes[i].annotated === false) {
               boxes[i].selected = !boxes[i].selected;
-              /* if (boxes[i].selected === true) {
-               // this.$helpers.server_log(this, 'SB', boxes[i].box_id);
-              } else {
-                this.$helpers.server_log(this, 'UB', boxes[i].box_id);
-              } */
             }
             this.updateImageBoxes(boxes);
           }
@@ -278,13 +273,6 @@ export default {
           }
         } 
       }
-      /* if (selected_box.length > 0){
-        this.$helpers.server_log(this, 'SB', selected_box);
-      }
-      if (unselected_box.length > 0){
-        this.$helpers.server_log(this, 'UB', unselected_box);
-      } */
-
       this.updateImageBoxes(this.image_box);
       }
     },
@@ -306,11 +294,7 @@ export default {
     
     disabled() {
       return !this.$store.getters.getShowAnswer;
-    }
-    /*image_url() {
-      return require('http://13.125.191.49:8000/media/receipt/receipt_00300.png')//this.$store.getters.prac_image_url;
-    }*/
-    
+    }    
   }
 };
 </script>

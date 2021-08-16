@@ -26,6 +26,22 @@ class BoxAnnotation(models.Model):
     def __str__(self):
         return 'boxannot-'+self.user.username+'-'+str(self.document)+'-'+str(self.box_id)+'-'+self.annot_type
 
+class TargetAnnotation(models.Model):
+    expert=models.ForeignKey(User, on_delete=models.CASCADE, related_name='expert_users')
+    user=models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_users')
+    document=models.ForeignKey(Document, on_delete=models.SET_NULL, null=True)
+    subcat=models.ForeignKey(InitSubCat, on_delete=models.CASCADE)
+    cat=models.ForeignKey(InitCat, on_delete=models.CASCADE)
+    annotation=models.ForeignKey(Annotation, on_delete=models.SET_NULL, null=True, blank=True)
+
+    annot_type=models.CharField(max_length=255) #exactly, closeto, na 
+    suggested_subcat=models.CharField(max_length=255, null=True, blank=True)
+
+    box_id=models.IntegerField(default=999, null=True, blank=True)
+    is_reviewed=models.BooleanField(default=False)
+    def __str__(self):
+        return 'boxannot-'+self.expert.username+'-'+str(self.document)+'-'+str(self.box_id)+'-'+self.annot_type
+""" 
 class TargetBoxAnnotation(models.Model):
     expert=models.ForeignKey(User, on_delete=models.CASCADE, related_name='expert_users')
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_users')
@@ -41,7 +57,7 @@ class TargetBoxAnnotation(models.Model):
     is_reviewed=models.BooleanField(default=False)
     def __str__(self):
         return 'boxannot-'+self.expert.username+'-'+str(self.document)+'-'+str(self.box_id)+'-'+self.annot_type
-
+ """
 class FinalLabel(models.Model):
     expert=models.ForeignKey(User, on_delete=models.CASCADE)
     doctype=models.ForeignKey(DocType, on_delete=models.CASCADE)

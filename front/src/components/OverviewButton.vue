@@ -65,7 +65,6 @@ export default {
       openOverview: function () {
         const self=this;
         self.dialog = true;
-        //self.$helpers.server_log(self, 'RI', [])
       },
       goTo: function(imgNo){
         this.$store.commit('set_image_count', imgNo);
@@ -75,7 +74,7 @@ export default {
       getThumbnail: function (imgNo){
         var docType= this.$route.params.docType;
         var two_digit_id = ("0" + imgNo).slice(-2);
-        return 'http://13.125.191.49:8000'+ '/media/'+docType+'/'+docType+'_000' + two_digit_id + '.png'
+        return 'http://3.38.105.16:8000'+ '/media/'+docType+'/'+docType+'_000' + two_digit_id + '.png'
       },      
     },
     mounted() {

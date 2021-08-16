@@ -6,7 +6,6 @@ urlpatterns = [
     # path(r'image/box_info/', views.selectedImageBox)
     path('signup/',views.signup),
     #path('start-task/', views.startTask),
-    path('log/', views.recordLog),
     path('check-user/', views.checkUser),
     path('consent-agreed/', views.recordconsentAgreed),
     path('instr-done/', views.startTask),
@@ -31,10 +30,12 @@ urlpatterns = [
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
 
-    path('get-suggestions-to-review/', views.getSuggestionsToReview),
+ #   path('get-suggestions-to-review/', views.getSuggestionsToReview),
+ #   path('get-issues-with-random-suggestions/', views.getIssuesWithRandomSuggestions),
+
     path('get-random-suggestions-to-review/', views.getRandomSuggestionsToReview),
-    path('get-unreviewed-issues/', views.getUnreviewedIssues),
-    path('save-grouped-issues/', views.saveGroupedIssues),
+#    path('get-unreviewed-issues/', views.getUnreviewedIssues),
+    path('save-similarity/', views.saveSimilarity),
 
     path('submit/', views.submit),
     path('submit-survey/', views.submitSurvey),

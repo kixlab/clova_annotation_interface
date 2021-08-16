@@ -131,41 +131,6 @@ def checkUser(request):
             }
         return JsonResponse(response)
 
-        
-""" @csrf_exempt
-def checkUser(request):
-    if request.method == 'GET':
-        username = request.GET['mturk_id']
-        print(User.objects)
-        if(len(User.objects.filter(username=username))==0):
-            user=User(username=username)
-            user.save()
-            # initialize status 
-            for document in Document.objects.all():
-                Status(user=user, document=document, status=False).save()
-            # initialize usercats
-            for initcat in InitCat.objects.all():
-                usercat=UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text)
-                usercat.save()
-            # add N/A category 
-            for doctype in DocType.objects.all():
-                UserCat(user=user, doctype=doctype, cat_text="N/A").save()
-            # initialize usersubcats 
-            for initsubcat in InitSubCat.objects.all():
-                usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype, cat_text=initsubcat.initcat.cat_text)
-                UserSubcat(usercat=usercat, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()   
-            # add N/A subcategory to each category 
-            for usercat in UserCat.objects.filter(user=user):
-                UserSubcat(usercat=usercat, subcat_text="N/A", subcat_description="Not applicable or does not exist").save()
-        else: 
-            user=User.objects.get(username=username)
-        user, created = User.objects.get_or_create(username=username)
-        response = {
-            'consent_agreed': user.consentAgreed,
-            'step': 1
-        }
-        return JsonResponse(response) """
-
 @csrf_exempt
 def recordconsentAgreed(request):
     if request.method == 'GET':
@@ -177,54 +142,12 @@ def recordconsentAgreed(request):
         profile.save()
         return HttpResponse('')
 
-""" @csrf_exempt
-def recordInstrDone(request):
-    if request.method == 'GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
-        #user=request.user
-        profile=Profile.objects.get(user=user)
-        profile.instr_read=True
-        profile.starttime=datetime.now()
-
-
-
-
-        if (user.instrEnded == False):
-            valid_usrs = len(list(User.objects.filter(instrEnded = True)))
-            user.startTask(valid_usrs)
-
-        return HttpResponse('') """
-
 @csrf_exempt
 def getDocTypes(request):
     if request.method == 'GET':
         doctypes=[doctype.doctype for doctype in DocType.objects.all()]
         return JsonResponse({'doctypes':doctypes})
 
-
-@csrf_exempt
-def recordLog(request):
-    if request.method == 'POST':
-        query_json = json.loads(request.body)
-#        user=request.user
-        username = query_json['mturk_id']
-        behavior_type = query_json['type']
-        box_ids = query_json['box_ids']
-        image_id = query_json['image_id']
-        label = query_json['label']
-
-        user = User.objects.get(username=username)
-
-        Log.objects.create(
-            user = user,
-            behavior = behavior_type,
-            boxIDs = box_ids,
-            imageID = image_id,
-            label = label
-        )
-
-        return HttpResponse("")
 
 @csrf_exempt
 def getImageID(request):
@@ -545,7 +468,8 @@ def getSuggestionsToReview(request):
         })
 
 
-def getRandomSuggestions(user, doctype, thisSuggestion):
+
+def assignRandomSuggestions(user, thisSuggestion): # assume that we have enough issue pull to choose from
     thisSubCat=thisSuggestion.subcat
     thisCat=thisSubCat.initcat
     suggestions=[]
@@ -563,7 +487,6 @@ def getRandomSuggestions(user, doctype, thisSuggestion):
         suggestions = suggestions+rand_selections_samecat
     else:
         suggestions=suggestions+selections_samecat
-    
 
     n_needed=6-len(suggestions)
     selections_othercat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat__initcat=thisCat))))
@@ -573,9 +496,51 @@ def getRandomSuggestions(user, doctype, thisSuggestion):
     else:
         suggestions=suggestions + rand_selections_othercat 
     
-    return suggestions 
+    assigned_suggestions=[]
+    for suggestion in suggestions: 
+        newAssignedSuggestion=AssignedSuggestion(user=user, my_suggestion=thisSuggestion, others=suggestion, is_reviewed=False)
+        newAssignedSuggestion.save()
+        assigned_suggestions.append(newAssignedSuggestion)
+    
+    return assigned_suggestions
 
-@csrf_exempt
+def getSuggestionsToReview(user, doctype, thisSuggestion):
+    assigned_suggestions=AssignedSuggestion.objects.filter(user=user, my_suggestion=thisSuggestion)
+    if(len(assigned_suggestions)>0):
+        unreviewed_suggestions=assigned_suggestions.filter(is_reviewed=False)
+    else:
+        unreviewed_suggestions=assignRandomSuggestions(user, thisSuggestion)
+    return unreviewed_suggestions
+
+""" 
+def getRandomSuggestions(user, doctype, thisSuggestion):
+    thisSubCat=thisSuggestion.subcat
+    thisCat=thisSubCat.initcat
+    suggestions=[]
+
+    selections_samesubcat=list(SelectedSuggestion.objects.filter(~Q(user=user), annotation__subcat=thisSubCat))
+    if(len(selections_samesubcat)>=2):
+        rand_selections_samesubcat = random.sample(selections_samesubcat,2)
+        suggestions=rand_selections_samesubcat
+    else: 
+        suggestions=selections_samesubcat
+    selections_samecat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat=thisSubCat)), annotation__subcat__initcat=thisCat))
+    if(len(selections_samecat)>=2):
+        rand_selections_samecat=random.sample(selections_samecat, 2)
+        suggestions = suggestions+rand_selections_samecat
+    else:
+        suggestions=suggestions+selections_samecat
+
+    n_needed=6-len(suggestions)
+    selections_othercat=list(SelectedSuggestion.objects.filter((~Q(user=user)&~Q(annotation__subcat__initcat=thisCat))))
+    if(len(selections_othercat)>=n_needed):
+        rand_selections_othercat = random.sample(selections_othercat, n_needed)
+        suggestions=suggestions + rand_selections_othercat
+    else:
+        suggestions=suggestions + rand_selections_othercat 
+    return suggestions  """
+
+""" @csrf_exempt
 def getUnreviewedIssues(request):
     if request.method=='GET':
         doctypetext=request.GET['doctype']
@@ -601,6 +566,8 @@ def getUnreviewedIssues(request):
     return JsonResponse({
         'unreviewed_issues': response
     })
+ """
+
 
 def getIssuesWithRandomSuggestions(user, doctype):
     mySelections=SelectedSuggestion.objects.filter(user=user)
@@ -614,10 +581,10 @@ def getIssuesWithRandomSuggestions(user, doctype):
         for myselection in mySelections: 
             mine.append({'image_no': myselection.annotation.document.doc_no, 'boxes_id': myselection.annotation.boxes_id, 'reason': myselection.reason, 'issue_pk': myselection.pk})
             
-        randomSuggestions=getRandomSuggestions(user, doctype, suggestion)
+        assignedSuggestions=getSuggestionsToReview(user, doctype, suggestion)
         others=[]
-        for issue in randomSuggestions:
-            others.append({'image_no': issue.annotation.document.doc_no, 'boxes_id': issue.annotation.boxes_id, 'reason': issue.reason, 'worker': issue.user.username, 'issue_pk': issue.pk})
+        for assignment in assignedSuggestions:
+            others.append({'image_no': assignment.others.annotation.document.doc_no, 'boxes_id': assignment.others.annotation.boxes_id, 'reason': assignment.others.reason, 'worker': assignment.others.user.username, 'issue_pk': assignment.others.pk})
 
         response.append({
             'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_issues': len(list(mySelections)), 'mine':mine, 'others':others
@@ -635,33 +602,41 @@ def getRandomSuggestionsToReview(request):
         return JsonResponse({
             'suggestions': getIssuesWithRandomSuggestions(user, doctype)
         })
-
-
-
 @csrf_exempt
-def saveGroupedIssues(request):
-    if request.method == 'POST':
+def saveSimilarity(request):
+    if(request.method=='POST'):
         query_json = json.loads(request.body)
-        username=query_json['mturk_id']
-        user = User.objects.get(username=username)
-        doctypetext=query_json['doctype']
-        doctype=DocType.objects.get(doctype=doctypetext)
-        myIssues=query_json['my_issue_pks']
-        otherIssues=query_json['other_issue_pks']
-        newGroup=GroupLink(target_suggestions=myIssues, grouped_suggestions=otherIssues, made_by=user)
-        newGroup.save()
+        username = query_json['mturk_id']
+        doctype=query_json['doctype']
+        suggestion_pk=query_json['suggestion_pk']
+        my_issue_pks=query_json['my_issue_pks']
+        other_issue_pk=query_json['other_issue_pk']
+        similarity=query_json['similarity']
 
-        my_selections=[SelectedSuggestion.objects.get(pk=pk) for pk in myIssues]
-        for my_selection in my_selections:
-            # mark selections as grouped 
-            my_selection.is_grouped=True
-            my_selection.save()
+        try: 
+            user = User.objects.get(username=username)
+            suggestion=UserSuggestion.objects.get(pk=suggestion_pk)
+            others=SelectedSuggestion.objects.get(pk=other_issue_pk)
         
-        return JsonResponse({
-            'suggestions': getUngroupedIssues(user, doctype)
-        })
+            # save pairwise similarity
+            for my_issue_pk in my_issue_pks:
+                mine=SelectedSuggestion.objects.get(pk=my_issue_pk)
+                others=SelectedSuggestion.objects.get(pk=other_issue_pk)
+                newSimilarity=Similarity(user=user, mine=mine, others=others, is_similar=similarity)
+                newSimilarity.save()
 
+            # mark assigned suggestion as reviewed 
+            thisAssignment=AssignedSuggestion.objects.get(user=user, my_suggestion=suggestion, others=others)
+            thisAssignment.is_reviewed=True
+            thisAssignment.save()
 
+            return JsonResponse(
+                {'result': True}
+            )
+        except: 
+            return JsonResponse({
+                'result': False
+            })
 
 @csrf_exempt
 def submit(request):

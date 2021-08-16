@@ -14,7 +14,7 @@ export default new Vuex.Store({
   state: {
     mturk_id: null,
     doctype: null,
-    server_url: 'http://13.125.191.49:8000',
+    server_url: 'http://3.38.105.16:8000',
 
     assigned_images: [],
     start_image_no: 0,
