@@ -111,6 +111,7 @@ export default {
           self.$store.commit('set_assigned_images', res.data.assigned_images);
           self.$store.commit('set_start_image_no', res.data.assigned_images[0]);
           self.$store.commit('set_curr_image', 0);
+          self.setCurrOrder(0);
           setTimeout(
             function(){
                   self.$router.push('/annotation/'+doctype+'/') }   ,500);
