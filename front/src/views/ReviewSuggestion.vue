@@ -33,7 +33,8 @@
       <v-container v-if="enough_suggestions" fluid fill-height>
         <v-row align-content='center'>
             <v-col>
-                <h3>In this page, we ask you to choose annotations <u>that represent similar suggestions</u>. After finishing marking similar suggestions, click the button on the top right to proceed to post-survey.</h3>
+                <h3>In this page, we ask you to choose annotations <u>that represent similar suggestions</u>.</h3>
+                <h3> After finishing marking similar suggestions, click the button on the top right to proceed to post-survey.</h3>
             </v-col>
         </v-row>
         <v-row  align-content='center' style="border: 0px solid red; height: 100%; overflow-y: auto">
@@ -52,14 +53,14 @@
                                 <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="warning" small style="margin: 5px" @click="clickCloseto(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
-                                ({{v.n_issues}} annotations)
+                                ({{v.n_issues}})
                             </div>
                             <h4 style="text-align: left; margin-top: 10px">N/A Suggestions</h4>
                             <div v-for="(v, idx) in unreviewed_issues.filter(v => v.suggestion_subcat === 'n/a')" :key="'n/a-' + idx" style="overflow-y: scroll">
                                 <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="error" small style="margin: 5px" @click="clickNa(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
-                                ({{v.n_issues}} annotations)
+                                ({{v.n_issues}})
                             </div>
                         </v-col>
                         <v-col cols="3" style="border: 1px solid black; ">
