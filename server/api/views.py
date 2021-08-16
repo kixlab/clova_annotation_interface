@@ -690,8 +690,10 @@ def saveGroupedIssues(request):
         user = User.objects.get(username=username)
         doctypetext=query_json['doctype']
         doctype=DocType.objects.get(doctype=doctypetext)
-        myIssues=query_json['my_issue_pks']
-        otherIssues=query_json['other_issue_pks']
+        myIssues_pk=query_json['my_issue_pk']
+        otherIssue_pk=query_json['other_issue_pk']
+
+        myIssue=
         newGroup=GroupLink(target_suggestions=myIssues, grouped_suggestions=otherIssues, made_by=user)
         newGroup.save()
 

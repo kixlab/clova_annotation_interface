@@ -101,8 +101,12 @@ class AssignedSuggestion(models.Model):
     mine=models.ForeignKey(UserSuggestion, on_delete=models.CASCADE)
     others=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE)
     is_reviewed=models.BooleanField(default=False, null=False)
-    is_similar=models.BooleanField(null=True, blank=True)
 
+class Similarity(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    mine=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE)
+    others=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE)
+    is_similar=models.BooleanField(default=False, null=False)
 
 class Annotation(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
