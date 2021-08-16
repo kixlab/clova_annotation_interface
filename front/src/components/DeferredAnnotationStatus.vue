@@ -144,7 +144,6 @@ export default {
             }
           }
         }
-        //self.$helpers.server_log(self, 'RA', group.boxes.map((i) => {return i.box_id}))
         self.updateImageBoxes(self.image_box)
         self.updateAnnotatedBoxes([group, "remove"])
       });
@@ -178,7 +177,6 @@ export default {
         temp.anschecked = 'false'
       }
         });
-      //this.$helpers.server_log(this, 'RL', [])
       self.updateImageBoxes(self.image_box)
       self.updateAnnotatedBoxes([[], "reset"])
       self.undo_warning = false;

@@ -87,7 +87,6 @@ export default {
               selected_boxes.push(parseInt(i));
             }
           }
-          //this.$helpers.server_log(this, 'UA', selected_boxes);
           this.updateImageBoxes(boxes);
         },
     },
