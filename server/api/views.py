@@ -498,14 +498,14 @@ def assignRandomSuggestions(user, thisSuggestion): # assume that we have enough 
     
     assigned_suggestions=[]
     for suggestion in suggestions: 
-        newAssignedSuggestion=AssignedSuggestion(user=user, mine=thisSuggestion, others=suggestion, is_reviewed=False)
+        newAssignedSuggestion=AssignedSuggestion(user=user, my_suggestion=thisSuggestion, others=suggestion, is_reviewed=False)
         newAssignedSuggestion.save()
         assigned_suggestions.append(newAssignedSuggestion)
     
     return assigned_suggestions
 
 def getSuggestionsToReview(user, doctype, thisSuggestion):
-    assigned_suggestions=AssignedSuggestion.objects.filter(user=user, mine=thisSuggestion)
+    assigned_suggestions=AssignedSuggestion.objects.filter(user=user, my_suggestion=thisSuggestion)
     if(len(assigned_suggestions)>0):
         unreviewed_suggestions=assigned_suggestions.filter(is_reviewed=False)
     else:
@@ -613,12 +613,30 @@ def saveSimilarity(request):
         other_issue_pk=query_json['other_issue_pk']
         similarity=query_json['similarity']
 
-        print(len(my_issue_pks), flush=True)
+        try: 
+            user = User.objects.get(username=username)
+            suggestion=UserSuggestion.objects.get(pk=suggestion_pk)
+            others=SelectedSuggestion.objects.get(pk=other_issue_pk)
+        
+            # save pairwise similarity
+            for my_issue_pk in my_issue_pks:
+                mine=SelectedSuggestion.objects.get(pk=my_issue_pk)
+                others=SelectedSuggestion.objects.get(pk=other_issue_pk)
+                newSimilarity=Similarity(user=user, mine=mine, others=others, is_similar=similarity)
+                newSimilarity.save()
 
-        print(suggestion_pk, my_issue_pks, other_issue_pk, similarity, flush=True)
-        return JsonResponse(
-            {'result': False}
-        )
+            # mark assigned suggestion as reviewed 
+            thisAssignment=AssignedSuggestion.objects.get(user=user, my_suggestion=suggestion, others=others)
+            thisAssignment.is_reviewed=True
+            thisAssignment.save()
+
+            return JsonResponse(
+                {'result': True}
+            )
+        except: 
+            return JsonResponse({
+                'result': False
+            })
 
 @csrf_exempt
 def submit(request):

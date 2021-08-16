@@ -98,7 +98,7 @@ class SelectedSuggestion(models.Model): # 각 issue!
 
 class AssignedSuggestion(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-    mine=models.ForeignKey(UserSuggestion, on_delete=models.CASCADE)
+    my_suggestion=models.ForeignKey(UserSuggestion, on_delete=models.CASCADE)
     others=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE)
     is_reviewed=models.BooleanField(default=False, null=False)
 
