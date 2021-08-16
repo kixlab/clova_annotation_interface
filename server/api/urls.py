@@ -10,6 +10,8 @@ urlpatterns = [
     path('practice-done/', views.startTask),
     path('annotation-done/', views.annotationDone),
     path('review-done/', views.reviewDone),
+    path('submit-survey/', views.submitSurvey),
+
     #views.startTask),
 
     path('get-doctypes/', views.getDocTypes),
@@ -40,7 +42,6 @@ urlpatterns = [
     path('save-similarity/', views.saveSimilarity),
 
     path('submit/', views.submit),
-    path('submit-survey/', views.submitSurvey),
 
 
     path('get-annotations-by-image', views.getAnnotationsByImage),
