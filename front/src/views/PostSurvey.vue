@@ -6,9 +6,9 @@
     </v-col>
     <v-col cols="4" style="overflow-y: auto; border: 0px solid red; position: absolute; top:50px; right: 0px;">
       <span v-if="showCode">
-          <div style="margin-top: 10px; ">Code to enter in MTurk: </div>
-          <div><b style="color: blue; font-size: large">{{this.token}}</b></div>
-          <div style="padding-bottom: 1%">Thanks again for the participation!</div>
+          <div style="margin-top: 10px; font-size: large ">Code to enter in MTurk: </div>
+          <div><b style="color: blue; font-size: xx-large">{{this.token}}</b></div>
+          <div style="padding-bottom: 1%; font-size: large ">Thanks again for the participation!</div>
       </span>
     </v-col>
   </v-row>
