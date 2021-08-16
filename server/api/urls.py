@@ -8,6 +8,7 @@ urlpatterns = [
     path('consent-agreed/', views.consentAgreed),
     path('instruction-read/', views.instructionRead),
     path('practice-done/', views.startTask),
+    path('annotation-done/', view.annotationDone),
     #views.startTask),
 
     path('get-doctypes/', views.getDocTypes),
@@ -29,8 +30,6 @@ urlpatterns = [
 
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
-
-    path('record-annotation-done/', views.recordAnnotationDone),
 
  #   path('get-suggestions-to-review/', views.getSuggestionsToReview),
  #   path('get-issues-with-random-suggestions/', views.getIssuesWithRandomSuggestions),
