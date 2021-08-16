@@ -51,7 +51,7 @@ export default {
       axios.post(self.$store.state.server_url + '/api/consent-agreed/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( function(){
-          self.$router.push('../instruction/')
+          self.$router.push('../instruction/receipt/')
         })  
       ;
     }

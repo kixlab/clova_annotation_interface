@@ -33,7 +33,7 @@ Vue.use(VueRouter)
     component: InformedConsent
   },
   {
-    path: '/instruction',
+    path: '/instruction/:docType/',
     name: 'Instruction',
     component: Instruction
   },

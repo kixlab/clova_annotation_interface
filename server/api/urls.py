@@ -6,7 +6,8 @@ urlpatterns = [
     path('check-user/', views.checkUser),
 
     path('consent-agreed/', views.consentAgreed),
-    path('instr-done/', views.startTask),
+    path('instruction-read/', views.instructionRead),
+    #views.startTask),
 
     path('get-doctypes/', views.getDocTypes),
     path('get-cats/',views.getCats),
