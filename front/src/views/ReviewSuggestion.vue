@@ -221,7 +221,7 @@ export default {
                 similarity: true
             }).then(function (res) { // get issue list again 
                 console.log(res)
-                if(res.result){
+                if(res.data.result){
                     const new_others = self.sel_issue.others
                     new_others.splice(new_others.indexOf(annot), 1)
                     self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
@@ -249,7 +249,7 @@ export default {
                 similarity: false
             }).then(function (res) { // get issue list again 
                 console.log(res)
-                if(res.result){
+                if(res.data.result){
                     const new_others = self.sel_issue.others
                     new_others.splice(new_others.indexOf(annot), 1)
                     self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
