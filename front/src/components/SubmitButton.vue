@@ -29,11 +29,11 @@ export default {
 
     onSubmit: function() {
       const self=this;
-      axios.post(self.$store.state.server_url + '/api/record-annotation-done/', {
+      axios.post(self.$store.state.server_url + '/api/annotation-done/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( function(){
-        var doctype=self.$router.currentRoute.fullPath.split('/')[2];
-        self.$router.push('../../review-suggestion/'+doctype);
+        const doctype=self.$route.params.docType
+        self.$router.push('../../review-suggestion/'+doctype+'/');
       });
 
       

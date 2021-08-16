@@ -152,6 +152,15 @@ def instructionRead(request):
         recordInstructionDone(user)
         return HttpResponse('')
 
+@csrf_exempt
+def annotationDone(request):
+    if request.method =='POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
+        user = User.objects.get(username=username)
+        recordAnnotationDone(user)
+        return HttpResponse('')
+
 
 def recordConsentAgreed(user):
     profile=Profile.objects.get(user=user)
