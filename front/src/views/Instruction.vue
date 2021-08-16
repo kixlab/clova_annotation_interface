@@ -73,6 +73,8 @@
 
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'Introduction',
   data: () => ({
@@ -92,7 +94,13 @@ export default {
   methods: {
     onClickNext: function () {
       const self = this;
-      self.$router.push('/practice/receipt/');
+      axios.post(self.$store.state.server_url + '/api/instruction-read/', {
+        mturk_id: self.$store.state.mturk_id,
+      }).then( function(){
+          const doctype=self.$route.params.docType
+          self.$router.push('../practice/'+doctype+'/')
+        })  
+      ;
     }
   },
   beforeCreate() {
