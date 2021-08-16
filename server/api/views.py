@@ -19,10 +19,10 @@ from .serializers import *
 
 n_documents=200
 workers_per_image=5
-window = 4
+images_per_worker=20
 
+window = images_per_worker / workers_per_image 
 n_annotators=n_documents/window # now = 50 
-images_per_worker=n_documents*workers_per_image / n_annotators # 200*5 / 50 = 20
 workers_per_group=images_per_worker/window # 20 / 4 = 5
 
 
@@ -30,24 +30,33 @@ workers_per_group=images_per_worker/window # 20 / 4 = 5
 @api_view(['POST','GET'])
 @permission_classes([AllowAny])
 def signup(request):
-    username = request.data['username']
+    username = request.data['mturk_id']
     password = username
     if len(User.objects.filter(username=username))==0:
         new_user=User(username=username, password=password)
         new_user.save()
-        login(request, new_user)
-#        print('logged in?', new_user.is_authenticated)
-        
+        login(request, new_user)        
         response = {
-            'status': 'new',
+            'step': 'new',
             'doctype': 'receipt'
         }
     else: # if already signed up 
         user=User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
         login(request, user)
+
+        # no sign up or only sign up --> consent 
+        # if consent done but instruction not read or practice not done --> instructon 
+        # if practice done --> annotation
+        if(not profile.consent_agreed):
+            step='consent'
+        else:
+            if(not practice_done):
+                step='instruction'
+            else:
+                step='annotation'
         response = {
-            'status': 'instruction',
+            'step': step,
             'doctype':profile.doctype.doctype
         }
     return JsonResponse(response)
@@ -116,10 +125,6 @@ def checkUser(request):
     if request.method =='GET':
         username = request.GET['mturk_id']
         user = User.objects.get(username=username)
-        
-        #user=request.user 
-        #print('user', user)
-        #print('request', request)
         if(user == None):
             response={
                 'login_status': False
@@ -130,17 +135,49 @@ def checkUser(request):
                 'username': user.username
             }
         return JsonResponse(response)
-
 @csrf_exempt
-def recordconsentAgreed(request):
-    if request.method == 'GET':
-        username = request.GET['mturk_id']
+def consentAgreed(request):
+    if request.method =='POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
         user = User.objects.get(username=username)
-        #user=request.user
-        profile=Profile.objects.get(user=user)
-        profile.consent_agreed=True
-        profile.save()
+        recordConsentAgreed(user)
         return HttpResponse('')
+
+def recordConsentAgreed(user):
+    profile=Profile.objects.get(user=user)
+    profile.consent_agreed=True
+    profile.save()
+
+def recordInstructionDone(user):
+    profile=Profile.objects.get(user=user)
+    profile.instr_done=True
+    profile.practice_starttime=datetime.now()
+    profile.save()
+
+def recordPracticeDone(user):
+    profile=Profile.objects.get(user=user)
+    profile.practice_done=True
+    profile.practice_endtime=datetime.now()
+    profile.save()
+
+def recordAnnotationDone(user):
+    profile=Profile.objects.get(user=user)
+    profile.annotation_done=True
+    profile.annot_endtime=datetime.now()
+    profile.save()
+
+def recordReviewDone(user):
+    profile=Profile.objects.get(user=user)
+    profile.review_done=True
+    profile.review_endtime=datetime.now()
+    profile.save()
+
+def recordSurveyDone(user):
+    profile=Profile.objects.get(user=user)
+    profile.survey_done=True
+    profile.survey_endtime=datetime.now()
+    profile.save()
 
 @csrf_exempt
 def getDocTypes(request):
