@@ -98,7 +98,7 @@ export default {
         mturk_id: self.$store.state.mturk_id,
       }).then( function(){
           const doctype=self.$route.params.docType
-          self.$router.push('../practice/'+doctype+'/')
+          self.$router.push('../../practice/'+doctype+'/')
         })  
       ;
     }
