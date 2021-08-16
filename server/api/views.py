@@ -74,10 +74,10 @@ def startTask(request):
         # assign task by assigning start image number 
         ## get smallest available user_order 
         # check if there is a user order taken but not completed
-            remaining_dropouts=Profile.objects.filter(instr_read=True, doctype=profile.doctype, done=False, starttime__lte=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
+            remaining_dropouts=Profile.objects.filter(practice_done=True, doctype=profile.doctype, done=False, practice_endtime=(datetime.now()-timedelta(hours=1, minutes=50)), dropout=False)
             
             if(len(remaining_dropouts)==0):
-                active_profiles=Profile.objects.filter(instr_read=True,doctype=profile.doctype, dropout=False)
+                active_profiles=Profile.objects.filter(practice_done=True,doctype=profile.doctype, dropout=False)
                 if(len(active_profiles)==0):
                     order=0
                 else:
