@@ -5,7 +5,7 @@
       <iframe id='postsurvey' src="https://docs.google.com/forms/d/e/1FAIpQLScYKocOokiB-6D5KRn6k3TSxfjoXb1t8x0Tfi8fF252zfvtfQ/viewform?embedded=true" width="640" height="1043" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
     </v-col>
   </v-row>
-  <v-row justify="center" align-content="center" align="center" class="instr" display=>
+  <v-row v-if="showCode" justify="center" align-content="center" align="center" class="instr" >
     <v-col cols="9" style="overflow-y: auto; border: 0px solid red; padding: 5% 0;">
       <span v-if="showCode">
           <div style="margin-top: 10px; ">Code to enter in MTurk: <b style="color: blue">{{this.token}}</b></div>
