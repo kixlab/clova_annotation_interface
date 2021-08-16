@@ -36,7 +36,7 @@ urlpatterns = [
 
     path('get-random-suggestions-to-review/', views.getRandomSuggestionsToReview),
     path('get-unreviewed-issues/', views.getUnreviewedIssues),
-    path('save-grouped-issues/', views.saveGroupedIssues),
+   # path('save-grouped-issues/', views.saveGroupedIssues),
 
     path('submit/', views.submit),
     path('submit-survey/', views.submitSurvey),
