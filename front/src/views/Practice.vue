@@ -89,6 +89,8 @@ export default {
 
   },
   methods:{
+    ...mapActions(['setCurrOrder']),
+
     updateStatus(){
       const self=this;
       var doctype=self.$router.currentRoute.fullPath.split('/')[2];
