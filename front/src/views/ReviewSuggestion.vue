@@ -33,7 +33,8 @@
       <v-container v-if="enough_suggestions" fluid fill-height>
         <v-row align-content='center'>
             <v-col>
-                <h3>In this page, we ask you to choose annotations <u>that represent similar suggestions</u>. After finishing marking similar suggestions, click the button on the top right to proceed to post-survey.</h3>
+                <h3>In this page, we ask you to choose annotations <u>that represent similar suggestions</u>.</h3>
+                <h3> After finishing marking similar suggestions, click the button on the top right to proceed to post-survey.</h3>
             </v-col>
         </v-row>
         <v-row  align-content='center' style="border: 0px solid red; height: 100%; overflow-y: auto">
