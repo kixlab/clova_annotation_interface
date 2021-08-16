@@ -81,13 +81,16 @@ export default {
     time_now: 0,
     passOneMinute: false,
     items: [
-      {src: require('@/assets/tutorial_clova1.png')},
-      {src: require('@/assets/tutorial_clova2.png')},
-      {src: require('@/assets/tutorial_clova3.png')},
-      {src: require('@/assets/tutorial_clova4.png')},
-      {src: require('@/assets/tutorial_clova5.png')},
-      {src: require('@/assets/tutorial_clova6.png')},
-      {src: require('@/assets/tutorial_clova7.png')},
+      {src: require('@/assets/instruction-annotation1.png')},
+      {src: require('@/assets/instruction-annotation2.png')},
+      {src: require('@/assets/instruction-annotation3.png')},
+      {src: require('@/assets/instruction-annotation4.png')},
+      {src: require('@/assets/instruction-annotation5.png')},
+      {src: require('@/assets/instruction-annotation6.png')},
+      {src: require('@/assets/instruction-annotation7.png')},
+      {src: require('@/assets/instruction-review1.png')},
+      {src: require('@/assets/instruction-review2.png')},
+      {src: require('@/assets/instruction-review3.png')},
       {}
     ]
   }),
