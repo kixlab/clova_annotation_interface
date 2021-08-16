@@ -195,6 +195,7 @@ def recordConsentAgreed(user):
     profile.save()
 
 def recordInstructionDone(user):
+    profile=Profile.objects.get(user=user)
     profile.instr_done=True
     profile.practice_starttime=datetime.now()
     profile.save()
