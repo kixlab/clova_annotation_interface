@@ -30,7 +30,8 @@
     </ol>
     <br>
 
-    <v-img src="require('@/assets/overview.png')" :contain="true" style="width:auto; max-height:100%; max-width:100%;"></v-img>
+    <v-img src="require('@/assets/overview.png')">
+        </v-img>
     <h4>For any questions, please contact : <a>jeongeonpark1@gmail.com</a> </h4> <br/>
     <h4>Fill in the blank with your MTurk ID and click the button below to proceed to the next step.</h4>
     <v-form
