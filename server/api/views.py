@@ -181,7 +181,7 @@ def submitSurvey(request):
         profile=Profile.objects.get(user=user)
         token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         profile.token=token
-
+        profile.done=True
         profile.save()
 
         response={
