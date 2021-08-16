@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('signup/',views.signup),
-    path('check-user/', views.checkUser),
+    # path('check-user/', views.checkUser),
 
     path('consent-agreed/', views.consentAgreed),
     path('instruction-read/', views.instructionRead),
@@ -14,15 +14,15 @@ urlpatterns = [
 
     #views.startTask),
 
-    path('get-doctypes/', views.getDocTypes),
+#    path('get-doctypes/', views.getDocTypes),
     path('get-cats/',views.getCats),
 
     path('get-suggestions/', views.getSuggestions),
    # path('save-suggestion/', views.saveSuggestions),
 
 
-    path('add-cat/', views.addCat),
-    path('add-subcat/', views.addSubcat),
+  #  path('add-cat/', views.addCat),
+  #  path('add-subcat/', views.addSubcat),
 
     path('get-image-id/', views.getImageID),
 
@@ -41,15 +41,15 @@ urlpatterns = [
 #    path('get-unreviewed-issues/', views.getUnreviewedIssues),
     path('save-similarity/', views.saveSimilarity),
 
-    path('submit/', views.submit),
+#    path('submit/', views.submit),
 
 
-    path('get-annotations-by-image', views.getAnnotationsByImage),
-    path('get-workers', views.getWorkers),
-    path('get-every-annotations', views.getEveryAnnotations),
-    path('get-annotations-by-worker', views.getAnnotationsByWorker),
-    path(r'image/<image_id>/', views.getImage, name='image_id'),
-    path(r'upload_image/', views.uploadImage),
-    path(r'json/<json_id>/', views.getJson, name='json_id'),
-    path(r'upload_json/', views.uploadJson),
+ #   path('get-annotations-by-image', views.getAnnotationsByImage),
+ #   path('get-workers', views.getWorkers),
+ #   path('get-every-annotations', views.getEveryAnnotations),
+ #   path('get-annotations-by-worker', views.getAnnotationsByWorker),
+ #   path(r'image/<image_id>/', views.getImage, name='image_id'),
+ #   path(r'upload_image/', views.uploadImage),
+ #   path(r'json/<json_id>/', views.getJson, name='json_id'),
+ #   path(r'upload_json/', views.uploadJson),
 ]

@@ -7,7 +7,6 @@ import Practice from '../views/Practice.vue'
 import DeferredAnnotation from '../views/Annotation.vue'
 import AfterDone from '../views/AfterDone.vue'
 import PageNotFound from '../views/404.vue'
-import DocTypeList from '../views/DocTypeList.vue'
 import AnnotDone from '../views/AnnotDone.vue'
 import Review from '../views/Review.vue'
 import ReviewSuggestion from '../views/ReviewSuggestion.vue'
@@ -41,11 +40,6 @@ Vue.use(VueRouter)
     path: '/practice/:docType/',
     name: 'Practice',
     component: Practice
-  },
-  {
-    path: '/doctypelist',
-    name: 'DocTypeList',
-    component: DocTypeList
   },
   {
     path: '/annot-done/:docType/',
