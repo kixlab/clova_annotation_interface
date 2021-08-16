@@ -53,14 +53,14 @@
                                 <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="warning" small style="margin: 5px" @click="clickCloseto(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
-                                ({{v.n_issues}} annotations)
+                                ({{v.n_issues}})
                             </div>
                             <h4 style="text-align: left; margin-top: 10px">N/A Suggestions</h4>
                             <div v-for="(v, idx) in unreviewed_issues.filter(v => v.suggestion_subcat === 'n/a')" :key="'n/a-' + idx" style="overflow-y: scroll">
                                 <v-btn depressed :outlined="v.suggestion_pk !== sel_issue.suggestion_pk" color="error" small style="margin: 5px" @click="clickNa(v)"> 
                                     {{v.suggestion_cat}}-{{v.suggestion_subcat}} ({{v.suggestion_text}})
                                 </v-btn>
-                                ({{v.n_issues}} annotations)
+                                ({{v.n_issues}})
                             </div>
                         </v-col>
                         <v-col cols="3" style="border: 1px solid black; ">
