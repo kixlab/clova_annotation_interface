@@ -81,6 +81,7 @@ export default {
     time_now: 0,
     passOneMinute: false,
     items: [
+      {src: require('@/assets/instruction-annotation0.png')},
       {src: require('@/assets/instruction-annotation1.png')},
       {src: require('@/assets/instruction-annotation2.png')},
       {src: require('@/assets/instruction-annotation3.png')},
@@ -88,6 +89,7 @@ export default {
       {src: require('@/assets/instruction-annotation5.png')},
       {src: require('@/assets/instruction-annotation6.png')},
       {src: require('@/assets/instruction-annotation7.png')},
+      {src: require('@/assets/instruction-review0.png')},
       {src: require('@/assets/instruction-review1.png')},
       {src: require('@/assets/instruction-review2.png')},
       {src: require('@/assets/instruction-review3.png')},
