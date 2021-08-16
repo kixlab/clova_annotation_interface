@@ -8,7 +8,7 @@ urlpatterns = [
     path('consent-agreed/', views.consentAgreed),
     path('instruction-read/', views.instructionRead),
     path('practice-done/', views.startTask),
-    path('annotation-done/', view.annotationDone),
+    path('annotation-done/', views.annotationDone),
     #views.startTask),
 
     path('get-doctypes/', views.getDocTypes),
