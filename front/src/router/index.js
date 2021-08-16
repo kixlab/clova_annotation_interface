@@ -11,6 +11,7 @@ import DocTypeList from '../views/DocTypeList.vue'
 import AnnotDone from '../views/AnnotDone.vue'
 import Review from '../views/Review.vue'
 import ReviewSuggestion from '../views/ReviewSuggestion.vue'
+import PostSurvey from '../views/PostSurvey.vue'
 
 Vue.use(VueRouter)
 
@@ -66,7 +67,13 @@ Vue.use(VueRouter)
     path: '/review-suggestion/:docType/',
     name: 'ReviewSuggestion',
     component: ReviewSuggestion
+  },  
+  {
+    path: '/postsurvey/',
+    name: 'PostSurvey',
+    component: PostSurvey
   },
+
   {
     path: "*",
     name: '404',

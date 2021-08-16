@@ -51,7 +51,7 @@
                             </v-row>
                         </v-col>
                         <v-col cols="6" style="border: 1px solid black; ">
-                            <h3>Similar suggestions ({{sel_issue.others.length}} total)</h3>
+                            <h3>Check whether each suggestion is similar to yours. ({{sel_issue.others.length}} to review)</h3>
                             <v-row style="height: 400px; overflow-y: auto; border: 0px solid lightgray; margin: 10px 3px 0; background-color: #eeeeee;">
                                 <v-col cols="auto" v-for="(annot, idx) in sel_issue.others" :key="idx" style="border: 1px solid black">
                                     <!--<v-checkbox hide-details style="margin: 0;" v-model="sel_sim_issues" :label="''+(idx+1)+'. Suggestion from Image #'+annot.image_no" :value="annot"/>-->
