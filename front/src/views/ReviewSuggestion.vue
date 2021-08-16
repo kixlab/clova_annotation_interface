@@ -10,7 +10,7 @@
       <v-toolbar-title>Image Annotation (ID: {{this.$store.state.mturk_id}})</v-toolbar-title>
       <v-spacer/>
 
-    <v-tooltip bottom :disabled="!disabled">
+    <v-tooltip bottom :disabled="valid">
             <template v-slot:activator="{ on, attrs }">
             <div v-on="on">
             <v-btn
