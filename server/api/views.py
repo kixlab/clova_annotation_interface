@@ -613,25 +613,30 @@ def saveSimilarity(request):
         other_issue_pk=query_json['other_issue_pk']
         similarity=query_json['similarity']
 
-        user = User.objects.get(username=username)
-        suggestion=UserSuggestion.objects.get(pk=suggestion_pk)
-        others=SelectedSuggestion.objects.get(pk=other_issue_pk)
-    
-        # save pairwise similarity
-        for my_issue_pk in my_issue_pks:
-            mine=SelectedSuggestion.objects.get(pk=my_issue_pk)
+        try: 
+            user = User.objects.get(username=username)
+            suggestion=UserSuggestion.objects.get(pk=suggestion_pk)
             others=SelectedSuggestion.objects.get(pk=other_issue_pk)
-            newSimilarity=Similarity(user=user, mine=mine, others=others, is_similar=similarity)
-            newSimilarity.save()
+        
+            # save pairwise similarity
+            for my_issue_pk in my_issue_pks:
+                mine=SelectedSuggestion.objects.get(pk=my_issue_pk)
+                others=SelectedSuggestion.objects.get(pk=other_issue_pk)
+                newSimilarity=Similarity(user=user, mine=mine, others=others, is_similar=similarity)
+                newSimilarity.save()
 
-        # mark assigned suggestion as reviewed 
-        thisAssignment=AssignedSuggestion.objects.get(user=user, my_suggestion=suggestion, others=others)
-        thisAssignment.is_reviewed=True
-        thisAssignment.save()
+            # mark assigned suggestion as reviewed 
+            thisAssignment=AssignedSuggestion.objects.get(user=user, my_suggestion=suggestion, others=others)
+            thisAssignment.is_reviewed=True
+            thisAssignment.save()
 
-        return JsonResponse(
-            {'result': False}
-        )
+            return JsonResponse(
+                {'result': True}
+            )
+        except: 
+            return JsonResponse({
+                'result': False
+            })
 
 @csrf_exempt
 def submit(request):
