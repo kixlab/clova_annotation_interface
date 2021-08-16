@@ -19,8 +19,10 @@
           <Progress/>
         </v-row>
         <v-row dense style="margin-top: 15px;"> 
+          <template v-if="this.$router.currentRoute.fullPath.split('/')[2]=='receipt'"> 
           As the receipts are from Indonesia, here are translations for commonly occuring words: <br>
           <b>Bayar - Pay | Tunai - Cash | Kembali(an) - Change | Pajak - Tax | PB1 - tax code </b>
+          </template>
         </v-row>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
