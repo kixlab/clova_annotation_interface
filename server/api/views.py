@@ -131,41 +131,6 @@ def checkUser(request):
             }
         return JsonResponse(response)
 
-        
-""" @csrf_exempt
-def checkUser(request):
-    if request.method == 'GET':
-        username = request.GET['mturk_id']
-        print(User.objects)
-        if(len(User.objects.filter(username=username))==0):
-            user=User(username=username)
-            user.save()
-            # initialize status 
-            for document in Document.objects.all():
-                Status(user=user, document=document, status=False).save()
-            # initialize usercats
-            for initcat in InitCat.objects.all():
-                usercat=UserCat(user=user, doctype=initcat.doctype, cat_text=initcat.cat_text)
-                usercat.save()
-            # add N/A category 
-            for doctype in DocType.objects.all():
-                UserCat(user=user, doctype=doctype, cat_text="N/A").save()
-            # initialize usersubcats 
-            for initsubcat in InitSubCat.objects.all():
-                usercat=UserCat.objects.get(user=user, doctype=initsubcat.initcat.doctype, cat_text=initsubcat.initcat.cat_text)
-                UserSubcat(usercat=usercat, subcat_text=initsubcat.subcat_text, subcat_description=initsubcat.subcat_description).save()   
-            # add N/A subcategory to each category 
-            for usercat in UserCat.objects.filter(user=user):
-                UserSubcat(usercat=usercat, subcat_text="N/A", subcat_description="Not applicable or does not exist").save()
-        else: 
-            user=User.objects.get(username=username)
-        user, created = User.objects.get_or_create(username=username)
-        response = {
-            'consent_agreed': user.consentAgreed,
-            'step': 1
-        }
-        return JsonResponse(response) """
-
 @csrf_exempt
 def recordconsentAgreed(request):
     if request.method == 'GET':
@@ -177,54 +142,12 @@ def recordconsentAgreed(request):
         profile.save()
         return HttpResponse('')
 
-""" @csrf_exempt
-def recordInstrDone(request):
-    if request.method == 'GET':
-        username = request.GET['mturk_id']
-        user = User.objects.get(username=username)
-        #user=request.user
-        profile=Profile.objects.get(user=user)
-        profile.instr_read=True
-        profile.starttime=datetime.now()
-
-
-
-
-        if (user.instrEnded == False):
-            valid_usrs = len(list(User.objects.filter(instrEnded = True)))
-            user.startTask(valid_usrs)
-
-        return HttpResponse('') """
-
 @csrf_exempt
 def getDocTypes(request):
     if request.method == 'GET':
         doctypes=[doctype.doctype for doctype in DocType.objects.all()]
         return JsonResponse({'doctypes':doctypes})
 
-
-@csrf_exempt
-def recordLog(request):
-    if request.method == 'POST':
-        query_json = json.loads(request.body)
-#        user=request.user
-        username = query_json['mturk_id']
-        behavior_type = query_json['type']
-        box_ids = query_json['box_ids']
-        image_id = query_json['image_id']
-        label = query_json['label']
-
-        user = User.objects.get(username=username)
-
-        Log.objects.create(
-            user = user,
-            behavior = behavior_type,
-            boxIDs = box_ids,
-            imageID = image_id,
-            label = label
-        )
-
-        return HttpResponse("")
 
 @csrf_exempt
 def getImageID(request):
@@ -575,7 +498,7 @@ def assignRandomSuggestions(user, thisSuggestion): # assume that we have enough 
     
     assigned_suggestions=[]
     for suggestion in suggestions: 
-        newAssignedSuggestion=AssignedSuggestion(user=user, mine=thisSuggestion, others=suggestion, is_reviewed=False, is_similar=None)
+        newAssignedSuggestion=AssignedSuggestion(user=user, mine=thisSuggestion, others=suggestion, is_reviewed=False)
         newAssignedSuggestion.save()
         assigned_suggestions.append(newAssignedSuggestion)
     

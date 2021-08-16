@@ -65,7 +65,6 @@ export default {
       openOverview: function () {
         const self=this;
         self.dialog = true;
-        //self.$helpers.server_log(self, 'RI', [])
       },
       goTo: function(imgNo){
         this.$store.commit('set_image_count', imgNo);
