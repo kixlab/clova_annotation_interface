@@ -112,6 +112,7 @@
                 <h3>There is no enough others' suggestions to compare with yours. You can skip this 'review' process and proceed to post-survey. Click 'NEXT' button on the top right!</h3>
             </v-col>
         </v-row>
+    </v-container>
     </v-main>
   </v-app>
 
