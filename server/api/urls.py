@@ -30,11 +30,11 @@ urlpatterns = [
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
 
-    path('get-suggestions-to-review/', views.getSuggestionsToReview),
-    path('get-issues-with-random-suggestions/', views.getIssuesWithRandomSuggestions),
+ #   path('get-suggestions-to-review/', views.getSuggestionsToReview),
+ #   path('get-issues-with-random-suggestions/', views.getIssuesWithRandomSuggestions),
 
     path('get-random-suggestions-to-review/', views.getRandomSuggestionsToReview),
-    path('get-unreviewed-issues/', views.getUnreviewedIssues),
+#    path('get-unreviewed-issues/', views.getUnreviewedIssues),
     path('save-similarity/', views.saveSimilarity),
 
     path('submit/', views.submit),
