@@ -325,7 +325,7 @@ def getSuggestions(request):
 
         return JsonResponse(response)
 
-
+""" 
 @csrf_exempt
 def getWorkerAnnotations(request):
     if request.method=='GET':
@@ -372,7 +372,7 @@ def getLastAnnotations(jsonlist):
             result[-1]=row
         else: 
             result.append(row)
-    return result
+    return result """
         
         
 """ 
@@ -517,7 +517,7 @@ def deleteAllAnnotations(request):
             annot.save()
         return HttpResponse('')
 
-
+""" 
 def getUngroupedIssues(user, doctype):
     mySelections=SelectedSuggestion.objects.filter(user=user, is_grouped=False)
     mySuggestions=list(set([selection.suggestion for selection in mySelections]))
@@ -534,7 +534,7 @@ def getUngroupedIssues(user, doctype):
         for otherselection in otherSelections:
             others.append({'image_no': otherselection.annotation.document.doc_no, 'boxes_id': otherselection.annotation.boxes_id, 'reason': otherselection.reason, 'worker': otherselection.user.username, 'issue_pk': otherselection.pk}) 
         response.append({'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat, 'n_mine': len(mine), 'n_others': len(others), 'mine': mine, 'others': others})            
-    return response
+    return response """
 
 """ 
 @csrf_exempt
@@ -593,6 +593,14 @@ def getSuggestionsToReview(user, doctype, thisSuggestion):
     else:
         unreviewed_suggestions=assignRandomSuggestions(user, thisSuggestion)
     return unreviewed_suggestions
+
+def checkIfEnoughSuggestions(user):
+    others_suggestions=list(SelectedSuggestion.objects.filter(~Q(user=user)))
+    if(len(others_suggestions)>12):
+        response=True
+    else: 
+        response=False
+    return response
 
 """ 
 def getRandomSuggestions(user, doctype, thisSuggestion):
@@ -680,9 +688,16 @@ def getRandomSuggestionsToReview(request):
         doctype=DocType.objects.get(doctype=doctypetext)
         username = request.GET['mturk_id']
         user = User.objects.get(username=username)
+        if(checkIfEnoughSuggestions(user)):
+            status=True
+            suggestions=getIssuesWithRandomSuggestions(user, doctype)
+        else:
+            status=False
+            suggestions=[]
         # get my suggestions           
         return JsonResponse({
-            'suggestions': getIssuesWithRandomSuggestions(user, doctype)
+            'status': status,
+            'suggestions': suggestions
         })
 @csrf_exempt
 def saveSimilarity(request):
