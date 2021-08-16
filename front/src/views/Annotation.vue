@@ -9,7 +9,7 @@
     >
       <v-toolbar-title>Image Annotation (ID: {{this.$store.state.mturk_id}}, {{this.$store.state.image_order+1}} of 21 images)</v-toolbar-title>
       <v-spacer/>
-      <instruction-button/>
+      <annotation-instruction-button/>
       <submit-button/>
     </v-app-bar>
 
@@ -52,7 +52,7 @@
 import ImagePanel from '@/components/ImagePanel.vue'
 import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
-import InstructionButton from '@/components/InstructionButton.vue'
+import AnnotationInstructionButton from '@/components/AnnotationInstructionButton.vue'
 //import OverviewButton from '@/components/OverviewButton.vue'
 import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
@@ -67,7 +67,7 @@ export default {
     ImagePanel,
     DeferredAnnotationStatus,
     SubmitButton,
-    InstructionButton,
+    AnnotationInstructionButton,
   //  OverviewButton,
     DeferredAnnotation,
     BoxSelectionStatus,

@@ -21,8 +21,8 @@
       <v-card-subtitle> 
        <b>Please refer to the below instructions along the way.</b>
       </v-card-subtitle>
-      <div v-for="num in [1, 2, 3, 4, 5, 6, 7]" :key="num">
-        <v-img :src="require('@/assets/tutorial_clova'+num+'.png')" style="width: 75%; margin: 8px auto; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"/>
+      <div v-for="num in [1, 2, 3]" :key="num">
+        <v-img :src="require('@/assets/instruction-review'+num+'.png')" style="width: 75%; margin: 8px auto; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"/>
       </div>
       <!--
       <v-card-text style="line-height: 1.8; color:black;">
@@ -111,7 +111,7 @@
 
 <script>
 export default {
-    name: "InstructionButton",
+    name: "ReviewInstructionButton",
     data() {
         return {
           dialog: false,
