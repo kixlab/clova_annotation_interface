@@ -613,7 +613,7 @@ def saveSimilarity(request):
         other_issue_pk=query_json['other_issue_pk']
         similarity=query_json['similarity']
 
-        print(suggestion_pk, my_issue_pks, other_issue_pk, similarity)
+        print(suggestion_pk, my_issue_pks, other_issue_pk, similarity, flush=True)
         return JsonResponse(
             {'result': False}
         )
