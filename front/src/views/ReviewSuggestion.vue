@@ -242,7 +242,7 @@ export default {
                 mturk_id: self.$store.state.mturk_id,
                 suggestion_pk: self.sel_issue.suggestion_pk,
                 my_issue_pks: mine,
-                other_issue_pks: others,
+                other_issue_pk: others,
                 similarity: false
             }).then(function (res) { // get issue list again 
                 console.log(res)
