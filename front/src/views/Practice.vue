@@ -91,10 +91,11 @@ export default {
   methods:{
     updateStatus(){
       const self=this;
+      var doctype=self.$router.currentRoute.fullPath.split('/')[2];
       axios.get(self.$store.state.server_url+'/api/get-status/', {
         params: {
             mturk_id: self.$store.state.mturk_id,
-            doctype: 'receipt'
+            doctype: doctype
           }
         }).then(function (res) {
           self.$store.commit('update_status',res.data.status);
@@ -102,10 +103,10 @@ export default {
     },
     onSubmit() {
       const self = this;
-
+      var doctype=self.$router.currentRoute.fullPath.split('/')[2];
       axios.post(self.$store.state.server_url+'/api/instr-done/',{
             mturk_id: self.$store.state.mturk_id,
-            doctype: 'receipt'
+            doctype: doctype
       }).then(function(res){
         console.log(res);
           self.$store.commit('set_assigned_images', res.data.assigned_images);
