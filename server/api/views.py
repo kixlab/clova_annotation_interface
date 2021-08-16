@@ -67,9 +67,9 @@ def startTask(request):
         query_json = json.loads(request.body)
         username = query_json['mturk_id']
         user = User.objects.get(username=username)
+        recordPracticeDone(user)
+        
         profile=Profile.objects.get(user=user)
-        profile.instr_read = True
-
         if(len(Status.objects.filter(user=user))==0):
         # assign task by assigning start image number 
         ## get smallest available user_order 
@@ -115,8 +115,7 @@ def startTask(request):
             documents=[status.document for status in statuses]
 
         response={
-            'assigned_images': [doc.doc_no for doc in documents],
-            'doctype': profile.doctype.doctype
+            'assigned_images': [doc.doc_no for doc in documents]
         }
         return JsonResponse(response)
 

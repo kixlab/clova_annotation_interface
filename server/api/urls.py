@@ -7,6 +7,7 @@ urlpatterns = [
 
     path('consent-agreed/', views.consentAgreed),
     path('instruction-read/', views.instructionRead),
+    path('practice-done/', views.startTask),
     #views.startTask),
 
     path('get-doctypes/', views.getDocTypes),

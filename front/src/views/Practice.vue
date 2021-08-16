@@ -104,9 +104,8 @@ export default {
     onSubmit() {
       const self = this;
       var doctype=self.$router.currentRoute.fullPath.split('/')[2];
-      axios.post(self.$store.state.server_url+'/api/instr-done/',{
+      axios.post(self.$store.state.server_url+'/api/practice-done/',{
             mturk_id: self.$store.state.mturk_id,
-            doctype: doctype
       }).then(function(res){
         console.log(res);
           self.$store.commit('set_assigned_images', res.data.assigned_images);
@@ -114,7 +113,7 @@ export default {
           self.$store.commit('set_curr_image', 0);
           setTimeout(
             function(){
-                  self.$router.push('/annotation/'+res.data.doctype) }   ,500);
+                  self.$router.push('/annotation/'+doctype+'/') }   ,500);
         })
       }
   },
