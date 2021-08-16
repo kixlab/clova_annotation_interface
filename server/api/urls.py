@@ -12,17 +12,9 @@ urlpatterns = [
     path('review-done/', views.reviewDone),
     path('submit-survey/', views.submitSurvey),
 
-    #views.startTask),
-
-#    path('get-doctypes/', views.getDocTypes),
     path('get-cats/',views.getCats),
 
     path('get-suggestions/', views.getSuggestions),
-   # path('save-suggestion/', views.saveSuggestions),
-
-
-  #  path('add-cat/', views.addCat),
-  #  path('add-subcat/', views.addSubcat),
 
     path('get-image-id/', views.getImageID),
 
@@ -34,22 +26,7 @@ urlpatterns = [
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
 
- #   path('get-suggestions-to-review/', views.getSuggestionsToReview),
- #   path('get-issues-with-random-suggestions/', views.getIssuesWithRandomSuggestions),
 
     path('get-random-suggestions-to-review/', views.getRandomSuggestionsToReview),
-#    path('get-unreviewed-issues/', views.getUnreviewedIssues),
     path('save-similarity/', views.saveSimilarity),
-
-#    path('submit/', views.submit),
-
-
- #   path('get-annotations-by-image', views.getAnnotationsByImage),
- #   path('get-workers', views.getWorkers),
- #   path('get-every-annotations', views.getEveryAnnotations),
- #   path('get-annotations-by-worker', views.getAnnotationsByWorker),
- #   path(r'image/<image_id>/', views.getImage, name='image_id'),
- #   path(r'upload_image/', views.uploadImage),
- #   path(r'json/<json_id>/', views.getJson, name='json_id'),
- #   path(r'upload_json/', views.uploadJson),
 ]
