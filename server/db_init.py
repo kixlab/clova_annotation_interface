@@ -16,10 +16,10 @@ for row in reader:
     [doctype]=row
     doctype=DocType.objects.create(doctype=doctype)
     doctype.save()
-    for i in range(220):
+    for i in range(1000):
         Document(doctype=doctype, doc_no=(i)).save()
 
-csv_path='db_init/db_init - initcat.csv'
+csv_path='db_init/db_init_proposed - initcat.csv'
 csvfile=open(csv_path, 'r', encoding='utf8', errors='ignore')
 reader=csv.reader(csvfile, delimiter=',')
 next(reader, None)
@@ -35,7 +35,7 @@ for row in reader:
 for doctype in DocType.objects.all():
     InitCat(doctype=doctype, cat_no=99, cat_text='n/a').save()
 
-csv_path='db_init/db_init - initsubcat.csv'
+csv_path='db_init/db_init_proposed - initsubcat.csv'
 csvfile=open(csv_path, 'r', encoding='utf8', errors='ignore')
 reader=csv.reader(csvfile, delimiter=',')
 next(reader, None)

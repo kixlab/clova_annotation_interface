@@ -1,0 +1,25 @@
+doctype,cat_no,cat_text
+receipt,1,menu
+receipt,2,subtotal
+receipt,3,total
+receipt,4,payment
+resume,1,personal info
+resume,2,employment
+resume,3,education
+resume,4,experience
+resume,5,publication
+resume,6,committee
+resume,7,awards
+event,1,event
+event,2,organizer
+event,3,sponsor
+event,4,program
+event,5,registration
+event,6,submission
+email,1,email_id
+email,2,account_name
+email,3,sender
+email,4,date
+email,5,receiver
+email,6,contents
+email,7,signature
