@@ -92,8 +92,7 @@ export default {
     }).then( function(res){
       console.log(res.data)
       if(res.data.is_new){
-      //  self.$store.commit('update_status', new Array(21).fill(false));
-      //  self.$router.push('../informed-consent/')   
+        self.$router.push('../informed-consent/')   
       }
       else{
         window.alert('It seems that you have participated in our previous study. You cannot participate again. If you have not participated in our study before but seeing this message, please contact jeongeonpark1@gmail.com.')
@@ -109,12 +108,11 @@ export default {
       }).then( (res)=>{
 //        self.$store.commit('set_mturk_id', self.turk_id.trim())
         if(res.data.step=='new'){ //http://15.165.236.102:8000
-          console.log('new one!')
+          self.$store.commit('update_status', new Array(21).fill(false));
           self.checkUser();          
         }
         if(res.data.step=='consent'){
-          window.alert('you')
-           self.$router.push('../informed-consent/')   
+          self.checkUser(); 
         }
         if(res.data.step=='instruction'){
           self.$router.push('/instruction/')
