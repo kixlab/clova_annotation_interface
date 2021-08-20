@@ -66,7 +66,7 @@ def signup(request):
 @permission_classes([AllowAny])
 def checkBaselineUser(request): # this request is sent only when the user is new to baseline 
     username = request.data['mturk_id']
-    if(len(User.objects.filter(username==username))==0): # new user 
+    if(len(User.objects.filter(username=username))==0): # new user 
         new_user=User(username=username, password=username)
         new_user.save()
         return JsonResponse(
