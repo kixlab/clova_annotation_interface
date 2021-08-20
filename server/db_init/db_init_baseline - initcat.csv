@@ -1,0 +1,7 @@
+doctype,cat_no,cat_text
+receipt,1,list
+receipt,2,payment
+receipt,3,price
+event,1,contents
+event,2,advertiser_info
+event,3,miscellaneous

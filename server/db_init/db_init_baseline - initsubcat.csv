@@ -1,0 +1,58 @@
+doctype,initcat,subcat_no,subcat_text,subcat_description
+receipt,list,1,number,number of each item
+receipt,list,2,name,name of item
+receipt,list,3,price,price of each item category
+receipt,list,4,individual price,price of one item
+receipt,list,5,option,additional option for item
+receipt,list,6,option price,price of additional option
+receipt,list,7,item number,number of item category
+receipt,list,8,total item,number of total item (*PCS)
+receipt,payment,1,cash,payment by cash (*Tunai)
+receipt,payment,2,card,payment by card
+receipt,payment,3,other,payment by others
+receipt,payment,4,change,received change (*Kembali)
+receipt,price,1,subtotal,sum of item prices (*Harga Jual)
+receipt,price,2,tax,"tax fee (*PB1, pajak, PPN)"
+receipt,price,3,service,tips for service
+receipt,price,4,discount,discounted price
+receipt,price,5,round,rounded price (*pembulatan)
+receipt,price,6,total,"sum of subtotal, tax, service, etc. Final price. (*Netto, Jumlah)"
+receipt,price,7,food,sum of food prices
+receipt,price,8,beverages,sum of beverage prices
+receipt,price,9,others,sum of prices of other items
+event,contents,1,datetime,Date and time the event is held
+event,contents,2,description,A description of what the event entails
+event,contents,3,price,"Prices regarding admission to the event, subevent, or products"
+event,contents,4,address,The place the event is held
+event,contents,5,message,Main message of a flyer that is designed to convey a message
+event,contents,6,title,Title/name of the event
+event,contents,7,subtitle,Subtitle/subname of the event
+event,contents,8,condition,Conditions for attending or registering for event
+event,contents,9,invitation,Text that directly invites reader to attend/apply/etc.
+event,contents,10,slogan,A slogan or motto
+event,contents,11,hook,Questions or phrases to grab the reader's attention/entice attendance
+event,contents,12,subevent,Text regarding subevents or components of the event (lists of nouns)
+event,contents,13,deadline,Registration times/deadlines
+event,contents,14,limit,Limit on number of attendees
+event,contents,15,notice,Notices/footnotes that provide information that readers should/may want to know
+event,contents,16,mention,"Guests, groups, and persons mentioned"
+event,contents,17,proceeds,Text regarding proceeds/donations
+event,contents,18,hashtag,Hashtags
+event,contents,19,quote,Quotes
+event,advertiser_info,1,phrase,Phrases surrounding contact info
+event,advertiser_info,2,website,A website URL provided by the flyer
+event,advertiser_info,3,phone_no,A phone number provided by the flyer
+event,advertiser_info,4,email,An email provided by the flyer
+event,advertiser_info,5,logo,Text in logos related to service of contact info
+event,advertiser_info,6,zoom,Zoom information
+event,advertiser_info,7,handle,Social media handles 
+event,advertiser_info,8,advertiser,Phrases related to advertiser/organizers of event
+event,advertiser_info,9,sponsor,Phrases related to sponsors of event
+event,advertiser_info,10,affiliation,Phrases related to affiliations of event
+event,advertiser_info,11,logo,Text in logos of organizations that are sponsoring/affiliated
+event,miscellaneous,1,error,A non-text object marked as text or misplaced boxes of text
+event,miscellaneous,2,watermark,A watermark placed on the flyer
+event,miscellaneous,3,image_unrelated,Text in image that is not directly related to the event
+event,miscellaneous,4,image_related,Text in image directly related to event
+event,miscellaneous,5,symbol,"Copyrights, trademarks, etc."
+event,miscellaneous,6,placeholder,Placeholders whose content cannot be categorized
