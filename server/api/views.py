@@ -69,10 +69,12 @@ def checkBaselineUser(request): # this request is sent only when the user is new
     if(len(User.objects.filter(username=username))==0): # new user 
         new_user=User(username=username, password=username)
         new_user.save()
+        print('new one', flush=True)
         return JsonResponse(
             {'is_new': True}
         )
     else: # this means the usre is new to the baseline but not to the proposed
+        print('duplicated one', flush=True)
         return JsonResponse({
             'is_new': False
         })
