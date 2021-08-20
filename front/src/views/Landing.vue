@@ -12,7 +12,7 @@
 
     <h3 style="color:red;"> CAUTIONS </h3>
     <ul>
-      <li> <b>An MTurk user can participate in this task only once.</b> </li>
+      <li> <b>An MTurk user can participate in this task <span style="color:red">only once</span>.</b> </li>
       <li> This task is expected to take 70 minutes at maximum.</li>
       <li> You will be provided with a token after completing the task. You <b>MUST</b> submit this token to the Amazon MTurk website to get rewards. </li>
       <li> If majority of your annotations are found to not follow the instructions, you may not be rewarded.</li>

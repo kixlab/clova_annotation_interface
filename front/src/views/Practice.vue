@@ -29,8 +29,16 @@
           <b style="color:red; margin-right: 8px;">* Important * </b>  This is a part of the tutorial where you can check your understanding with the requester's provided answer. Please practice with the provided image.
         </v-row>
         <v-row dense style="margin-top: 10px;"> 
-          Also, the receipts are from Indonesia, here are translations for commonly occuring words: <br>
+          <template v-if="this.$router.currentRoute.fullPath.split('/')[2]=='receipt'"> 
+          As the receipts are from Indonesia, here are translations for commonly occuring words: <br>
           <b>Bayar - Pay | Tunai - Cash | Kembali(an) - Change | Pajak - Tax | PB1 - tax code </b>
+          </template>
+          <template v-if="this.$router.currentRoute.fullPath.split('/')[2]=='event'"> 
+          <div>
+          There are bounding boxes that are drawn to the <b>background, watermark, or logos</b>.
+          Make sure to annotate <b>all those boxes</b> as well.
+          </div>
+          </template>
         </v-row>
         <v-row align-content="start">
           <!-- COL1 - IMAGE LOADER -->

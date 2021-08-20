@@ -23,6 +23,12 @@
           As the receipts are from Indonesia, here are translations for commonly occuring words: <br>
           <b>Bayar - Pay | Tunai - Cash | Kembali(an) - Change | Pajak - Tax | PB1 - tax code </b>
           </template>
+          <template v-if="this.$router.currentRoute.fullPath.split('/')[2]=='event'"> 
+          <div>
+          There are bounding boxes that are drawn to the <b>background, watermark, or logos</b>.
+          Make sure to annotate <b>all those boxes</b> as well.
+          </div>
+          </template>
         </v-row>
       <v-row align-content="start">
         <!-- COL1 - IMAGE LOADER -->
