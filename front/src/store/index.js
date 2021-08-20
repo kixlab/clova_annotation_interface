@@ -47,40 +47,40 @@ export default new Vuex.Store({
     
   },
   getters: {
-    image_url: state => {
+    image_url: (state) => {
       var docType= router.currentRoute.params.docType
      // var image_order=state.image_order+state.start_image_no;
       
       var three_digit_id = ("00" + state.curr_image_no).slice(-3);
       //console.log("server_url ** ", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png')
-      return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
+      return 'http://3.38.105.16:8000' + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
       
     },
-    json_url: state => {
+    json_url: (state) => {
       var docType= router.currentRoute.params.docType
       //var image_order=state.image_order+state.start_image_no;
 
       var three_digit_id = ("00" + state.curr_image_no).slice(-3);
       //console.log("json_url **", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json')
-      return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
+      return 'http://3.38.105.16:8000' + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
     },
-    prac_image_url: state => {
-      var docType= 'receipt'
+    prac_image_url: () => {
+      var docType= router.currentRoute.params.docType
      // var image_order=state.image_order+state.start_image_no;
       
-      var three_digit_id = '300';
+      var three_digit_id = '813';
 //      console.log(state.start_image_no);
  //     console.log("server_url ** ", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png')
-      return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
+      return 'http://3.38.105.16:8000' + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
       
     },
-    prac_json_url: state => {
-      var docType= 'receipt'
+    prac_json_url: (state) => {
+      var docType= router.currentRoute.params.docType
       //var image_order=state.image_order+state.start_image_no;
 
-      var three_digit_id = '300';
-  //    console.log("json_url **", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json')
-      return state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
+      var three_digit_id = '813';
+      console.log("json_url **", state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json')
+      return 'http://3.38.105.16:8000' + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
     },
     get_image_order: state =>{
       return state.image_order

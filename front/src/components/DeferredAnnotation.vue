@@ -55,6 +55,48 @@
           <v-col :cols="3" style="text-align:left;">
             </v-col>
         </v-row>
+        <v-row>
+          <v-dialog
+            v-model="memo"
+            width="600"
+            persistent
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" fab @click="loadmemo" style="marginLeft: 10px;">
+                <v-icon>edit</v-icon>
+              </v-btn>
+            </template>
+
+            <v-card>
+              <v-card-title class="indigo lighten-2 white--text">
+                Personal Notes
+              </v-card-title>
+              <v-card-text class="text-left">
+                <div style="marginTop: 15px">
+                  This is your own note space - Feel free to enter in <b>any notes that may help your annotation</b> or <b>any comments/feedback you have to the requesters</b>.
+                  <br/>
+                  Anything you fill in <b style="color:blue">will stay</b> even if you work on different images!
+                </div>
+                <v-textarea
+                  outlined
+                  label="Write here"
+                  :value="memo_content"
+                  v-model="memo_content"
+                  hide-details
+                  style="marginTop: 15px;"
+                ></v-textarea>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="indigo lighten-2 white--text" text @click="savememo" >
+                  save and close
+                </v-btn>
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
       </v-card-text>
 
     </v-card>
@@ -84,6 +126,9 @@ export default {
       addcat: false,
       addsubcat: false,
       sel_category: null,    
+
+      memo:false,
+      memo_content: "",
   }},
   mounted: function () {
     const self = this;
@@ -234,6 +279,33 @@ export default {
             self.updateImageBoxes(currImageBox)
             self.updateAnnotatedBoxes([{cat: agroup.cat, subcat: agroup.subcat, subcatpk: agroup.subcatpk, catpk: agroup.catpk, boxes: group, confidence: agroup.confidence, annotpk: agroup.group_id, suggestion:agroup.suggestion}, "add"])
           }          
+        },
+
+        loadmemo() {
+          const self = this;
+          axios.get(self.$store.state.server_url+'/api/get-memo/',{
+          params:{
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType
+          }
+          }).then(function(res){
+            self.memo_content = res.data.memo
+            //console.log(self.memo_content)
+          })
+          
+        },
+
+        savememo() {
+          const self = this;
+          axios.post(self.$store.state.server_url+'/api/save-memo/',{
+            mturk_id: self.$store.state.mturk_id,
+            doctype: self.$route.params.docType,
+            memo: self.memo_content
+          }).then(function(){
+            self.memo = false
+            //console.log(self.memo_content)
+          })
+          
         },
   },
   computed: {
