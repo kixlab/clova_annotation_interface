@@ -94,17 +94,7 @@ export default {
       }).then( function(res){
 //        self.$store.commit('set_mturk_id', self.turk_id.trim())
         if(res.data.step=='new'){ //http://15.165.236.102:8000
-          axios.post('http://15.165.236.102:8000/api/check-proposed-user/', {
-              mturk_id: self.$store.state.mturk_id,
-            }).then( function(res){
-              if(res.data.is_new){
-                  self.$store.commit('update_status', new Array(21).fill(false));
-                  self.$router.push('../informed-consent/')   
-              }
-              else{
-                window.alert('It seems that you have participated in our previous study. You cannot participate again. If you have not participated in our study before but seeing this message, please contact jeongeonpark1@gmail.com.')
-              }
-              })
+          checkUser();          
         }
         if(res.data.step=='consent'){
            self.$router.push('../informed-consent/')   
@@ -117,6 +107,20 @@ export default {
         }
       });
     }
+  },
+  checkUser(){
+    axios.post('http://15.165.236.102:8000/api/check-proposed-user/', {
+      mturk_id: self.$store.state.mturk_id,
+    }).then( function(res){
+      if(res.data.is_new){
+        window.alert("OK")
+//                  self.$store.commit('update_status', new Array(21).fill(false));
+//                  self.$router.push('../informed-consent/')   
+      }
+      else{
+        window.alert('It seems that you have participated in our previous study. You cannot participate again. If you have not participated in our study before but seeing this message, please contact jeongeonpark1@gmail.com.')
+      }
+      })
   },
   mounted() {
     this.turk_id = this.mturk_id;
