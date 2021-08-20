@@ -108,7 +108,7 @@ export default {
       });
     }
   },
-  checkUser(){
+  checkUser: function (){
     axios.post('http://15.165.236.102:8000/api/check-proposed-user/', {
       mturk_id: self.$store.state.mturk_id,
     }).then( function(res){
