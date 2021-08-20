@@ -62,6 +62,22 @@ def signup(request):
     return JsonResponse(response)
 
 @csrf_exempt
+@api_view(['POST','GET'])
+@permission_classes([AllowAny])
+def checkBaselineUser(request): # this request is sent only when the user is new to baseline 
+    username = request.data['mturk_id']
+    if(len(User.objects.filter(username==username))==0): # new user 
+        new_user=User(username=username, password=username)
+        new_user.save()
+        return JsonResponse(
+            {'is_new': True}
+        )
+    else: # this means the usre is new to the baseline but not to the proposed
+        return JsonResponse({
+            'is_new': False
+        })
+    
+@csrf_exempt
 def startTask(request):
     if request.method == 'POST':
         query_json = json.loads(request.body)
