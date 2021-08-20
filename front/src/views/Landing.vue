@@ -113,6 +113,7 @@ export default {
           self.checkUser();          
         }
         if(res.data.step=='consent'){
+          window.alert('you')
            self.$router.push('../informed-consent/')   
         }
         if(res.data.step=='instruction'){
