@@ -89,6 +89,7 @@ export default {
       {src: require('@/assets/instruction-annotation5.png')},
       {src: require('@/assets/instruction-annotation6.png')},
       {src: require('@/assets/instruction-annotation7.png')},
+      {src: require('@/assets/instruction-annotation8.png')},
       {src: require('@/assets/instruction-review0.png')},
       {src: require('@/assets/instruction-review1.png')},
       {src: require('@/assets/instruction-review2.png')},

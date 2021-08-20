@@ -33,24 +33,26 @@ export default {
       //console.log(self.$store.getters.getImageBoxes)
       const total_num = self.$store.getters.getImageBoxes.length
 
-      /*
+      
       const ansProposed = ['goods-num_goods', 'goods-name', 'goods-name', 'goods-name', 'goods-whole_price',
       'goods-num_goods', 'goods-name', 'goods-name', 'goods-name', 'goods-whole_price',
       'sub_total-sub_total', 'sub_total-sub_total', 'tax-PB1', 'tax-PB1',
       'grand_total-grand_total', 'grand_total-grand_total', 'payment-cash', 'payment-cash',
       'return-cash_change', 'return-cash_change', 'return-cash_change']
-      */
+      /*
       const ansBaseline = ['list-number', 'list-name', 'list-name', 'list-name', 'list-price',
       'list-number', 'list-name', 'list-name', 'list-name', 'list-price',
       'price-subtotal', 'price-subtotal', 'price-tax', 'price-tax',
       'price-total', 'price-total', 'payment-cash', 'payment-cash',
       'payment-change', 'payment-change', 'payment-change']
+      */
       
       var boxes = self.$store.getters.getImageBoxes
       for (var box in boxes) {
+        var newgt = {}
         var tempbox = boxes[box]
         //var gt = tempbox.gtlabel.cat + '-' + tempbox.gtlabel.subcat
-        var gt = ansBaseline[box]
+        var gt = ansProposed[box]
         //console.log(tempbox.box_id, tempbox.text, ":", tempbox.label, "vs.", gt)
         if (tempbox.label !== gt) {
           tempbox.correct = false
@@ -58,7 +60,13 @@ export default {
           tempbox.correct = true
         }
         tempbox.anschecked = true
+
+        newgt['cat'] = gt.split('-')[0]
+        newgt['subcat'] = gt.split('-')[1]
+        tempbox.gtlabel = newgt
       }
+
+      
       var accuracy = (boxes.filter(v => v.correct).length / total_num * 1.00 * 100).toFixed(2)
       var wrong = total_num - boxes.filter(v => v.correct).length
       if (wrong > 0) {
