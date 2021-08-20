@@ -23,6 +23,9 @@ urlpatterns = [
     path('delete-annotation/', views.deleteAnnotation),
     path('delete-all-annotations/', views.deleteAllAnnotations),
 
+    path('get-memo/', views.getMemo), 
+    path('save-memo/', views.saveMemo),
+
     path('update-status/', views.updateStatus),
     path('get-status/', views.getStatus),
 

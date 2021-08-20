@@ -400,6 +400,42 @@ def deleteAllAnnotations(request):
             annot.save()
         return HttpResponse('')
 
+@csrf_exempt
+def saveMemo(request):
+    if request.method == 'POST':
+        query_json = json.loads(request.body)
+        username=query_json['mturk_id']
+        user = User.objects.get(username=username)
+        doctypetext=query_json['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        memo_text=query_json['memo']
+        my_memos=Memo.objects.filter(user=user, doctype=doctype)
+        if(len(my_memos)==0):
+            new_memo=Memo(user=user, doctype=doctype, text=memo_text)
+            new_memo.save()
+        else: 
+            my_memo=my_memos[0]
+            my_memo(text)=memo_text 
+            my_memo.save()
+        return HttpResponse('')
+
+
+def getMemo(request):
+    if request.method=='GET':
+        username = request.GET['mturk_id']
+        user = User.objects.get(username=username)
+        doctypetext=request.GET['doctype']
+        doctype=DocType.objects.get(doctype=doctypetext)
+        my_memos=Memo.objects.filter(user=user, doctype=doctype)
+        if(len(my_memos)==0):
+            return JsonResponse({
+                'memo': ''
+            })
+        else:
+            return JsonResponse({
+                'memo': my_memos[0].text
+            })
+
 def assignRandomSuggestions(user, thisSuggestion): # assume that we have enough issue pull to choose from
     thisSubCat=thisSuggestion.subcat
     thisCat=thisSubCat.initcat
