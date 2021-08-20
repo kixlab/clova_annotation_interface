@@ -97,8 +97,6 @@ export default {
           axios.post('http://15.165.236.102:8000/api/check-proposed-user/', {
               mturk_id: self.$store.state.mturk_id,
             }).then( function(res){
-              console.log(res.data)
-
               if(res.data.is_new){
                   self.$store.commit('update_status', new Array(21).fill(false));
                   self.$router.push('../informed-consent/')   
