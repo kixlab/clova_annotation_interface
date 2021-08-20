@@ -415,7 +415,7 @@ def saveMemo(request):
             new_memo.save()
         else: 
             my_memo=my_memos[0]
-            my_memo(text)=memo_text 
+            my_memo.text=memo_text 
             my_memo.save()
         return HttpResponse('')
 
