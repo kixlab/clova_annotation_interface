@@ -71,7 +71,7 @@ export default {
       width: 0,
       height: 0,
 
-      prac_img: 'http://3.38.105.16:8000/media/receipt/receipt_00300.png',
+      prac_img: 'http://3.38.105.16:8000/media/'+this.$router.currentRoute.params.docType+'/'+this.$router.currentRoute.params.docType+'_00813.png',
       showAnswer: this.$store.getters.getShowAnswer,
       showAnswer2: true,
 
@@ -119,6 +119,7 @@ export default {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes', 'setShowAnswer']),
     loadNewImage: function() {
       const self = this;
+      console.log(self.$store.getters.prac_json_url)
       axios.get(self.$store.getters.prac_json_url).then(function(res) {
           var json = res.data;
           var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)

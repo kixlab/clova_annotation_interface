@@ -44,7 +44,7 @@
           <v-col cols="7">
             <v-row dense>
               <box-selection-status/>
-              <practice-deferred-annotation/>
+              <deferred-annotation/>
               <deferred-annotation-status/>
             </v-row>
           </v-col>
@@ -64,7 +64,7 @@ import PracticeInstructionButton from '@/components/PracticeInstructionButton.vu
 //import OverviewButton from '@/components/OverviewButton.vue'
 
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
-import PracticeDeferredAnnotation from '@/components/PracticeDeferredAnnotation.vue'
+import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
 import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
 
 
@@ -82,7 +82,7 @@ export default {
   //  OverviewButton,
     
     BoxSelectionStatus,
-    PracticeDeferredAnnotation,
+    DeferredAnnotation,
     DeferredAnnotationStatus,
     
   },
@@ -123,7 +123,7 @@ export default {
   },
   mounted(){
     this.updateStatus();
-    console.log(this.$store.getters.getShowAnswer)
+    //console.log(this.$store.getters.getShowAnswer)
     this.setShowAnswer(false);
   },
   computed: {
