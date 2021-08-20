@@ -109,6 +109,7 @@ export default {
       }).then( (res)=>{
 //        self.$store.commit('set_mturk_id', self.turk_id.trim())
         if(res.data.step=='new'){ //http://15.165.236.102:8000
+          console.log('new one!')
           self.checkUser();          
         }
         if(res.data.step=='consent'){
