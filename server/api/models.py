@@ -123,6 +123,14 @@ class Annotation(models.Model):
     def __str__(self):
         return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)+'-'+self.cat.cat_text+'-'+self.subcat.subcat_text
 
+class Memo(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
+    text=models.CharField(max_length=99999)
+
+    def __str__(self):
+        return 'memo-'+self.user.username+'-'+self.doctype.doctype
+
 class Status(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
