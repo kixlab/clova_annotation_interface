@@ -46,7 +46,7 @@ def signup(request):
         profile=Profile.objects.get(user=user)
         if (profile.annotation_done):
         
-            username_new = username + "-" + str(len(User.objects.filter(username__contains=username.split("-")[0])))
+            username_new = username + "-#" + str(len(User.objects.filter(username__contains=username.split("-#")[0])))
             password = username_new
 
             new_user=User(username=username_new, password=password)
