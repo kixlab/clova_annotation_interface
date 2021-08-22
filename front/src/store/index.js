@@ -44,6 +44,9 @@ export default new Vuex.Store({
       var new_image=state.assigned_images[newidx]
       state.curr_image_no = new_image
     },
+    set_server_url(state, server_url) {
+      state.server_url = server_url
+    },
     
   },
   getters: {
@@ -90,7 +93,10 @@ export default new Vuex.Store({
     },
     get_assigned_images: (state) => {
       return state.assigned_images
-    }
+    },
+    get_server_url: (state) => {
+      return state.server_url
+    },
   },
   actions:{
     setCurrOrder({commit}, neworder){
@@ -101,7 +107,11 @@ export default new Vuex.Store({
     },
     setAssignedImages({ commit }, images) {
       commit('set_assigned_images', images)
-  },  
+    },  
+    setServerURL({commit}, newURL) {
+      commit('set_server_url', newURL)
+    } ,
+
 
     
   },

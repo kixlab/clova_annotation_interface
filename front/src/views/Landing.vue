@@ -70,7 +70,7 @@
 
 <script>
 // @ is an alias to /src
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import axios from 'axios';
 
 export default {
@@ -86,6 +86,7 @@ export default {
     ...mapState(['mturk_id'])
   },
   methods: {
+    ...mapActions(['setServerURL']),
     checkUser: function (){
       const self=this;
     axios.post('http://15.165.236.102:8000/api/check-proposed-user/', {
@@ -95,7 +96,7 @@ export default {
         self.$router.push('../informed-consent/')   
       }
       else{
-        window.alert('It seems that you have participated in the version 1 task. Please look for HITs with *version 2* and participate. If you have any other questions, please contact jeongeonpark1@gmail.com.')
+        window.alert('It seems that you have participated in the version 1 task. Please look for HITs with *version 1* and participate. If you have any other questions, please contact jeongeonpark1@gmail.com.')
       }
       })
   },
@@ -104,12 +105,12 @@ export default {
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
       self.checkUser()
-      axios.post(self.$store.state.server_url + '/api/signup/', {
+      axios.post('http://3.38.105.16:8000' + '/api/signup/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( (res)=>{
         self.$store.commit('set_mturk_id', res.data.username)
-        console.log(res.data.username)
-        /*
+        console.log(res.data)
+        
         if(res.data.step=='new'){ //http://15.165.236.102:8000
           self.$store.commit('update_status', new Array(21).fill(false));
           self.checkUser();          
@@ -120,16 +121,17 @@ export default {
         if(res.data.step=='instruction'){
           self.$router.push('/instruction/')
         }
-        if(res.data.status=='annotation'){
+        if(res.data.step=='annotation'){
           self.$router.push('/annotation/'+res.data.doctype)
         }
-        */
+        
       });
     }
   },
   
   mounted() {
     this.turk_id = this.mturk_id;
+    this.setServerURL('http://3.38.105.16:8000')
   }
 }
 </script>

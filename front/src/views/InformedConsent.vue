@@ -48,6 +48,7 @@ export default {
   methods: {
     onClickNext: function () {
       const self = this;
+      console.log(self.$store.state.server_url)
       axios.post(self.$store.state.server_url + '/api/consent-agreed/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( function(){
