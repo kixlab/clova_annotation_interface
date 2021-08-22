@@ -12,7 +12,8 @@
 
     <h3 style="color:red;"> CAUTIONS </h3>
     <ul>
-      <li> <b>An MTurk user can participate in this task <span style="color:red">only once</span>.</b> </li>
+      <!--<li> <b>An MTurk user can participate in this task <span style="color:red">only once</span>.</b> </li>-->
+      <li> You can participate on this <b>task multiple times (through multiple HITs)</b>, but cannot participate on a different version task (This is the version 2 task).</li>
       <li> This task is expected to take 70 minutes at maximum.</li>
       <li> You will be provided with a token after completing the task. You <b>MUST</b> submit this token to the Amazon MTurk website to get rewards. </li>
       <li> If majority of your annotations are found to not follow the instructions, you may not be rewarded.</li>
@@ -94,7 +95,7 @@ export default {
         self.$router.push('../informed-consent/')   
       }
       else{
-        window.alert('It seems that you have participated in our previous study. You cannot participate again. If you have not participated in our study before but seeing this message, please contact jeongeonpark1@gmail.com.')
+        window.alert('It seems that you have participated in another version task (This is version 2). Please look for HITs with *version 2* and participate. If you have any other questions, please contact jeongeonpark1@gmail.com.')
       }
       })
   },
@@ -102,10 +103,13 @@ export default {
       const self = this;
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
+      self.checkUser()
       axios.post(self.$store.state.server_url + '/api/signup/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( (res)=>{
-//        self.$store.commit('set_mturk_id', self.turk_id.trim())
+        self.$store.commit('set_mturk_id', res.data.username)
+        console.log(res.data.username)
+        /*
         if(res.data.step=='new'){ //http://15.165.236.102:8000
           self.$store.commit('update_status', new Array(21).fill(false));
           self.checkUser();          
@@ -119,6 +123,7 @@ export default {
         if(res.data.status=='annotation'){
           self.$router.push('/annotation/'+res.data.doctype)
         }
+        */
       });
     }
   },

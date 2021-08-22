@@ -38,9 +38,22 @@ def signup(request):
         login(request, new_user)        
         response = {
             'step': 'new',
-            'doctype': 'receipt'
+            'doctype': 'receipt',
+            'username': username
         }
     else: # if already signed up 
+        username_new = username + str(len(User.objects.filter(username=username)))
+        password = username_new
+
+        new_user=User(username=username, password=password)
+        new_user.save()
+        login(request, new_user)        
+        response = {
+            'step': 'new',
+            'doctype': 'receipt',
+            'username': username_new
+        }
+        '''
         user=User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
         login(request, user)
@@ -48,6 +61,7 @@ def signup(request):
         # no sign up or only sign up --> consent 
         # if consent done but instruction not read or practice not done --> instructon 
         # if practice done --> annotation
+        
         if(not profile.consent_agreed):
             step='consent'
         else:
@@ -59,6 +73,7 @@ def signup(request):
             'step': step,
             'doctype':profile.doctype.doctype
         }
+        '''
     return JsonResponse(response)
 
 @csrf_exempt
