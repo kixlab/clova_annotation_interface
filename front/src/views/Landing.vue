@@ -95,7 +95,7 @@ export default {
         self.$router.push('../informed-consent/')   
       }
       else{
-        window.alert('It seems that you have participated in another version task (This is version 2). Please look for HITs with *version 2* and participate. If you have any other questions, please contact jeongeonpark1@gmail.com.')
+        window.alert('It seems that you have participated in the version 1 task. Please look for HITs with *version 2* and participate. If you have any other questions, please contact jeongeonpark1@gmail.com.')
       }
       })
   },
