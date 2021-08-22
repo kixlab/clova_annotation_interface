@@ -55,20 +55,26 @@ def signup(request):
             response = {
                 'step': 'new',
                 'doctype': 'receipt',
-                'username': username_new
+                'username': username_new,
+                'new_user': 'yes'
             }
         elif not profile.consent_agreed:
             step='consent'
+            response = {
+                'step': step,
+                'doctype':profile.doctype.doctype,
+                'username': username
+            } 
         else:
             if(not profile.practice_done):
                 step='instruction'
             else:
                 step='annotation'
-        response = {
-            'step': step,
-            'doctype':profile.doctype.doctype,
-            'username': username
-        } 
+            response = {
+                'step': step,
+                'doctype':profile.doctype.doctype,
+                'username': username
+            } 
         '''
         user=User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
@@ -228,7 +234,7 @@ def recordConsentAgreed(user):
 
 def recordInstructionDone(user):
     profile=Profile.objects.get(user=user)
-    profile.instr_read=True
+    profile.instr_done=True
     profile.practice_starttime=datetime.now()
     profile.save()
 
