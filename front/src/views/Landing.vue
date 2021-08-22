@@ -119,7 +119,7 @@ export default {
           self.checkUser(); 
         }
         if(res.data.step=='instruction'){
-          self.$router.push('/instruction/')
+          self.$router.push('/instruction/'+res.data.doctype)
         }
         if(res.data.step=='annotation'){
           self.$router.push('/annotation/'+res.data.doctype)
