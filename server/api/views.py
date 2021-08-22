@@ -42,7 +42,7 @@ def signup(request):
             'username': username
         }
     else: # if already signed up 
-        username_new = username + str(len(User.objects.filter(username=username)))
+        username_new = username + "-" + str(len(User.objects.filter(username=username)))
         password = username_new
 
         new_user=User(username=username, password=password)
