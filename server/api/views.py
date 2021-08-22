@@ -42,17 +42,33 @@ def signup(request):
             'username': username
         }
     else: # if already signed up 
-        username_new = username + "-" + str(len(User.objects.filter(username=username)))
-        password = username_new
+        user=User.objects.get(username=username)
+        profile=Profile.objects.get(user=user)
+        if (profile.annotation_done):
+        
+            username_new = username + "-" + str(len(User.objects.filter(username__contains=username.split("-")[0])))
+            password = username_new
 
-        new_user=User(username=username, password=password)
-        new_user.save()
-        login(request, new_user)        
+            new_user=User(username=username_new, password=password)
+            new_user.save()
+            login(request, new_user)        
+            response = {
+                'step': 'new',
+                'doctype': 'receipt',
+                'username': username_new
+            }
+        elif not profile.consent_agreed:
+            step='consent'
+        else:
+            if(not profile.practice_done):
+                step='instruction'
+            else:
+                step='annotation'
         response = {
-            'step': 'new',
-            'doctype': 'receipt',
-            'username': username_new
-        }
+            'step': step,
+            'doctype':profile.doctype.doctype,
+            'username': username
+        } 
         '''
         user=User.objects.get(username=username)
         profile=Profile.objects.get(user=user)
@@ -212,7 +228,7 @@ def recordConsentAgreed(user):
 
 def recordInstructionDone(user):
     profile=Profile.objects.get(user=user)
-    profile.instr_done=True
+    profile.instr_read=True
     profile.practice_starttime=datetime.now()
     profile.save()
 
