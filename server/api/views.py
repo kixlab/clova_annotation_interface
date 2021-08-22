@@ -82,8 +82,8 @@ def signup(request):
 def checkBaselineUser(request): # this request is sent only when the user is new to baseline 
     username = request.data['mturk_id']
     if(len(User.objects.filter(username=username))==0): # new user 
-        new_user=User(username=username, password=username)
-        new_user.save()
+        #new_user=User(username=username, password=username)
+        #new_user.save()
         is_new=True
     else: # this means the usre is new to the proposed but not to the baseline
         is_new=False
