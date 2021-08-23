@@ -17,7 +17,7 @@ from django.db.models import Max, Count, Q
 from .serializers import *
 
 
-n_documents=200
+n_documents=800
 workers_per_image=5
 images_per_worker=20
 
