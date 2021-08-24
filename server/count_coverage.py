@@ -46,11 +46,15 @@ print('number of valid profiles:', len(valid_Profile))
 
 done_users=[]
 valid_users=[]
+all_users=[]
 for profile in done_Profile:
     done_users.append(profile.user)
 
 for profile in valid_Profile:
     valid_users.append(profile.user)
+
+for profile in all_Profile:
+    all_users.append(profile.user)
 
 doc_nos=range(800)
 
@@ -77,3 +81,6 @@ print('done users')
 coverage(done_users)
 print('valid usres')
 coverage(valid_users)
+
+print('all usres')
+coverage(all_users)
