@@ -33,7 +33,7 @@ valid_Profile=[]
 for profile in done_Profile:
     is_troller=False
     for bad in blacklist:
-        print(bad, profile.user.username)
+        #print(bad, profile.user.username)
         if(bad in profile.user.username):
             is_troller=True
             break
@@ -69,6 +69,9 @@ def coverage(users):
     
     print("over:", over)
     print("less:", less)
+    print("over count:", len(over))
+    print("less count:", len(less))
+    
 
 print('done users')
 coverage(done_users)
