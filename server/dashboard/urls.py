@@ -32,5 +32,10 @@ urlpatterns = [
     path('move-subcat/', views.moveSubCat),
     path('get-all-memo/', views.getMemo),
 
-    path('get-examples/', views.getExamples)
+    path('get-examples/', views.getExamples),
+    
+    path('add-cat/', views.addCat),
+    path('merge-cats/', views.mergeCats),
+    path('merge-subcats/', views.mergeSubCats)
+
 ]

@@ -624,7 +624,82 @@ def moveSubCat(request):
         thisSubCat=FinalSubCat.objects.get(finalcat=oldCat, subcat_text=subcat)
         thisSubCat.finalcat=newCat
         thisSubCat.save()
+
+        if(len(FinalSubCat.objects.filter(finalcat=oldCat))==0):
+            oldCat.delete()
         return HttpResponse('')
+
+#path('add-cat/', views.addCat),
+
+@csrf_exempt
+def addCat(request):
+    if request.method=='POST':
+        query_json = json.loads(request.body)
+        username=query_json['expert_id']
+        doctypetext=query_json['doctype']
+        category_text=query_json['category']
+
+        expert=User.objects.get(username=username)
+        doctype=DocType.objects.get(doctype=doctypetext)
+        newCat=FinalCat(expert=expert, doctype=doctype, cat_text=category_text)
+        newCat.save()
+        return HttpResponse('')
+
+#    path('merge-cats/', views.mergeCats),
+
+def mergeCats(request):
+    if request.method=='POST':
+        query_json = json.loads(request.body)
+        username=query_json['expert_id']
+        doctypetext=query_json['doctype']
+        from_cat=query_json['from_cat']
+        to_cat=query_json['to_cat']
+
+        expert=User.objects.get(username=username)
+        doctype=DocType.objects.get(doctype=doctypetext)
+
+        fromCat=FinalCat.objects.get(expert=expert, doctype=doctype,cat_text=from_cat)
+        toCat=FinalCat.objects.get(expert=expert, doctype=doctype,cat_text=to_cat)
+
+        for subcat in FinalSubCat.objects.filter(finalcat=fromCat):
+            subcat.finalcat=toCat
+            subcat.save()
+
+        fromCat.delete()
+        return HttpResponse('')
+
+
+#    path('merge-subcats/', views.mergeSubCats)
+def mergeSubCats(request):
+    if request.method=='POST':
+        query_json = json.loads(request.body)
+        username=query_json['expert_id']
+        doctypetext=query_json['doctype']
+        from_cat=query_json['from_cat']
+        from_subcat=query_json['from_subcat']
+        to_cat=query_json['to_cat']
+        to_subcat=query_json['to_subcat']
+
+        expert=User.objects.get(username=username)
+        doctype=DocType.objects.get(doctype=doctypetext)
+
+        fromCat=FinalCat.objects.get(expert=expert, doctype=doctype,cat_text=from_cat)
+        fromSubCat=FinalSubCat.objects.get(finalcat=fromCat, subcat_text=from_subcat)
+
+        toCat=FinalCat.objects.get(expert=expert, doctype=doctype,cat_text=to_cat)
+        toSubCat=FinalSubCat.objects.get(finalcat=toCat, subcat_text=to_subcat)
+
+        for box in RevisedBoxAnnotation.objects.filter(expert=expert, finalsubcat=fromSubCat):
+            box.finalcat=toCat
+            box.finalsubcat=toSubCat
+            box.save()
+
+        fromSubCat.delete()
+        if(len(FinalSubCat.objects.filter(finalcat=fromCat))==0):
+            fromCat.delete()
+        return HttpResponse('')
+
+
 
 @csrf_exempt
 def getExamples(request):
