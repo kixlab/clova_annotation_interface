@@ -40,6 +40,17 @@ for profile in done_Profile:
     if not is_troller: 
         valid_Profile.append(profile)
 
+valid_Profile=[]
+for profile in done_Profile:
+    is_troller=False
+    for bad in blacklist:
+        #print(bad, profile.user.username)
+        if(bad in profile.user.username):
+            is_troller=True
+            break
+    if not is_troller: 
+        valid_Profile.append(profile)
+
 print('number of done profiles:', len(done_Profile))
 print('number of valid profiles:', len(valid_Profile))
 
