@@ -22,6 +22,7 @@ valid_Profile=[]
 for profile in done_Profile:
     is_troller=False
     for bad in blacklist:
+        print(bad, profile.user.username)
         if(bad in profile.user.username):
             is_troller=True
             break
@@ -47,7 +48,7 @@ def coverage(users):
     over=[]
     less=[]
     for doc_no in doc_nos: 
-        document=Document.objects.filter(doctype__doctype='receipt', doc_no=doc_no)
+        document=Document.objects.get(doctype__doctype='receipt', doc_no=doc_no)
         done_statuses=Status.objects.filter(document=document, status=True)
         fin_statuses=[status for status in done_statuses if status.user in users]
         if(len(fin_statuses)>5):
@@ -57,7 +58,7 @@ def coverage(users):
     
     print("over:", over)
     print("less:", less)
-    
+
 print('done users')
 coverage(done_users)
 print('valid usres')
