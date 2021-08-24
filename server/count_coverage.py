@@ -18,6 +18,17 @@ blacklist=[
     'A5LYLHG880ABE'
 ]
 
+
+blacklist=[
+    'A16X5F',
+    'A1EX0M',
+    'A1IOMF',
+    'A1XO6O',
+    'A3QI1R',
+    'A3TUMZ',
+    'A5LYLH'
+]
+
 valid_Profile=[]
 for profile in done_Profile:
     is_troller=False
