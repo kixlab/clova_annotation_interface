@@ -647,6 +647,7 @@ def addCat(request):
 
 #    path('merge-cats/', views.mergeCats),
 
+@csrf_exempt
 def mergeCats(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
@@ -670,6 +671,7 @@ def mergeCats(request):
 
 
 #    path('merge-subcats/', views.mergeSubCats)
+@csrf_exempt
 def mergeSubCats(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
