@@ -639,7 +639,7 @@ def getExamples(request):
         thisCat=FinalCat.objects.get(expert=expert, doctype=doctype, cat_text=cat_text)
         thisSubCat=FinalSubCat.objects.get(finalcat=thisCat, subcat_text=subcat_text)
         
-        curBoxes=RevisedBoxAnnotation.objects.filter(expert=expert, finalsubbcat=thisSubCat)
+        curBoxes=RevisedBoxAnnotation.objects.filter(expert=expert, finalsubcat=thisSubCat)
         docs=[]
         for curBox in curBoxes: # get max 6 docs
             doc=curBox.document
