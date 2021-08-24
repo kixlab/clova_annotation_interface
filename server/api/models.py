@@ -112,6 +112,21 @@ class Similarity(models.Model):
     others=models.ForeignKey(SelectedSuggestion, on_delete=models.CASCADE, related_name='others')
     is_similar=models.BooleanField(default=False, null=False)
 
+class SimScore(models.Model):
+    doctype=models.ForeignKey(DocType, on_delete=models.CASCADE)
+    first_sugg=models.ForeignKey(UserSuggestion, on_delete=models.CASCADE, related_name='first_sugg')
+    second_sugg=models.ForeignKey(UserSuggestion, on_delete=models.CASCADE, related_name='second_sugg')
+    similar=models.IntegerField(default=0)
+    not_similar=models.IntegerField(default=0)
+    is_valid=models.BooleanField(default=False)
+
+
+class FinalSuggestion(models.Model):
+    subcat=models.ForeignKey(InitSubCat, on_delete=models.CASCADE)
+    suggested_subcat=models.CharField(max_length=255, null=True, blank=True)
+    def __str__(self):
+        return str(self.subcat)+'-'+self.suggested_subcat
+
 class Annotation(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
@@ -123,6 +138,27 @@ class Annotation(models.Model):
     def __str__(self):
         return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)+'-'+self.cat.cat_text+'-'+self.subcat.subcat_text
 
+class GroupedAnnotation(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    document=models.ForeignKey('Document', on_delete=models.SET_NULL, null=True)
+    boxes_id=models.TextField(validators=[validate_comma_separated_integer_list], null=True)
+    annot_type=models.CharField(max_length=500)
+    final_suggestion=models.ForeignKey(FinalSuggestion, on_delete=models.SET_NULL, null=True)
+    reason=models.TextField(max_length=255, default="No reason", null=True, blank=True)
+    subcat = models.ForeignKey('InitSubCat', on_delete=models.CASCADE, null=True)
+
+class BoxAnnotation(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    document=models.ForeignKey(Document, on_delete=models.SET_NULL, null=True)
+    annotation=models.ForeignKey(Annotation, on_delete=models.SET_NULL, null=True)
+    subcat = models.ForeignKey(InitSubCat, on_delete=models.CASCADE, null=True)
+    cat= models.ForeignKey(InitCat, on_delete=models.CASCADE, null=True)
+    annot_type=models.CharField(max_length=255) #exactly, closeto, na 
+    suggested_subcat=models.CharField(max_length=255, null=True, blank=True)
+    box_id=models.IntegerField(default=999)
+    def __str__(self):
+        return self.user.username+'-box-'+str(self.pk)
+        
 class Memo(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     doctype=models.ForeignKey('DocType', on_delete=models.CASCADE)
