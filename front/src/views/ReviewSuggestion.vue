@@ -173,6 +173,7 @@ export default {
             self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
             self.valid=(self.unreviewed_issues.length==0);
             self.enough_suggestions=res.data.status;
+            console.log(res.data)
             if(!self.enough_suggestions){
                 self.valid=true;
             }
