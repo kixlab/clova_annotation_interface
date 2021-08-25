@@ -69,6 +69,15 @@ export default {
       }
       return res
     }
+  },
+
+  watch: {
+    box_info: {
+      deep: true,
+      handler() {
+        console.log('new box')
+      }
+    }
   }
 }
 </script>

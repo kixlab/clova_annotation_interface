@@ -20,7 +20,8 @@
           </v-form>
           -->
           
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScgecpVkjesO4G9iF34qAqrFSVBSN4PzPD-2V1Gh3fL3HdPBw/viewform?embedded=true" width="640" height="550" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+          <iframe id='postsurvey' src="https://docs.google.com/forms/d/e/1FAIpQLSeXHhHy0xBhJRq3EVunZoxd4OwmX9PQrfC7V5ZPr2FEO9SsTQ/viewform?embedded=true" width="640" height="1043" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+          
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -58,6 +59,13 @@ export default {
       token: '',
     }
   },
+  mounted: function() {
+    const self=this;
+    setTimeout(() => {
+        document.getElementById('postsurvey').onload=function(){
+          self.activateButton=true;}
+      }, 1000);
+  },   
   methods: {
     gotoReview: function () {
       var doctype=this.$router.currentRoute.fullPath.split('/')[2];
