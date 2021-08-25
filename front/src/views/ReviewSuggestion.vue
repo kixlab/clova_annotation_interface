@@ -307,7 +307,7 @@ export default {
         },
 
         imageNo2Url(no) {
-            var docType= 'receipt'
+            var docType= 'event'
             var three_digit_id = ("00" + no).slice(-3);
             return this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.png'
         },
@@ -316,7 +316,7 @@ export default {
             const box_id_list = JSON.parse(box_id)
 
             const self = this;
-            var docType= 'receipt'
+            var docType= 'event'
             var three_digit_id = ("00" + no).slice(-3);
             const json_url = this.$store.state.server_url + '/media/'+docType+'/'+docType+'_00' + three_digit_id + '.json'
             

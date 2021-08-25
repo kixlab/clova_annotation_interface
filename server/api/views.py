@@ -38,7 +38,7 @@ def signup(request):
         login(request, new_user)        
         response = {
             'step': 'new',
-            'doctype': 'receipt',
+            'doctype': 'event',
             'username': username
         }
     else: # if already signed up 
@@ -54,7 +54,7 @@ def signup(request):
             login(request, new_user)        
             response = {
                 'step': 'new',
-                'doctype': 'receipt',
+                'doctype': 'event',
                 'username': username_new,
                 'new_user': 'yes'
             }

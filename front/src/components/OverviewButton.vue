@@ -74,7 +74,7 @@ export default {
       getThumbnail: function (imgNo){
         var docType= this.$route.params.docType;
         var two_digit_id = ("0" + imgNo).slice(-2);
-        return 'http://3.38.105.16:8000'+ '/media/'+docType+'/'+docType+'_000' + two_digit_id + '.png'
+        return 'http://52.78.121.66:8000'+ '/media/'+docType+'/'+docType+'_000' + two_digit_id + '.png'
       },      
     },
     mounted() {

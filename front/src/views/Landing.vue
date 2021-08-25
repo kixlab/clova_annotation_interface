@@ -6,7 +6,7 @@
     Thank you for your participation!<br><br>
 
     This task is conducted as a part of a research project in which we try to re-design the machine learning dataset generation process with crowdsourcing. 
-    In this task, you will be asked to label text boxes on a receipt image with a given label set.<br>
+    In this task, you will be asked to label text boxes on a event flyer image with a given label set.<br>
 
     <br><v-divider/><br>
 
@@ -26,8 +26,8 @@
     <ol>
       <li> Read the informed consent and agree to participate </li>
       <li> Read the instruction </li>
-      <li> Practice session with one receipt image </li>
-      <li> Annotate 20 receipt images </li>
+      <li> Practice session with eventy flyer image </li>
+      <li> Annotate 20 event flyer images </li>
       <li> Review your annotation </li>
       <li> Do a simple survey and submit a token to Amazon MTurk webpage</li>
     </ol>
@@ -105,7 +105,7 @@ export default {
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
       self.checkUser()
-      axios.post('http://3.38.105.16:8000' + '/api/signup/', {
+      axios.post('http://52.78.121.66:8000' + '/api/signup/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( (res)=>{
         self.$store.commit('set_mturk_id', res.data.username)
@@ -131,7 +131,7 @@ export default {
   
   mounted() {
     this.turk_id = this.mturk_id;
-    this.setServerURL('http://3.38.105.16:8000')
+    this.setServerURL('http://52.78.121.66:8000')
   }
 }
 </script>

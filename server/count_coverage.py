@@ -74,7 +74,7 @@ def coverage(users):
     over=[]
     less=[]
     for doc_no in doc_nos: 
-        document=Document.objects.get(doctype__doctype='receipt', doc_no=doc_no)
+        document=Document.objects.get(doctype__doctype='event', doc_no=doc_no)
         done_statuses=Status.objects.filter(document=document, status=True)
         fin_statuses=[status for status in done_statuses if status.user in users]
         if(len(fin_statuses)>5):

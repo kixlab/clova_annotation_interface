@@ -43,7 +43,7 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance,created, **kwargs):
     if created:
-        doctype=DocType.objects.get(doctype='receipt')
+        doctype=DocType.objects.get(doctype='event')
         Profile.objects.create(user=instance, doctype=doctype)
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):

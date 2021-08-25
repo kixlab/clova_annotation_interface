@@ -7,7 +7,7 @@
 
       2. This research is to re-design the machine learning dataset generation process with crowdsourcing. <br><br>
 
-      3. In this experiment, you will <b>assign appropriate labels to the text boxes</b> on <b>20 different receipt images</b>.<br><br>
+      3. In this experiment, you will <b>assign appropriate labels to the text boxes</b> on <b>20 different event flyer images</b>.<br><br>
 
       4. As the annotation interface to be used in this experiment does not include an invasive treatment, 
       you are informed that no side effects are known or expected. 
@@ -52,7 +52,7 @@ export default {
       axios.post(self.$store.state.server_url + '/api/consent-agreed/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( function(){
-          self.$router.push('../instruction/receipt/')
+          self.$router.push('../instruction/event/')
         })  
       ;
     }

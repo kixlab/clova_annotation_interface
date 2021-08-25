@@ -71,7 +71,7 @@ export default {
       width: 0,
       height: 0,
 
-      prac_img: 'http://3.38.105.16:8000/media/'+this.$router.currentRoute.params.docType+'/'+this.$router.currentRoute.params.docType+'_00813.png',
+      prac_img: 'http://52.78.121.66:8000/media/'+this.$router.currentRoute.params.docType+'/'+this.$router.currentRoute.params.docType+'_00813.png',
       showAnswer: this.$store.getters.getShowAnswer,
       showAnswer2: true,
 

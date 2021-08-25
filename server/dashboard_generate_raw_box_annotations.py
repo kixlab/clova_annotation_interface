@@ -12,7 +12,7 @@ def most_frequent(List):
 RawBoxAnnotation.objects.all().delete()
 
 max_docno=1000
-doctypes=['receipt', 'event']
+doctypes=['event']
 
 for doctype in doctypes: 
     for doc_no in range(max_docno):

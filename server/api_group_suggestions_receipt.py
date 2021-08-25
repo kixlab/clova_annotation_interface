@@ -3,12 +3,12 @@ from api.models import *
 from django.db.models import Count
 
 # python manage.py shell
-# exec(open('api_group_suggestions_receipt.py').read())
+# exec(open('api_group_suggestions_event.py').read())
 
 
 # caclulate similarity score for each pair 
 
-doctype=DocType.objects.get(doctype='receipt')
+doctype=DocType.objects.get(doctype='event')
 
 SimScore.objects.filter(doctype=doctype).delete()
 FinalSuggestion.objects.filter(subcat__initcat__doctype=doctype).delete()

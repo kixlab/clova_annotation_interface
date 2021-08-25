@@ -35,8 +35,8 @@ CSRF_HEADER_NAME = 'X-XSRF-TOKEN'
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
-    'http://3.38.105.16:8080',
-    'http://3.38.105.16',
+    'http://52.78.121.66:8080',
+    'http://52.78.121.66',
     'http://52.79.140.137',
     'http://52.79.140.137:8080',
     'http://15.165.236.102:8080',

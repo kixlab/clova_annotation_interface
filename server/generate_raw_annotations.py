@@ -10,7 +10,7 @@ RawAnnotation.objects.all().delete()
 max_docno=210
 
 for doc_no in range(max_docno):
-    document=Document.objects.get(doctype__doctype='receipt', doc_no=doc_no)
+    document=Document.objects.get(doctype__doctype='event', doc_no=doc_no)
     thisBoxAnnots=BoxAnnotation.objects.filter(document=document)
     cand_box_ids=list(set([box.box_id for box in thisBoxAnnots]))
     for box_id in cand_box_ids: 

@@ -45,7 +45,7 @@ def signup(request):
 
     response = {
         'status': 'new',
-        'doctype': 'receipt'
+        'doctype':'event'
     }
     return JsonResponse(response)
 
