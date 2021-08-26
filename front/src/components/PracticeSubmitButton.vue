@@ -76,9 +76,11 @@ export default {
         alert("You got everything correct! Please move on to the actual task. Good job!! 😊")
       }
       
-      self.updateImageBoxes(boxes)
-      //console.log(boxes.map(v => v.label))
       self.setShowAnswer(true/*!this.$store.getters.getShowAnswer*/)
+      const new_boxes = [...boxes]
+      self.updateImageBoxes(new_boxes)
+      //console.log(boxes.map(v => v.label))
+      
       
     }
   },

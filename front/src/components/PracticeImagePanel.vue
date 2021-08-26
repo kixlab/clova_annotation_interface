@@ -23,7 +23,7 @@
               <template slot-scope="{ startPoint }">
                 {{startPoint}}
               <div v-if="image_box" ref="img_box">
-                <div v-for="box in image_box" :key="box.id">
+                <div v-for="box in image_box" :key="box.id+box.answer">
                   <div v-if="box.selected === true">
                     <bounding-box :showans="showAnswer2" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
                   </div>
@@ -90,7 +90,7 @@ export default {
       
 
       self.$store.subscribeAction({after: (action) => {
-        if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
+        if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes' || action.type === 'setShowAnswer') {
           self.image_box = self.$store.getters.getImageBoxes;
         }
         //if (action.type)
@@ -98,7 +98,7 @@ export default {
     })
     
     self.$store.subscribeAction({after: (action) => {
-      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
+      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes' || action.type === 'setShowAnswer') {
         self.image_box = self.$store.getters.getImageBoxes;
       }
     }})

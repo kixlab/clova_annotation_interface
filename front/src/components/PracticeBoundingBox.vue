@@ -3,7 +3,7 @@
     <!--
     <text fill="red" :x="x+3" :y="y-15-7" font-size="11" font-weight="bold" font-family="Avenir, Helvetica, Arial, sans-serif">{{ this.$store.getters.getShowAnswer }}</text>
     -->
-    <template v-if="box_info.correct === false && box_info.label !== '' && showAnswer === true && showans === true && box_info.anschecked === true">
+    <template v-if="box_info.correct === false && showAnswer === true && showans === true ">
         <rect fill="white" :x="x" :y="y-36" :width="100" height=35 />
         <text fill="red" :x="x+3" :y="y-15-7" font-size="11" font-weight="bold" font-family="Avenir, Helvetica, Arial, sans-serif">{{ this.box_info.label }} (x)</text>
         <text fill="green" :x="x+3" :y="y-7" font-size="11" font-weight="bold" font-family="Avenir, Helvetica, Arial, sans-serif">{{this.box_info.gtlabel.cat}}-{{this.box_info.gtlabel.subcat}} (o)</text>
