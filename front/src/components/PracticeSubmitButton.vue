@@ -34,11 +34,11 @@ export default {
       const total_num = self.$store.getters.getImageBoxes.length
 
       
-      const ansProposed = ['goods-num_goods', 'goods-name', 'goods-name', 'goods-name', 'goods-whole_price',
-      'goods-num_goods', 'goods-name', 'goods-name', 'goods-name', 'goods-whole_price',
-      'sub_total-sub_total', 'sub_total-sub_total', 'tax-PB1', 'tax-PB1',
-      'grand_total-grand_total', 'grand_total-grand_total', 'payment-cash', 'payment-cash',
-      'return-cash_change', 'return-cash_change', 'return-cash_change']
+      const ansProposed = ['event_content-title', 'event_content-title',
+      'event_location-online', 'event_datetime-main_date', 'event_datetime-main_date', 'event_datetime-main_date', 'event_datetime-main_time', 'event_location-online',
+      'host_or_sponsor-brand', 'host_or_sponsor-brand', 'host_or_sponsor-brand',
+      'participant-instructions', 'participant-instructions', 'participant-instructions', 'participant-instructions', 'participant-instructions', 'participant-instructions',
+      'participant-instructions', 'contact_or_fmi-website', 'contact_or_fmi-website']
       /*
       const ansBaseline = ['list-number', 'list-name', 'list-name', 'list-name', 'list-price',
       'list-number', 'list-name', 'list-name', 'list-name', 'list-price',
@@ -76,9 +76,11 @@ export default {
         alert("You got everything correct! Please move on to the actual task. Good job!! 😊")
       }
       
-      self.updateImageBoxes(boxes)
-      //console.log(boxes.map(v => v.label))
       self.setShowAnswer(true/*!this.$store.getters.getShowAnswer*/)
+      const new_boxes = [...boxes]
+      self.updateImageBoxes(new_boxes)
+      //console.log(boxes.map(v => v.label))
+      
       
     }
   },

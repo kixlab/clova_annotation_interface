@@ -7,7 +7,7 @@
       dense
       fixed
     >
-      <v-toolbar-title>Image Annotation (ID: {{this.$store.state.mturk_id}}, {{this.$store.state.image_order+1}} of 21 images)</v-toolbar-title>
+      <v-toolbar-title>Image Annotation (ID: {{this.$store.state.mturk_id}}, {{this.$store.state.image_order+1}} of 20 images)</v-toolbar-title>
       <v-spacer/>
       <annotation-instruction-button/>
       <submit-button/>

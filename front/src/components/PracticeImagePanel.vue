@@ -90,7 +90,7 @@ export default {
       
 
       self.$store.subscribeAction({after: (action) => {
-        if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
+        if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes' || action.type === 'setShowAnswer') {
           self.image_box = self.$store.getters.getImageBoxes;
         }
         //if (action.type)
@@ -98,7 +98,7 @@ export default {
     })
     
     self.$store.subscribeAction({after: (action) => {
-      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes') {
+      if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes' || action.type === 'setShowAnswer') {
         self.image_box = self.$store.getters.getImageBoxes;
       }
     }})

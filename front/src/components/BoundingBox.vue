@@ -1,6 +1,7 @@
 <template>
   <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
     <rect id="box" class="bnd" :style="color" style="fill:transparent; stroke-width:1;" :x="x" :y="y" :width="w" :height="h"/>
+    <rect id="box" class="bnd" style="stroke:#EBD5D2; stroke-width:1px; fill:red; fill-opacity:0.1; fill:transparent; stroke-width:1;" :x="x+0.5" :y="y" :width="w" :height="h"/>
   </svg>
 </template>
 

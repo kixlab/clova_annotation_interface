@@ -18,7 +18,7 @@
               <div v-if="image_box" ref="img_box">
                 <div v-for="box in image_box" :key="box.id">
                   <div v-if="box.selected === true">
-                    <bounding-box circle="no" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
+                    <bounding-box circle="no" color="stroke:red; stroke-width:3px; fill:red; fill-opacity:0.2;" :box_info="box"/>
                   </div>
                   <div v-else-if="box.annotated === true && box.hover === false">
                     <bounding-box circle="no" color="stroke:grey; fill:grey; fill-opacity:0.4;" :box_info="box"/>
