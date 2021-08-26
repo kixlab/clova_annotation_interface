@@ -89,7 +89,7 @@ export default {
     ...mapActions(['setServerURL']),
     checkUser: function (){
       const self=this;
-    axios.post('http://13.125.211.174:8000/api/check-proposed-user/', {
+    axios.post('http://15.165.236.102:8000/api/check-proposed-user/', {
       mturk_id: self.$store.state.mturk_id,
     }).then( function(res){
       if(res.data.is_new){
