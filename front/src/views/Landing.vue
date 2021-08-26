@@ -105,6 +105,11 @@ export default {
       self.$refs.form.validate()
       self.$store.commit('set_mturk_id', self.turk_id.trim())
       self.checkUser()
+      axios.post('http://3.38.105.16:8000' + '/api/signup/', {
+        mturk_id: self.$store.state.mturk_id,
+      }).then( (res)=>{
+        console.log(res)
+      });
       axios.post('http://52.78.121.66:8000' + '/api/signup/', {
         mturk_id: self.$store.state.mturk_id,
       }).then( (res)=>{
