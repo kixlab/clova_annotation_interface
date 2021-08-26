@@ -23,7 +23,7 @@
               <template slot-scope="{ startPoint }">
                 {{startPoint}}
               <div v-if="image_box" ref="img_box">
-                <div v-for="box in image_box" :key="box.id+box.answer">
+                <div v-for="box in image_box" :key="box.id">
                   <div v-if="box.selected === true">
                     <bounding-box :showans="showAnswer2" color="stroke:red; stroke-width:2px; fill:red; fill-opacity:0.1;" :box_info="box"/>
                   </div>
