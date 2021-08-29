@@ -14,7 +14,6 @@ import random
 import json
 from datetime import datetime, timedelta
 from django.db.models import Max, Count, Q
-from .serializers import *
 
 
 n_documents=800
