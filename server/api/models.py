@@ -135,6 +135,7 @@ class Annotation(models.Model):
     cat= models.ForeignKey('InitCat', on_delete=models.CASCADE, null=True)
     confidence=models.BooleanField(null=True, default=True)
     is_alive=models.BooleanField(default=False)
+    is_valid=models.BooleanField(default=False)
     def __str__(self):
         return self.user.username+'-'+str(self.document)+'-'+str(self.boxes_id)+'-'+self.cat.cat_text+'-'+self.subcat.subcat_text
 

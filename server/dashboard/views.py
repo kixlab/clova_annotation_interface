@@ -32,20 +32,20 @@ workers_per_group=images_per_worker/window # 20 / 4 = 5
 def signup(request):
     username = request.data['username']
     doctype_text = request.data['doctype']
-    password = username
-   
-    new_user=User(username=username, password=password)
-    new_user.save()
 
-
-    initstatus=initialize(doctype_text, username)
-
-    login(request, new_user)
-
-
+    if(len(User.objects.filter(username=username))>0):
+        user=User.objects.filter(username=username)[0]
+        login(request, user)
+    
+    else:
+        password = username   
+        new_user=User(username=username, password=password)
+        new_user.save()
+        initstatus=initialize(doctype_text, username)
+        login(request, new_user)
     response = {
         'status': 'new',
-        'doctype':'event'
+        'doctype': 'event'
     }
     return JsonResponse(response)
 
@@ -202,7 +202,7 @@ def getNAs(doctype, expert):
         response=[]
         for suggestion in suggestions: 
             annots=unreviewed.filter(annotation__final_suggestion=suggestion)
-            n_workers=len(list(set([annot.annotation for annot in annots])))
+            n_workers=len(list(set([annot.annotation.user for annot in annots])))
             n_images=len(list(set([annot.annotation.document for annot in annots])))
             n_annotations=len(annots)
             annot_response=[]
@@ -213,13 +213,15 @@ def getNAs(doctype, expert):
                         'image_no': annot.annotation.document.doc_no, 
                         'worker_id': annot.annotation.user.username,
                         'boxes_id':annot.annotation.boxes_id,
-                        'reason': annot.annotation.reason
+                        'reason': annot.annotation.reason,
+                        'suggested_subcategory': suggestion.suggested_subcat
                     }
                 )
-            response.append({
-                'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat,
-                'n_images': n_images, 'n_workers': n_workers, 'n_annotations': n_annotations, 'annotations': annot_response
-            })
+            if(len(annots)>0):
+                response.append({
+                    'suggestion_pk': suggestion.pk, 'suggestion_cat': suggestion.subcat.initcat.cat_text, 'suggestion_subcat': suggestion.subcat.subcat_text, 'suggestion_text': suggestion.suggested_subcat,
+                    'n_images': n_images, 'n_workers': n_workers, 'n_annotations': n_annotations, 'annotations': annot_response
+                })
         return response
 
 
@@ -259,7 +261,8 @@ def getCTs(doctype, expert):
                         'image_no': annot.annotation.document.doc_no, 
                         'worker_id': annot.annotation.user.username,
                         'boxes_id':annot.annotation.boxes_id,
-                        'reason': annot.annotation.reason
+                        'reason': annot.annotation.reason,
+                        'suggested_subcategory': suggestion.suggested_subcat
                 })
                 if(len(annot_response)>0):
                     suggest_response.append({
@@ -268,7 +271,7 @@ def getCTs(doctype, expert):
                     })
             if(len(suggest_response)>0):
                 cat_response.append({
-                    'subcat': subcat.subcat_text, 'suggestions': suggest_response
+                    'subcat': subcat.subcat_text, 'subcat_description': subcat.subcat_description, 'suggestions': suggest_response
                 })
         if(len(cat_response)>0):
             response.append({
@@ -293,6 +296,7 @@ def getCloseToSuggestions(request):
 
 
 def updateRevisedBoxAnnotation(expert, thisTargetAnnot, thisCat, thisSubCat, revision_type):
+    print(expert, thisTargetAnnot, thisCat, thisSubCat, revision_type, flush=True)
     boxes_id=thisTargetAnnot.annotation.boxes_id.replace(',', ' ').replace('[', ' ').replace(']', ' ').split()
     document=thisTargetAnnot.annotation.document
     for box_id in boxes_id:
@@ -308,10 +312,10 @@ def updateRevisedBoxAnnotation(expert, thisTargetAnnot, thisCat, thisSubCat, rev
             newRevBox.save()
     return True
 
-def saveResolution(username, doctypetext, annotations_pk, cat_text, subcat_text, description, revision_type):    
-    expert=User.objects.get(username=username)
-    doctype=DocType.objects.get(doctype=doctypetext)
+def saveResolution(expert, doctype, annotations_pk, cat_text, subcat_text, description, revision_type):  
 
+    Revision(expert=expert, revision_type=revision_type, annotation_pks=annotations_pk).save()
+     
     thisCats=FinalCat.objects.filter(expert=expert, cat_text=cat_text)
     if(len(thisCats)>0):
         thisCat=thisCats[0]
@@ -327,8 +331,41 @@ def saveResolution(username, doctypetext, annotations_pk, cat_text, subcat_text,
         newFinalSubCat=FinalSubCat(finalcat=thisCat, subcat_text=subcat_text, subcat_description=description)
         newFinalSubCat.save()
         thisSubCat=newFinalSubCat
-
+    print(annotations_pk, flush=True)
     for annotation_pk in annotations_pk: # pks are for the targetAnnotation
+        thisAnnot=TargetAnnotation.objects.get(pk=annotation_pk)
+        thisAnnot.is_reviewed=True 
+        thisAnnot.save()
+        newRevAnnot=RevisedAnnotation(expert=expert, annotation=thisAnnot.annotation, finalcat=thisCat, finalsubcat=thisSubCat, revision_type=revision_type)
+        newRevAnnot.save()
+        result=updateRevisedBoxAnnotation(expert, thisAnnot, thisCat, thisSubCat, revision_type)
+            
+    return True
+
+def saveApprove(expert, doctype, annot_dicts, cat_text, description, revision_type):  
+    annotation_pks=[annot["annotation_pk"] for annot in annot_dicts]
+    Revision(expert=expert, revision_type=revision_type, annotation_pks=annotation_pks).save()
+     
+    for annot in annot_dicts:
+        annotation_pk=annot["annotation_pk"]
+        subcat_text=annot["sugg_subcat"] 
+
+        thisCats=FinalCat.objects.filter(expert=expert, cat_text=cat_text)
+        if(len(thisCats)>0):
+            thisCat=thisCats[0]
+        else: 
+            newFinalCat=FinalCat(expert=expert, doctype=doctype, cat_text=cat_text)
+            newFinalCat.save()
+            thisCat=newFinalCat
+
+        thisSubCats=FinalSubCat.objects.filter(finalcat=thisCat, subcat_text=subcat_text)
+        if(len(thisSubCats)>0):
+            thisSubCat=thisSubCats[0]
+        else: 
+            newFinalSubCat=FinalSubCat(finalcat=thisCat, subcat_text=subcat_text, subcat_description=description)
+            newFinalSubCat.save()
+            thisSubCat=newFinalSubCat
+
         thisAnnot=TargetAnnotation.objects.get(pk=annotation_pk)
         thisAnnot.is_reviewed=True 
         thisAnnot.save()
@@ -343,20 +380,20 @@ def saveResolution(username, doctypetext, annotations_pk, cat_text, subcat_text,
 def saveNAApprove(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
-        annotation_pks=query_json['annotation_pks']
+        username=query_json['mturk_id']
+        annot_dicts=query_json['annotation_pks']
         category_text=query_json['category']
-        subcategory_text=query_json['subcategory']
         description=query_json['description']
         doctypetext=query_json['doctype']
 
         expert=User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
 
-        result=saveResolution(username, doctypetext,annotation_pks, category_text, subcategory_text, description,'na-approve')
+
+        result=saveApprove(expert, doctype,annot_dicts, category_text, description,'na-approve')
     
-        na_suggestions=getNAs(doctype, username)
-        current_distribution=getDistn(doctype, username)
+        na_suggestions=getNAs(doctype, expert)
+        current_distribution=getDistn(doctype, expert)
 
         response={
             'na_suggestions': na_suggestions,
@@ -370,7 +407,7 @@ def saveNAApprove(request):
 def saveNANew(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         annotation_pks=query_json['annotation_pks']
         category_text=query_json['category']
         subcategory_text=query_json['subcategory']
@@ -380,10 +417,10 @@ def saveNANew(request):
         expert=User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
 
-        result=saveResolution(username, doctypetext,annotation_pks, category_text, subcategory_text, description,'na-new')
+        result=saveResolution(expert, doctype,annotation_pks, category_text, subcategory_text, description,'na-new')
     
-        na_suggestions=getNAs(doctype, username)
-        current_distribution=getDistn(doctype, username)
+        na_suggestions=getNAs(doctype, expert)
+        current_distribution=getDistn(doctype, expert)
 
         response={
             'na_suggestions': na_suggestions,
@@ -395,7 +432,7 @@ def saveNANew(request):
 def saveNAExisting(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         annotation_pks=query_json['annotation_pks']
         category_text=query_json['category']
         subcategory_text=query_json['subcategory']
@@ -405,10 +442,10 @@ def saveNAExisting(request):
         expert=User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
 
-        result=saveResolution(username, doctypetext,annotation_pks, category_text, subcategory_text, description,'na-existing')
+        result=saveResolution(expert, doctype,annotation_pks, category_text, subcategory_text, description,'na-existing')
     
-        na_suggestions=getNAs(doctype, username)
-        current_distribution=getDistn(doctype, username)
+        na_suggestions=getNAs(doctype, expert)
+        current_distribution=getDistn(doctype, expert)
 
         response={
             'na_suggestions': na_suggestions,
@@ -420,7 +457,7 @@ def saveNAExisting(request):
 def saveNAIgnore(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         annotation_pks=query_json['annotation_pks']
         category_text=query_json['category']
         subcategory_text=query_json['subcategory']
@@ -430,14 +467,10 @@ def saveNAIgnore(request):
         expert=User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
 
-
-        for annotation_pk in annotation_pks: # pks are for the targetAnnotation
-            thisAnnot=TargetAnnotation.objects.get(pk=annotation_pk)
-            thisAnnot.is_reviewed=True 
-            thisAnnot.save()
+        result=saveResolution(expert, doctype,annotation_pks, category_text, 'n/a', description,'na-ignore')
     
-        na_suggestions=getNAs(doctype, username)
-        current_distribution=getDistn(doctype, username)
+        na_suggestions=getNAs(doctype, expert)
+        current_distribution=getDistn(doctype, expert)
 
         response={
             'na_suggestions': na_suggestions,
@@ -449,23 +482,23 @@ def saveNAIgnore(request):
 def saveCloseToApprove(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
-        annotation_pks=query_json['annotation_pks']
+        username=query_json['mturk_id']
+        annot_dicts=query_json['annotation_pks']
         category_text=query_json['category']
-        subcategory_text=query_json['subcategory']
         description=query_json['description']
         doctypetext=query_json['doctype']
 
         expert=User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
 
-        result=saveResolution(username, doctypetext,annotation_pks, category_text, subcategory_text, description,'ct-approve')
+
+        result=saveApprove(expert, doctype,annot_dicts, category_text, description,'ct-approve')
     
-        na_suggestions=getNAs(doctype, username)
-        current_distribution=getDistn(doctype, username)
+        ct_suggestions=getCTs(doctype, expert)
+        current_distribution=getDistn(doctype, expert)
 
         response={
-            'na_suggestions': na_suggestions,
+            'close_to_suggestions': ct_suggestions,
             'distribution': current_distribution
         }
         return JsonResponse(response)
@@ -476,7 +509,7 @@ def saveCloseToApprove(request):
 def saveCloseToNew(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         annotation_pks=query_json['annotation_pks']
         category_text=query_json['category']
         subcategory_text=query_json['subcategory']
@@ -486,13 +519,13 @@ def saveCloseToNew(request):
         expert=User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
 
-        result=saveResolution(username, doctypetext,annotation_pks, category_text, subcategory_text, description,'ct-new')
+        result=saveResolution(expert, doctype,annotation_pks, category_text, subcategory_text, description,'ct-new')
     
-        na_suggestions=getNAs(doctype, username)
-        current_distribution=getDistn(doctype, username)
+        ct_suggestions=getCTs(doctype, expert)
+        current_distribution=getDistn(doctype, expert)
 
         response={
-            'na_suggestions': na_suggestions,
+            'close_to_suggestions': ct_suggestions,
             'distribution': current_distribution
         }
         return JsonResponse(response)
@@ -501,7 +534,7 @@ def saveCloseToNew(request):
 def saveCloseToExisting(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         annotation_pks=query_json['annotation_pks']
         category_text=query_json['category']
         subcategory_text=query_json['subcategory']
@@ -511,13 +544,13 @@ def saveCloseToExisting(request):
         expert=User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
 
-        result=saveResolution(username, doctypetext,annotation_pks, category_text, subcategory_text, description,'ct-existing')
+        result=saveResolution(expert, doctype,annotation_pks, category_text, subcategory_text, description,'ct-existing')
     
-        na_suggestions=getNAs(doctype, username)
-        current_distribution=getDistn(doctype, username)
+        ct_suggestions=getCTs(doctype, expert)
+        current_distribution=getDistn(doctype, expert)
 
         response={
-            'na_suggestions': na_suggestions,
+            'close_to_suggestions': ct_suggestions,
             'distribution': current_distribution
         }
         return JsonResponse(response)
@@ -526,7 +559,7 @@ def saveCloseToExisting(request):
 def saveCloseToIgnore(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         annotation_pks=query_json['annotation_pks']
         category_text=query_json['category']
         subcategory_text=query_json['subcategory']
@@ -536,17 +569,13 @@ def saveCloseToIgnore(request):
         expert=User.objects.get(username=username)
         doctype=DocType.objects.get(doctype=doctypetext)
 
-
-        for annotation_pk in annotation_pks: # pks are for the targetAnnotation
-            thisAnnot=TargetAnnotation.objects.get(pk=annotation_pk)
-            thisAnnot.is_reviewed=True 
-            thisAnnot.save()
+        result=saveResolution(expert, doctype,annotation_pks, category_text, 'n/a', description,'ct-ignore')
     
-        na_suggestions=getNAs(doctype, username)
-        current_distribution=getDistn(doctype, username)
+        ct_suggestions=getCTs(doctype, expert)
+        current_distribution=getDistn(doctype, expert)
 
         response={
-            'na_suggestions': na_suggestions,
+            'close_to_suggestions': ct_suggestions,
             'distribution': current_distribution
         }
         return JsonResponse(response)
@@ -555,7 +584,7 @@ def saveCloseToIgnore(request):
 def changeCatText(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         doctypetext=query_json['doctype']
         old_cat=query_json['old_cat']
         new_cat=query_json['new_cat']
@@ -572,7 +601,7 @@ def changeCatText(request):
 def changeSubCatText(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         doctypetext=query_json['doctype']
         cat=query_json['cat']
         old_subcat=query_json['old_subcat']
@@ -591,7 +620,7 @@ def changeSubCatText(request):
 def changeSubCatDescription(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         doctypetext=query_json['doctype']
         cat=query_json['cat']
         subcat=query_json['subcat']
@@ -610,7 +639,7 @@ def changeSubCatDescription(request):
 def moveSubCat(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         doctypetext=query_json['doctype']
         old_cat=query_json['old_cat']
         new_cat=query_json['new_cat']
@@ -635,7 +664,7 @@ def moveSubCat(request):
 def addCat(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         doctypetext=query_json['doctype']
         category_text=query_json['category']
 
@@ -651,7 +680,7 @@ def addCat(request):
 def mergeCats(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         doctypetext=query_json['doctype']
         from_cat=query_json['from_cat']
         to_cat=query_json['to_cat']
@@ -675,7 +704,7 @@ def mergeCats(request):
 def mergeSubCats(request):
     if request.method=='POST':
         query_json = json.loads(request.body)
-        username=query_json['expert_id']
+        username=query_json['mturk_id']
         doctypetext=query_json['doctype']
         from_cat=query_json['from_cat']
         from_subcat=query_json['from_subcat']

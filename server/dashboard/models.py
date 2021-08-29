@@ -82,3 +82,9 @@ class RevisedBoxAnnotation(models.Model):
     finalsubcat=models.ForeignKey(FinalSubCat, on_delete=models.SET_NULL, null=True)
     box_id=models.IntegerField(default=999)
     revision_type=models.CharField(max_length=225) #na-new, na-existing, auto-mv
+
+
+class Revision(models.Model):
+    expert=models.ForeignKey(User, on_delete=models.CASCADE)
+    revision_type=models.CharField(max_length=255)
+    annotation_pks=models.TextField(validators=[validate_comma_separated_integer_list], null=True) #pks for TargetAnnotation 
