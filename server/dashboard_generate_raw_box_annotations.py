@@ -2,9 +2,6 @@ import csv
 from api.models import *
 from dashboard.models import * 
 
-# python manage.py shell
-# exec(open('dashboard_generate_raw_box_annotations.py').read())
-
 def most_frequent(List):
     return max(set(List), key = List.count)
  

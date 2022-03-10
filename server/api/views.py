@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework import viewsets, permissions
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
@@ -74,44 +73,7 @@ def signup(request):
                 'doctype':profile.doctype.doctype,
                 'username': username
             } 
-        '''
-        user=User.objects.get(username=username)
-        profile=Profile.objects.get(user=user)
-        login(request, user)
-
-        # no sign up or only sign up --> consent 
-        # if consent done but instruction not read or practice not done --> instructon 
-        # if practice done --> annotation
-        
-        if(not profile.consent_agreed):
-            step='consent'
-        else:
-            if(not practice_done):
-                step='instruction'
-            else:
-                step='annotation'
-        response = {
-            'step': step,
-            'doctype':profile.doctype.doctype
-        }
-        '''
     return JsonResponse(response)
-
-@csrf_exempt
-@api_view(['POST','GET'])
-@permission_classes([AllowAny])
-def checkBaselineUser(request): # this request is sent only when the user is new to baseline 
-    username = request.data['mturk_id']
-    if(len(User.objects.filter(username=username))==0): # new user 
-        #new_user=User(username=username, password=username)
-        #new_user.save()
-        is_new=True
-    else: # this means the usre is new to the proposed but not to the baseline
-        is_new=False
-
-    return JsonResponse({
-            'is_new': is_new
-        })
     
 @csrf_exempt
 def startTask(request):

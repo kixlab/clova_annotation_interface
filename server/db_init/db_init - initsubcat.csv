@@ -1,86 +1,48 @@
 doctype,initcat,subcat_no,subcat_text,subcat_description
-receipt,menu,1,id,Id of the menu
-receipt,menu,2,name,Name of the menu
-receipt,menu,3,count,Number of menu consumed
-receipt,menu,4,unitprice,Unit price of the menu
-receipt,menu,5,price,Total price of the menu
-receipt,subtotal,1,price,Subtotal price excluding tax
-receipt,subtotal,2,menu count,Number of unique menus
-receipt,subtotal,3,item count,Total number of items
-receipt,subtotal,4,service charge,Service charge
-receipt,subtotal,5,tax price,Tax price
-receipt,total,1,price,Total price
-receipt,payment,1,cash,Price paid by cash
-receipt,payment,2,change,Amount of change received
-receipt,payment,3,credit card,Price paid by credit card
-resume,personal info,1,name,Name of the person
-resume,personal info,2,office address,Address of the office
-resume,personal info,3,office no.,Phone number of the office
-resume,personal info,4,job title,Title of the current job
-resume,personal info,5,institution,Institution that the person works at
-resume,personal info,6,birthplace,Birthplace of the person
-resume,personal info,7,birthdate,Birthdate of the person
-resume,personal info,8,research interest,Field that the person is working on or interested in
-resume,employment,1,title,Title of the job
-resume,employment,2,institution,Institution that the person worked at
-resume,employment,3,location,Location of the institution
-resume,employment,4,year,Dates of the experience
-resume,education,1,degree,Degree that the person has
-resume,education,2,institution,Institution or school that the person received the degree
-resume,education,3,location,Location of the institution
-resume,education,4,major,Major field of study for the degree
-resume,education,5,graduation year,Year that the person received the degree
-resume,experience,1,title,Title of the experience
-resume,experience,2,institution,Institution of the experience
-resume,experience,3,location,Location of the experience
-resume,experience,4,role description,Role description of the experience
-resume,experience,5,year,Dates of the experience
-resume,publication,1,title,Publication title
-resume,publication,2,year,Publication year
-resume,publication,3,venue,Journal or conference the paper was published
-resume,publication,4,authors,Author list of the publication
-resume,committee,1,title,Title of the committee that the person belongs to
-resume,committee,2,organization,Organization of the committee
-resume,committee,3,year,Dates that the person served in the committee
-resume,awards,1,title,Title of the award
-resume,awards,2,institution,Institution that gave the award
-resume,awards,3,year,Dates that the person received the award
-event,event,1,title,Title of the event
-event,event,2,subtitle,Subtitle of the event
-event,event,3,date,Dates of the event
-event,event,4,time,Time of the event 
-event,event,5,topic,Topic or subject of the event
-event,event,6,website,Website of the event
-event,event,7,description,Description of the event
-event,event,8,venue name,Venue of the event
-event,event,9,venue address,Address of the venue
-event,organizer,1,name,Name of the organizer
-event,organizer,2,affliation ,Affliation of the organizer
-event,organizer,3,contact information,Contact information of the organizer
-event,sponsor,1,name,Name of the sponsors
-event,program,1,title,Title of the program
-event,program,2,content,Content or details of the program
-event,program,3,speaker,Speaker(s) of the program
-event,program,4,date,Date of the program
-event,registration,1,type,Type of registration
-event,registration,2,date,Deadline of registration
-event,registration,3,fee,Registration fee
-event,submission,1,type,Type of submission
-event,submission,2,date,Deadline of submission
-email,email_id,1,email_id,id of the email
-email,account_name,1,account_name,name of the email account
-email,sender,1,sender,sender of the email
-email,date,1,date_sent,date the email was sent
-email,date,2,date_primary,primary date of the email
-email,date,3,date_modified,last modified date of the email
-email,date,4,date_touched,last touched date of the email
-email,receiver,1,receiver_to,the people who received the email
-email,receiver,2,receiver_cc,the people who were cc'ed to the email
-email,receiver,3,receiver_bcc,the people who were bcc'ed to the email
-email,contents,1,subject,subject (title) of the email
-email,contents,2,bodytext,body of the email
-email,contents,3,attachment,attachment added to the email
-email,signature,1,name,name in the signature
-email,signature,2,title,job title in the signature
-email,signature,3,institution,institution affiliation in the signature
-email,signature,4,contact,contact in the signature
+receipt,goods,1,num_goods,the number of goods for buying
+receipt,goods,2,name,the name of goods
+receipt,goods,3,status,the status of goods
+receipt,goods,4,whole_price,the price of goods for buying (num_goods * piece_price)
+receipt,goods,5,piece_price,the price of piece of goods for buying
+receipt,goods,6,code,the code name of goods
+receipt,goods,7,discount_percent,discount percentage of goods
+receipt,goods,8,discount_amount,discount amount of goods
+receipt,num_total,1,goods,the number of total goods for buying (only categories)
+receipt,num_total,2,quantity,the number of total quantity for buying (categories * num_goods)
+receipt,unit,1,currency,the unit of currency
+receipt,sub_total,1,sub_total,only sum of goods prices before summation of tax (=HARGA JUAL)
+receipt,service,1,service,tips for market
+receipt,tax,1,PB1,"tax system of Indonesia (=tax, pajak resto, PPN)"
+receipt,rounding,1,rounding,amount of rounding
+receipt,discount,1,discount,amount of discount
+receipt,grand_total,1,grand_total,the total payment for user (due)
+receipt,payment,1,cash,"recieved cash from user (=tendered, TUNAI, bayar)"
+receipt,payment,2,card,payment from user's card
+receipt,return,1,cash_change,cash change for user (=KEMBALI)
+event,out_of_content,1,out_of_content,"Texts outside of main contents (e.g., pictures, backgrounds)"
+event,event_location,1,event_location_online,"Event location in online (e.g., URL, Zoom ID)"
+event,event_location,2,event_location_offline,"Event location in offline (e.g., address)"
+event,event_datetime,1,event_main_date,The date that the main event holds
+event,event_datetime,2,event_main_time,The time that the main event starts
+event,event_datetime,3,event_open_time,The time that the main event place opens 
+event,event_datetime,4,event_rsvp_duedate,The due date of RSVP of the event
+event,event_content,1,event_title,The title of the event
+event,event_content,2,event_content,The content of the event
+event,event_content,3,event_purpose,The purpose of the event
+event,event_content,4,event_pr,The PR messages to encourage the participation
+event,participant,1,participant_benefits,The benefits that participants can get from the event
+event,participant,2,participant_instructions,The instructions that participants should follow
+event,participant,3,participant_conditions,The conditions to participate the event
+event,participant,4,participant_limits,The participant limits
+event,fee,1,fee_amont,The exact number to be paid to participate the event
+event,fee,2,fee_condition,"The additional conditions for the fee (e.g., discount, extra cost)"
+event,host_or_sponsor,1,host_or_sponsor_name,The name of the host or the sponsor
+event,host_or_sponsor,2,host_or_sponsor_brand,"The brand of the host or the sponsor (e.g., logo, PR, or introduction)"
+event,host_or_sponsor,3,host_or_sponsor_message,The message to the host or the sponsor
+event,staff,1,staff_name,The name of the staff
+event,staff,2,staff_role,The role of the staff
+event,contact_or_fmi,1,contact_or_fmi_instructions,The instructions to contact or get more information
+event,contact_or_fmi,2,contact_or_fmi_website,The website for the contact or more information
+event,contact_or_fmi,3,contact_or_fmi_email,The email for the contact or more information
+event,contact_or_fmi,4,contact_or_fmi_phone,The phone number for the contact or more information
+event,contact_or_fmi,5,contact_or_fmi_etc,The other communication medium for the contact or more information
