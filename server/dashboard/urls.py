@@ -2,10 +2,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    # path(r'image/', views.selectedImage),
-    # path(r'image/box_info/', views.selectedImageBox)
     path('signup/',views.signup),
-    #path('start-task/', views.startTask),
     path('get-cats/',views.getCats),
     path('get-final-cats/',views.getFinalCats),
 
