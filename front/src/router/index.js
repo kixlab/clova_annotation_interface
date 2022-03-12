@@ -5,7 +5,6 @@ import InformedConsent from '../views/InformedConsent.vue'
 import Instruction from '../views/Instruction.vue'
 import Practice from '../views/Practice.vue'
 import DeferredAnnotation from '../views/Annotation.vue'
-import AfterDone from '../views/AfterDone.vue'
 import PageNotFound from '../views/404.vue'
 import AnnotDone from '../views/AnnotDone.vue'
 import Review from '../views/Review.vue'
@@ -52,11 +51,6 @@ Vue.use(VueRouter)
     component: Review
   },
 
-  {
-    path: '/after-done',
-    name: 'AfterDone',
-    component: AfterDone
-  },
   {
     path: '/review-suggestion/:docType/',
     name: 'ReviewSuggestion',
