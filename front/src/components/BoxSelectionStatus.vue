@@ -9,8 +9,7 @@
         <b>
         {{ annot_progress }}% 
           (
-            <span style="color: red">{{image_box_num - image_box_todo_num}}</span>
-          / {{image_box_num}} boxes
+            <span style="color: red">{{image_box_num - image_box_todo_num}}</span> / {{image_box_num}} boxes
           )
         </b>
       </v-progress-linear>

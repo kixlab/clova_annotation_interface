@@ -173,7 +173,6 @@ export default {
             self.unreviewed_issues=res.data.suggestions.filter(v => v.others.length>0)
             self.valid=(self.unreviewed_issues.length==0);
             self.enough_suggestions=res.data.status;
-            console.log(res.data)
             if(!self.enough_suggestions){
                 self.valid=true;
             }
@@ -215,7 +214,7 @@ export default {
                 other_issue_pk: others,
                 similarity: true
             }).then(function (res) { // get issue list again 
-                console.log(res)
+                //console.log(res)
                 if(res.data.result){
                     const new_others = self.sel_issue.others
                     new_others.splice(new_others.indexOf(annot), 1)
@@ -245,7 +244,7 @@ export default {
                 other_issue_pk: others,
                 similarity: false
             }).then(function (res) { // get issue list again 
-                console.log(res)
+                //console.log(res)
                 if(res.data.result){
                     const new_others = self.sel_issue.others
                     new_others.splice(new_others.indexOf(annot), 1)
@@ -417,14 +416,6 @@ export default {
                 //console.log("WATCH", this.sel_issue)
             }
         },
-        /*
-        annot_boxes: {
-            deep: true,
-            handler(after, before) {
-                console.log("change in annot_boxes", this.annot_boxes)
-                console.log(after, before)
-            }
-        },*/
     },
 
     computed: {

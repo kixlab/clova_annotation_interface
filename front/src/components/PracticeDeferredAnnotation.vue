@@ -74,8 +74,7 @@ export default {
   data() {
     return{
       selection: [],
-      subcats: [
-      ]   ,
+      subcats: [],
       selected_boxes: this.$store.getters.getSelectedBoxes,
       image_box: this.$store.getters.getImageBoxes,
       cats: ['menu', 'subtotal', 'total', 'payment'],
@@ -194,23 +193,8 @@ export default {
         }else{
           window.alert("Please select boxes to annotate.")
         }
-        //self.category='';
-        //self.sel_category=null;
         self.subcategory='';
-/* 
-        if(this.$store.getters.getIfAllBoxesAnnotated){
-          axios.post(self.$store.state.server_url + "/api/update-status/", {
-            mturk_id: self.$store.state.mturk_id,
-            doctype: self.$route.params.docType,
-            image_id: self.$store.state.curr_image_no,
-            status: true
-          }).then(function () {
-            self.setAStatus({
-              'idx':self.$store.state.image_order,
-              'val':true
-            });
-          });
-        } */
+
       },
 
       loadAnnotatedBoxes(annotations){

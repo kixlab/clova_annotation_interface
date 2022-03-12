@@ -93,7 +93,6 @@ export default {
         if (action.type === 'setImageBoxes' || action.type === 'updateAnnotatedBoxes' || action.type === 'updateImageBoxes' || action.type === 'setShowAnswer') {
           self.image_box = self.$store.getters.getImageBoxes;
         }
-        //if (action.type)
       }})
     })
     
@@ -104,22 +103,11 @@ export default {
     }})
 
   },
-
-  watch:{
-    /*
-    curr_image_no: {
-      deep: true,
-      handler(){
-        this.loadNewImage();
-      }
-    }
-    */
-  },
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes', 'setShowAnswer']),
     loadNewImage: function() {
       const self = this;
-      console.log(self.$store.getters.prac_json_url)
+      //console.log(self.$store.getters.prac_json_url)
       axios.get(self.$store.getters.prac_json_url).then(function(res) {
           var json = res.data;
           var img_width = json.meta === undefined ? json.image_size.width:(json.meta.image_size === undefined? json.meta.imageSize.width:json.meta.image_size.width)
@@ -134,8 +122,6 @@ export default {
           self.setImageBoxes([json, self.width, self.width*img_height/img_width, true]);
           
           self.original_box = json;
-
-          //console.log(self.$store.getters.getImageBoxes)
       })
       .catch(function(err) {
         console.log(err);
@@ -192,7 +178,6 @@ export default {
     },
 
     checkPosition: function(event) {
-      //if (this.$modelPrediction) {
         this.getInitialPosition()
         var x = event.clientX - this.initialPosition[0]
         var y = event.clientY - this.initialPosition[1]
@@ -210,7 +195,6 @@ export default {
           }
         }
         this.updateImageBoxes(boxes)
-      //}
     },
 
     updateSelectedBoxes: function() {
@@ -258,13 +242,10 @@ export default {
         var x2 = boxes[box].x_pos + boxes[box].x_len;
         var y1 = boxes[box].y_pos;
         var y2 = boxes[box].y_pos + boxes[box].y_len;
-
-        //if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && start[1] <= y1 && start[1] <= y2 && end[1] >= y1 && end[1] >= y2) {
-        //if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && (start[1] <= y1 || start[1] <= y2) && (end[1] >= y1 || end[1] >= y2)) {
+        
         if ((start[0] <= x1 || start[0] <= x2) && (end[0] >= x1 || end[0] >= x2) && (start[1] <= y1 || start[1] <= y2) && (end[1] >= y1 || end[1] >= y2)) {
 
           if (this.image_box[box].annotated === false) {
-            //this.image_box[box].selected = !this.image_box[box].selected;
             this.image_box[box].selected = true;
             if (this.image_box[box].selected === true) {
               selected_box.push(this.image_box[box].box_id)

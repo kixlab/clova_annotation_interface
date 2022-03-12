@@ -114,7 +114,7 @@ export default {
         mturk_id: self.$store.state.mturk_id,
       }).then( (res)=>{
         self.$store.commit('set_mturk_id', res.data.username)
-        console.log(res.data)
+        //console.log(res.data)
         
         if(res.data.step=='new'){ //http://15.165.236.102:8000
           self.$store.commit('update_status', new Array(21).fill(false));

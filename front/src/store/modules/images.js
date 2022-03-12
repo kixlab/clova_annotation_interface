@@ -168,7 +168,7 @@ const mutations = {
     setImageRatio: (state, imageRatio) => {
         state.imageRatio = imageRatio
     },
-    setImageURL: (state, commit, rootState) => {
+    setImageURL: (state, rootState) => {
         state.imageURL = rootState.image_url
     },
     setSelectedBox: (state, selectedBoxes) => {

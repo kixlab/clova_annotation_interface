@@ -67,19 +67,13 @@
 // @ is an alias to /src
 import PracticeImagePanel from '@/components/PracticeImagePanel.vue'
 import PracticeSubmitButton from '@/components/PracticeSubmitButton.vue'
-
 import PracticeInstructionButton from '@/components/PracticeInstructionButton.vue'
-//import OverviewButton from '@/components/OverviewButton.vue'
-
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
 import DeferredAnnotationStatus from '@/components/DeferredAnnotationStatus.vue'
 
-
 import axios from 'axios'
 import { mapActions} from 'vuex'
-
-//import SubmitButton from '../components/SubmitButton.vue'
 
 export default {
   name: 'Home',
@@ -131,7 +125,6 @@ export default {
   },
   mounted(){
     this.updateStatus();
-    //console.log(this.$store.getters.getShowAnswer)
     this.setShowAnswer(false);
   },
   computed: {

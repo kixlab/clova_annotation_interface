@@ -89,7 +89,7 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="indigo lighten-2 white--text" text @click="savememo" >
+                <v-btn color="indigo lighten-2 white--text" text @click="savememo">
                   save and close
                 </v-btn>
                 <v-spacer></v-spacer>
@@ -201,7 +201,7 @@ export default {
 
       annotate(item, confidence, suggestion, reason) {
 
-        const imageBox = this.getImageBoxes()//this.image_box
+        const imageBox = this.getImageBoxes()
         var group = []
         var label = item.cat + "-" + item.subcat
         if(confidence!=1){

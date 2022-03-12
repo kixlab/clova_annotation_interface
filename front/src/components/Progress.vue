@@ -29,10 +29,7 @@
       </template>
 
   </div>
-<!--  <div>
-  {{stats}}
- </div>
- --></div>
+</div>
 </template>
 
 

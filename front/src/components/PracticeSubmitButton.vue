@@ -19,7 +19,6 @@
 </template>
 
 <script>
-//import axios from "axios";
 import {mapGetters, mapActions} from 'vuex';
 
 export default {
@@ -30,7 +29,6 @@ export default {
 
     onSubmit: function() {
       const self=this;
-      //console.log(self.$store.getters.getImageBoxes)
       const total_num = self.$store.getters.getImageBoxes.length
 
       
@@ -79,7 +77,6 @@ export default {
       self.setShowAnswer(true/*!this.$store.getters.getShowAnswer*/)
       const new_boxes = [...boxes]
       self.updateImageBoxes(new_boxes)
-      //console.log(boxes.map(v => v.label))
       
       
     }
@@ -88,9 +85,7 @@ export default {
   computed: {
     
     disabled() {
-      //console.log(this.$store.getters.getImageBoxes.length)
       const total_num = this.$store.getters.getImageBoxes.length
-      //console.log(this.$store.getters.getAnnotatedBoxes.map(v => v.boxes).flat(1).map(v => v.box_id).length >= 22)
       return this.$store.getters.getAnnotatedBoxes.map(v => v.boxes).flat(1).length < total_num
     }
     

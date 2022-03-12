@@ -3,11 +3,8 @@
   <v-card
     tile
     @mousedown="clickDown" @mouseup="clickUp"
-    
     >
-    <!--
-    <b style="color: red; fontSize: 85%">Sometimes, the box position might be a bit off from the texts on the image. If that problem occurs, please move to another image and come back.</b>
-    -->
+
       <v-row>
         <v-col>
           <div ref="img_container">
@@ -41,19 +38,6 @@
       </v-row>
 
   </v-card>
-  <!--
-  <v-card >
-    <br>
-    As the receipts are from Indonesia, here are some translations for commonly occuring words: <br>
-    <span style="textAlign: left;">
-    <b >
-    Bayar - Pay <br>
-    Tunai - Cash <br>
-    Kembalian - Change <br>
-    </b>
-    </span>
-  </v-card>
-  -->
  </v-col>
 </template>
 
@@ -94,13 +78,6 @@ export default {
         this.image_box = this.$store.getters.getImageBoxes;
       }
     }})
-    /*
-    self.$store.subscribeAction({after: (action) => {
-      if (action.type === 'setImageBoxes') {
-        self.loadNewImage();
-      }
-    }})
-    */
   },
 
   watch:{
@@ -114,25 +91,6 @@ export default {
   },
   methods: {
     ...mapActions(['setImage', 'initializeImages', 'setImageBoxes', 'updateImageBoxes',]),
-    /* loadImageID: function (callback) {
-      const self = this;
-      axios.get(self.$store.state.server_url + "/api/get-image-id", {
-        params: {
-          mturk_id: self.$store.state.mturk_id,
-          doctype: self.$route.params.docType
-        }
-      }).then(function (res) {
-        if (res.data.step >= 20) {
-          alert('You already finished the task!\n');
-          self.$router.push('after-done')
-        }
-        //self.$store.commit('set_step', res.data.step)
-        callback(self);
-
-      }).catch(function(err) {
-        alert('Please refresh this page.\nIf this error repeats, please contact us via jeongeonpark1@gmail.com \n' + err);
-      });
-    }, */
     loadNewImage: function() {
       const self = this;
       axios.get(self.$store.getters.json_url).then(function(res) {
@@ -242,12 +200,9 @@ export default {
         var y1 = boxes[box].y_pos;
         var y2 = boxes[box].y_pos + boxes[box].y_len;
 
-        //if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && start[1] <= y1 && start[1] <= y2 && end[1] >= y1 && end[1] >= y2) {
-        //if (start[0] <= x1 && start[0] <= x2 && end[0] >= x1 && end[0] >= x2 && (start[1] <= y1 || start[1] <= y2) && (end[1] >= y1 || end[1] >= y2)) {
         if ((start[0] <= x1 || start[0] <= x2) && (end[0] >= x1 || end[0] >= x2) && (start[1] <= y1 || start[1] <= y2) && (end[1] >= y1 || end[1] >= y2)) {
 
           if (this.image_box[box].annotated === false) {
-            //this.image_box[box].selected = !this.image_box[box].selected;
             this.image_box[box].selected = true;
             if (this.image_box[box].selected === true) {
               selected_box.push(this.image_box[box].box_id)

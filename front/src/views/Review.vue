@@ -44,13 +44,9 @@
 // @ is an alias to /src
 import ImagePanel from '@/components/ImagePanel.vue'
 import AnnotationStatus from '@/components/AnnotationStatus.vue'
-//import SubmitButton from '@/components/SubmitButton.vue'
-//import InstructionButton from '@/components/InstructionButton.vue'
-//import OverviewButton from '@/components/OverviewButton.vue'
 import DeferredAnnotation from '@/components/DeferredAnnotation.vue'
 import BoxSelectionStatus from '@/components/BoxSelectionStatus.vue'
 import Progress from '@/components/Progress.vue'
-//import axios from 'axios'
 import SubmitButton from '../components/SubmitButton.vue'
 
 export default {
@@ -60,8 +56,6 @@ export default {
     ImagePanel,
     AnnotationStatus,
     SubmitButton,
-//    InstructionButton,
-  //  OverviewButton,
     DeferredAnnotation,
     BoxSelectionStatus,
   },
