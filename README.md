@@ -1,6 +1,5 @@
-# clova-annotation
-
-## Purpose
+# Annotation and Resolution Interface
+This interface is used as a part of the funded project with Clova, to receive label suggestions from annotators during the annotation stage.
 
 ## Structure
 * Frontend (`/front`): Vue.js
